@@ -6,7 +6,10 @@ imp.reload(sys)
 try: sys.setdefaultencoding('UTF8')
 except Exception as E: pass
 
-import unittest
+try:
+    import unittest2 as unittest
+except ImportError:
+    import unittest
 from datetime import datetime
 from popbill import *
 

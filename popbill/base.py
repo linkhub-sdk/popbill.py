@@ -269,10 +269,14 @@ class PopbillException(Exception):
         self.code = code
         self.message = message
 
-
 class JsonObject(object):
-    def __init__(self,dict):
-        self.__dict__.update(dict.__dict__)
+    def __init__(self,dic):
+        try:
+            d = dic.__dict__
+        except AttributeError :
+            d = dic._asdict()
+        
+        self.__dict__.update(d)
 
     def __getattr__(self,name):
         return None
@@ -285,7 +289,7 @@ class PopbillEncoder(JSONEncoder):
 
 class Utils:
     @staticmethod
-    def _json_object_hook(d): return JsonObject(namedtuple('X', d.keys())(*d.values()))
+    def _json_object_hook(d): return JsonObject(namedtuple('JsonObject', d.keys())(*d.values()))
     
     @staticmethod
     def json2obj(data): 
