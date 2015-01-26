@@ -16,7 +16,7 @@ from popbill import *
 class TaxinvoiceServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.taxinvoiceService =  TaxinvoiceService('TESTER','YNbUJqKeTKxuZ6nHULU9fRCXAWzKfG4jR/GoPyt1LPE=')
+        self.taxinvoiceService =  TaxinvoiceService('TESTER','tIzVceSOTQ5DuAXI6V+GSWeP+iI1MsuY1Fqtj1UPfrw=')
         self.taxinvoiceService.IsTest = True
         self.testCorpNum = "1231212312"
         self.testUserID = "userid"
