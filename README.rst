@@ -5,6 +5,12 @@ popbill 1.0.0
 
 팝빌 API for Python.
 
+.. image:: https://api.travis-ci.org/linkhub-sdk/popbill.py.svg?branch=master
+        :target: https://travis-ci.org/linkhub-sdk/popbill.py
+
+.. image:: https://pypip.in/d/popbill/badge.svg
+        :target: https://pypi.python.org/pypi/popbill
+
 * requirements
  
   * Python 2.6+
