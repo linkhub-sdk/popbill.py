@@ -637,7 +637,7 @@ class TaxinvoiceService(PopbillBase):
         if MgtKey == None or MgtKey == "" :
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
 
-        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=POPUP',CorpNum)
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=POPUP',CorpNum,UserID)
 
         return result.url
 
@@ -658,7 +658,7 @@ class TaxinvoiceService(PopbillBase):
         if MgtKey == None or MgtKey == "" :
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
 
-        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=PRINT',CorpNum)
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=PRINT',CorpNum,UserID)
 
         return result.url
 
@@ -679,7 +679,7 @@ class TaxinvoiceService(PopbillBase):
         if MgtKey == None or MgtKey == "" :
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
 
-        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=EPRINT',CorpNum)
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=EPRINT',CorpNum,UserID)
 
         return result.url
 
