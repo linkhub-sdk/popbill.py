@@ -2,6 +2,7 @@
 # code for console Encoding difference. Dont' mind on it 
 import sys
 import imp
+import random
 imp.reload(sys)
 try: sys.setdefaultencoding('UTF8')
 except Exception as E: pass
@@ -16,10 +17,11 @@ from popbill import *
 class TaxinvoiceServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.taxinvoiceService =  TaxinvoiceService('TESTER','tIzVceSOTQ5DuAXI6V+GSWeP+iI1MsuY1Fqtj1UPfrw=')
+        self.taxinvoiceService =  TaxinvoiceService('TESTER','SsA0QTJTfRYy1TA9KphDMB49eJpBhnw19UHulIDwz+A=')
         self.taxinvoiceService.IsTest = True
         self.testCorpNum = "1231212312"
         self.testUserID = "userid"
+        self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
 
     def test_getBalance(self):
         balance = self.taxinvoiceService.getBalance(self.testCorpNum)
@@ -82,7 +84,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         bIsInUse = self.taxinvoiceService.checkMgtKeyInUse(self.testCorpNum,"SELL","12345678901")
         self.assertEqual(bIsInUse,False,"미등록으로 확인")
 
-    def test_register(self):
+    def test_1_register(self):
 
         taxinvoice = Taxinvoice(writeDate = "20150121", #작성일자
                                 chargeDirection = "정과금", 
@@ -93,7 +95,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 invoicerCorpNum = self.testCorpNum,
                                 invoicerTaxRegID = '',
                                 invoicerCorpName = "공급자 상호",
-                                invoicerMgtKey = "1234567890",
+                                invoicerMgtKey = self.testMgtKey,
                                 invoicerCEOName = "공급자 대표자 성명",
                                 invoicerAddr = "공급자 주소",
                                 invoicerBizClass = "공급자 업종",
@@ -161,8 +163,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 )
 
         result = self.taxinvoiceService.register(self.testCorpNum,taxinvoice)
-        if result.code != -11001038 :
-            self.assertEqual(result.code,1,"등록 오류 : " + result.message)
+        self.assertEqual(result.code,1,"등록 오류 : " + result.message)
 
     def test_update(self):
 
@@ -175,7 +176,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 invoicerCorpNum = self.testCorpNum,
                                 invoicerTaxRegID = '',
                                 invoicerCorpName = "공급자 상호",
-                                invoicerMgtKey = "1234567890",
+                                invoicerMgtKey = self.testMgtKey,
                                 invoicerCEOName = "공급자 대표자 성명",
                                 invoicerAddr = "공급자 주소",
                                 invoicerBizClass = "공급자 업종",
@@ -242,11 +243,11 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
 
                                 )
 
-        result = self.taxinvoiceService.update(self.testCorpNum,"SELL","1234567890",taxinvoice)
+        result = self.taxinvoiceService.update(self.testCorpNum,"SELL",self.testMgtKey,taxinvoice)
         self.assertEqual(result.code,1,"수정 오류 : " + result.message)
 
     def test_attachFile(self):
-        result = self.taxinvoiceService.attachFile(self.testCorpNum,"SELL","1234567890","test.jpeg")
+        result = self.taxinvoiceService.attachFile(self.testCorpNum,"SELL",self.testMgtKey,"test.jpeg")
         self.assertEqual(result.code,1,"첩부 오류 : " + result.message)
 
 
@@ -263,10 +264,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         self.assertIsNotNone(info.invoicerMgtKey,"아이템키 확인")
         self.assertIsNone(info.trusteeCorpNum,"빈값 확인")
 
-    def test_delete(self):
-        result = self.taxinvoiceService.delete(self.testCorpNum,"SELL","1234567890")
-        if result.code != -11000005:
-            self.assertEqual(result.code,1,"삭제 오류 : " + result.message)
+    def test_z_delete(self):
+        result = self.taxinvoiceService.delete(self.testCorpNum,"SELL",self.testMgtKey)
+        self.assertEqual(result.code,1,"삭제 오류 : " + result.message)
 
     def test_getLogs(self):
         logs = self.taxinvoiceService.getLogs(self.testCorpNum,"SELL","1234")
