@@ -683,6 +683,27 @@ class TaxinvoiceService(PopbillBase):
 
         return result.url
 
+    def getMailURL(self,CorpNum,MgtKeyType,MgtKey, UserID):
+        """ 공급받는자용 메일 링크 URL 확인
+            args
+                CorpNum : 회원 사업자 번호
+                MgtKeyType : 관리번호 유형 one of ['SELL','BUY','TRUSTEE']
+                MgtKey : 파트너 관리번호
+                UserID : 팝빌 회원아이디
+            return
+                팝빌 URL as str
+            raise
+                PopbillException
+        """
+        if MgtKeyType not in self.__MgtKeyTypes :
+            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "" :
+            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=MAIL',CorpNum,UserID)
+
+        return result.url
+
     def getInfos(self,CorpNum,MgtKeyType,MgtKeyList):
         """ 상태정보 다량 확인, 최대 1000건
             args
