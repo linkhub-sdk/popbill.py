@@ -17,7 +17,7 @@ from popbill import *
 class TaxinvoiceServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.taxinvoiceService =  TaxinvoiceService('TESTER','SsA0QTJTfRYy1TA9KphDMB49eJpBhnw19UHulIDwz+A=')
+        self.taxinvoiceService =  TaxinvoiceService('TESTER','r1bp+HzSDrMkSS8921B8Dyrn83Y/yDcOnru2OBTT2Z8=')
         self.taxinvoiceService.IsTest = True
         self.testCorpNum = "1231212312"
         self.testUserID = "userid"
@@ -41,7 +41,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         result = self.taxinvoiceService.checkIsMember(self.testCorpNum)
         self.assertEqual(result.code,1,result.message + ", 가입시 코드는 1")
 
-        result = self.taxinvoiceService.checkIsMember("0000000000")
+        result = self.taxinvoiceService.checkIsMember("1234568790")
         self.assertEqual(result.code,0,result.message + ", 미가입시 코드는 0")
 
     def test_joinMember(self):
