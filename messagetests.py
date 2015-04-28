@@ -17,7 +17,7 @@ from popbill import *
 class MessageServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.messageService = MessageService('TESTER','r1bp+HzSDrMkSS8921B8Dyrn83Y/yDcOnru2OBTT2Z8=')
+        self.messageService = MessageService('TESTER','SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.messageService.IsTest = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
@@ -186,6 +186,44 @@ class MessageServiceTestCase(unittest.TestCase):
         url = self.messageService.getURL(self.testCorpNum, self.testUserID, 'BOX')
         self.assertEqual(url[:5], "https","https로 시작")
         print("BOX URL : " +url)
+
+    def test_15_sendMMS(self):
+        Subject = "동보전송 제목"
+        reserveDT = ''
+        filepath = 'test2.jpeg'
+                                        
+        try:
+            receiptNum = self.messageService.sendMMS(self.testCorpNum, "07075103710","01043245117","수신자명", Subject, "동보전송 메시지 내용", filepath, reserveDT)
+            print(receiptNum)
+                        
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_16_sendMMS(self):
+        
+        filepath = 'test2.jpeg'
+
+        messages = []
+        reserveDT = ''
+
+        messages.append(
+                        MessageReceiver(
+                                        snd='07075103710',
+                                        rcv='010111222',
+                                        rcvnm='수신자명',
+                                        msg='멀티 문자 API TEST',
+                                        sjt='멀티 문자 제목'
+                                       )
+                        )
+        try:
+            receiptNum = self.messageService.sendMMS_Multi(self.testCorpNum, "07075103710",'', '', messages, filepath, reserveDT)
+            print(receiptNum)
+                        
+        except PopbillException as PE:
+            print(PE.message)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
