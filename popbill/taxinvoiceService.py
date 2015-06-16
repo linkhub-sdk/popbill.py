@@ -201,7 +201,7 @@ class TaxinvoiceService(PopbillBase):
 
         return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,'',CorpNum,UserID,"DELETE")
 
-    def send(self,CorpNum,MgtKeyType,MgtKey,Memo = None, UserID = None):
+    def send(self,CorpNum,MgtKeyType,MgtKey,Memo = None, EmailSubject = None, UserID = None):
         """ 승인요청
             args
                 CorpNum : 회원 사업자 번호
@@ -220,7 +220,7 @@ class TaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
 
         if Memo != None and Memo != '':
-            postData = self._stringtify({"memo" : Memo})
+            postData = self._stringtify({"memo" : Memo, "emailSubject" : EmailSubject})
         else :
             postData = ''
 
