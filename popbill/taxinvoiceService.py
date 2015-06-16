@@ -218,11 +218,15 @@ class TaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
         if MgtKey == None or MgtKey == "" :
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        
+        req = {} 
 
         if Memo != None and Memo != '':
-            postData = self._stringtify({"memo" : Memo, "emailSubject" : EmailSubject})
-        else :
-            postData = ''
+            req["memo"] = Memo
+        if EmailSubject != None and EmailSubject != '':
+            req["emailSubject"] = EmailSubject
+
+        postData = self._stringtify(req)
 
         return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"SEND")
 
