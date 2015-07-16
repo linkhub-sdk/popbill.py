@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Module for Popbill Taxinvoice API. It include base functionality of the
+# Module for Popbill Statement API. It include base functionality of the
 # RESTful web service request and parse json result. It uses Linkhub module
 # to accomplish authentication APIs.
 #
@@ -234,6 +234,26 @@ class StatementService(PopbillBase):
             raise PopbillException(-99999999,"명세서 코드가 입력되지 않았습니다.")
 
         return self._httpget('/Statement/' + str(ItemCode) + '/' + MgtKey, CorpNum)
+
+    def getInfos(self,CorpNum, ItemCode, MgtKeyList):
+        """ 상태정보 다량 확인, 최대 1000건
+            args
+                CorpNum : 회원 사업자 번호
+                ItemCode : 명세서 코드 
+                    [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
+                    [124 - 발주서], [125 - 입금표], [126 - 영수증]
+                MgtKeyList : 문서관리번호 목록
+            return
+                상태정보 목록 as List
+            raise
+                PopbillException
+        """
+        if MgtKeyList == None or len(MgtKeyList) < 1:
+            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+       
+        postData = self._stringtify(MgtKeyList)
+
+        return self._httppost('/Statement/' + str(ItemCode),postData,CorpNum)
 
     def getDetailInfo(self, CorpNum, ItemCode, MgtKey):
         """ 전자명세서 상세정보 확인

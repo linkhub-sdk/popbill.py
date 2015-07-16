@@ -16,11 +16,20 @@ from popbill import *
 class StatementServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.statementService =  StatementService('TESTER','r1bp+HzSDrMkSS8921B8Dyrn83Y/yDcOnru2OBTT2Z8=')
+        self.statementService =  StatementService('TESTER','SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.statementService.IsTest = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
+
+    def test_getInfos(self):
+        infos = self.statementService.getInfos(self.testCorpNum,121,["20150707-01","20150706-01"])
+        for info in infos:
+            print("info : %s" % info.mgtKey)
+            for key, value in info.__dict__.items():
+                if not key.startswith("__"):
+                    print("     %s : %s" % (key,value))
+        self.assertGreater(len(infos),0,"갯수 확인")
 
     def test_getBalance(self):
         balance = self.statementService.getBalance(self.testCorpNum)
