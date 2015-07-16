@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Module for Popbill Closedown API. It include base functionality of the
+# Module for Popbill Cashbill API. It include base functionality of the
 # RESTful web service request and parse json result. It uses Linkhub module
 # to accomplish authentication APIs.
 #
