@@ -46,7 +46,7 @@ class Singleton(type):
 class PopbillBase(__with_metaclass(Singleton,object)):
     IsTest = False
 
-    def __init__(self,LinkID,SecretKey,timeOut = 15):
+    def __init__(self,LinkID,SecretKey,timeOut = 60):
         """ 생성자.
             args
                 LinkID : 링크허브에서 발급받은 LinkID
@@ -61,8 +61,8 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         self.__timeOut = timeOut
 
 
-    def _getConn(self):
-        if stime() - self.__connectedAt >= self.__timeOut or self.__conn == None:
+    def _getConn(self,ForceReconnect=False):
+        if ForceReconnect or self.__conn == None or stime() - self.__connectedAt >= self.__timeOut:
             self.__conn = httpclient.HTTPSConnection(ServiceURL_TEST if self.IsTest else ServiceURL_REAL);
             self.__connectedAt = stime()
             return self.__conn
@@ -168,8 +168,6 @@ class PopbillBase(__with_metaclass(Singleton,object)):
 
     def _httpget(self,url,CorpNum = None,UserID = None):
 
-        conn = self._getConn()
-
         headers = {"x-pb-version" : APIVersion}
 
         if CorpNum != None:
@@ -178,10 +176,29 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         if UserID != None:
             headers["x-pb-userid"] = UserID
 
-        conn.request('GET',url,'',headers)
+        # SEH 의 EXCEPTION_EXECUTE_HANDLER 를 모방해서, 한번의 실패에 한해 강제 재연결을 수행한다.
+        # 그 후에 발생하는 에러에 대해서는 그냥 예외처리한다.
+        for i in range(2):
+            try:
+                conn = self._getConn()
+                conn.request('GET', url, '', headers)
 
-        response = conn.getresponse()
-        responseString = response.read()
+                response = conn.getresponse()
+                responseString = response.read()
+                break
+            except httpclient.HTTPException:
+                if i == 0:
+                    # 처음 예외가 발생했을 경우는 재연결을 시도한다.
+                    try:
+                        self._getConn(ForceReconnect=True)
+                        continue
+                    except Exception:
+                        # 재연결에서 어떤 에러가 발생한다면?
+                        # 처리할 수 없는 상황, 아마도 서버에의 초기 연결이 실패한경우
+                        raise PopbillException(int(-99999999), 'UNEXPECTED EXCEPTION')
+                else:
+                    # 이미 한번 예외 처리를 했음에도 불구하고 에러가 난 경우.
+                    raise PopbillException(int(-99999999), 'UNEXPECTED EXCEPTION')
 
         if response.status != 200 :
             err = Utils.json2obj(responseString)
@@ -190,8 +207,6 @@ class PopbillBase(__with_metaclass(Singleton,object)):
             return Utils.json2obj(responseString)
 
     def _httppost(self,url,postData, CorpNum = None,UserID = None,ActionOverride = None ):
-
-        conn = self._getConn();
 
         headers = {"x-pb-version" : APIVersion, "Content-Type" : "Application/json"}
 
@@ -204,10 +219,29 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         if ActionOverride != None:
             headers["X-HTTP-Method-Override"] = ActionOverride
 
-        conn.request('POST',url,postData,headers)
+        # SEH 의 EXCEPTION_EXECUTE_HANDLER 를 모방해서, 한번의 실패에 한해 강제 재연결을 수행한다.
+        # 그 후에 발생하는 에러에 대해서는 그냥 예외처리한다.
+        for i in range(2):
+            try:
+                conn = self._getConn()
+                conn.request('POST', url, postData, headers)
 
-        response = conn.getresponse()
-        responseString = response.read()
+                response = conn.getresponse()
+                responseString = response.read()
+                break
+            except httpclient.HTTPException:
+                if i == 0:
+                    # 처음 예외가 발생했을 경우는 재연결을 시도한다.
+                    try:
+                        self._getConn(ForceReconnect=True)
+                        continue
+                    except Exception:
+                        # 재연결에서 어떤 에러가 발생한다면?
+                        # 처리할 수 없는 상황, 아마도 서버에의 초기 연결이 실패한경우
+                        raise PopbillException(int(-99999999), 'UNEXPECTED EXCEPTION')
+                else:
+                    # 이미 한번 예외 처리를 했음에도 불구하고 에러가 난 경우.
+                    raise PopbillException(int(-99999999), 'UNEXPECTED EXCEPTION')
 
         if response.status != 200 :
             err = Utils.json2obj(responseString)
@@ -216,8 +250,6 @@ class PopbillBase(__with_metaclass(Singleton,object)):
             return Utils.json2obj(responseString)
 
     def _httppost_files(self,url,postData,Files,CorpNum,UserID = None):
-
-        conn = self._getConn
 
         boundary = "--POPBILL_PYTHON--"
 
@@ -252,10 +284,29 @@ class PopbillBase(__with_metaclass(Singleton,object)):
 
         multiparted = buff.getvalue()
 
-        conn.request('POST',url,multiparted,headers)
+        # SEH 의 EXCEPTION_EXECUTE_HANDLER 를 모방해서, 한번의 실패에 한해 강제 재연결을 수행한다.
+        # 그 후에 발생하는 에러에 대해서는 그냥 예외처리한다.
+        for i in range(2):
+            try:
+                conn = self._getConn()
+                conn.request('POST', url, multiparted, headers)
 
-        response = conn.getresponse()
-        responseString = response.read()
+                response = conn.getresponse()
+                responseString = response.read()
+                break
+            except httpclient.HTTPException:
+                if i == 0:
+                    # 처음 예외가 발생했을 경우는 재연결을 시도한다.
+                    try:
+                        self._getConn(ForceReconnect=True)
+                        continue
+                    except Exception:
+                        # 재연결에서 어떤 에러가 발생한다면?
+                        # 처리할 수 없는 상황, 아마도 서버에의 초기 연결이 실패한경우
+                        raise PopbillException(int(-99999999), 'UNEXPECTED EXCEPTION')
+                else:
+                    # 이미 한번 예외 처리를 했음에도 불구하고 에러가 난 경우.
+                    raise PopbillException(int(-99999999), 'UNEXPECTED EXCEPTION')
 
         if response.status != 200 :
             err = Utils.json2obj(responseString)
