@@ -149,8 +149,6 @@ class PopbillBase(__with_metaclass(Singleton,object)):
 
         if token != None :
             refreshToken = token.expiration[:-5] < linkhub.getTime()
-            print token.expiration[:-5]
-            print linkhub.getTime()
 
         if refreshToken :
             try:
