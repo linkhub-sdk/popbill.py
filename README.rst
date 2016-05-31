@@ -1,7 +1,7 @@
 ####
 popbill.py
 ####
-popbill 1.1.3
+popbill 1.1.4
 
 팝빌 API for Python.
 
@@ -12,7 +12,7 @@ popbill 1.1.3
         :target: https://pypi.python.org/pypi/popbill
 
 * requirements
- 
+
   * Python 2.6+
   * linkhub
 
