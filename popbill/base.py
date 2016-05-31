@@ -46,7 +46,7 @@ class Singleton(type):
 class PopbillBase(__with_metaclass(Singleton,object)):
     IsTest = False
 
-    def __init__(self,LinkID,SecretKey,timeOut = 15):
+    def __init__(self,LinkID,SecretKey,timeOut = 60):
         """ 생성자.
             args
                 LinkID : 링크허브에서 발급받은 LinkID
