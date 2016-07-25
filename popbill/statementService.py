@@ -103,7 +103,7 @@ class StatementService(PopbillBase):
         if statement == None:
             raise PopbillException(-99999999, "등록할 전자명세서 정보가 입력되지 않았습니다.")
 
-        if Memo != None and Memo != '' :
+        if Memo != None or Memo != '' :
             statement.memo = Memo
 
         postData = self._stringtify(statement)
