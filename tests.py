@@ -111,7 +111,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         print(result.message)
         self.assertEqual(result.code,1,"등록 오류 : " + result.message)
 
-    def registIssue(self, CorpNum, taxinvoice, writeSpecification = False, forceIssue = False, dealInfoiceMgtKey = None, memo = None, emailSubject = None, UserID = None) :
+    
     def test_search(self):
         MgtKeyType = "SELL"
         DType = "W"
