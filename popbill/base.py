@@ -141,23 +141,79 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         return self._httppost('/Join',postData)
 
     def checkID(self, checkID):
+        """ 아이디 중복확인
+            args
+                checkID : 중복확인할 아이디
+            return
+                중복여부, consist of code and message
+            raise
+                PopbillException
+        """
         return self._httpget('/IDCheck?ID=' + checkID)
 
     def listContact(self, CorpNum, UserID = None) :
+        """ 담당자 목록 확인
+            args
+                CorpNum : 회원 사업자번호
+                UserID : 회원 아이디
+            return
+                담당자 목록 as list
+            raise
+                PopbillException
+        """
         return self._httpget('/IDs',CorpNum, UserID)
 
     def updateContact(self, CorpNum, ContactInfo, UserID = None) :
+        """ 담당자 정보 수정
+            args
+                CorpNum : 회원 사업자번호
+                ContactInfo : 담당자 정보, Reference ContactInfo class
+                UserID :  회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
         postData = self._stringtify(ContactInfo)
         return self._httppost('/IDs',postData,CorpNum, UserID)
 
     def getCorpInfo(self, CorpNum, UserID = None) :
+        """ 회사정보 확인
+            args
+                CorpNum : 회원 사업자번호
+                UserID : 회원 아이디
+            return
+                회사정보
+            raise
+                PopbillException
+        """
         return self._httpget('/CorpInfo', CorpNum, UserID)
 
     def updateCorpInfo(self, CorpNum, CorpInfo, UserID = None) :
+        """ 담당자 정보 수정
+            args
+                CorpNum : 회원 사업자번호
+                CorpInfo : 회사 정보, Reference CorpInfo class
+                UserID :  회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
         postData = self._stringtify(CorpInfo)
         return self._httppost('/CorpInfo', postData, CorpNum, UserID)
 
     def registContact(self, CorpNum, ContactInfo, UserID = None) :
+        """ 담당자 추가
+            args
+                CorpNum : 회원 사업자번호
+                ContactInfo : 담당자 정보, Reference ContactInfo class
+                UserID :  회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
         postData = self._stringtify(ContactInfo)
         return self._httppost('/IDs/New', postData, CorpNum, UserID)
 
