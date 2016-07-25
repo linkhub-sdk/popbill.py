@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# code for console Encoding difference. Dont' mind on it 
+# code for console Encoding difference. Dont' mind on it
 import sys
 import imp
 import random
@@ -17,11 +17,64 @@ from popbill import *
 class TaxinvoiceServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.taxinvoiceService =  TaxinvoiceService('TESTER','r1bp+HzSDrMkSS8921B8Dyrn83Y/yDcOnru2OBTT2Z8=')
+        self.taxinvoiceService =  TaxinvoiceService('TESTER','SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.taxinvoiceService.IsTest = True
-        self.testCorpNum = "1231212312"
-        self.testUserID = "userid"
+        self.testCorpNum = "1234567890"
+        self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
+
+    def test_checkID(self):
+        response = self.taxinvoiceService.checkID('testkorea')
+        print(response.message)
+
+    def test_registContact(self) :
+        contactInfo = ContactInfo (
+                        id = "testkorea_0725",
+                        pwd = "popbill",
+                        personName = "정씨네",
+                        tel = "010-1234-1234",
+                        hp = "010-4324-5117",
+                        fax = "070-7510-3710",
+                        email = "code@linkhub.co.kr",
+                        searchAllAllowYN = True,
+                        mgrYN = True
+                        )
+        response = self.taxinvoiceService.registContact(self.testCorpNum, contactInfo, self.testUserID)
+        print(response.message)
+
+    def test_updateCorpInfo(self) :
+        corpInfo = CorpInfo (
+                        ceoname = "대표자성명_0725",
+                        corpName = "상호_0725",
+                        addr = "주소_0725",
+                        bizType = "업태_0725",
+                        bizClass = "업종_0725"
+                        )
+        response = self.taxinvoiceService.updateCorpInfo(self.testCorpNum, corpInfo, self.testUserID)
+        print(response.message)
+    def test_getCorpInfo(self):
+        corpInfo = self.taxinvoiceService.getCorpInfo(self.testCorpNum, self.testUserID)
+        print(corpInfo.addr)
+    def test_getChargeInfo(self):
+        chrgInfo = self.taxinvoiceService.getChargeInfo(self.testCorpNum,self.testUserID)
+        print (chrgInfo.unitCost)
+
+    def test_listContact(self):
+        contactList = self.taxinvoiceService.listContact(self.testCorpNum)
+        print (contactList[1].id)
+
+    def test_updateContact(self):
+        contactInfo = ContactInfo(
+                            personName = "담당자 성명_py",
+                            tel = "010-1234-1234",
+                            hp = "010-4324-4324",
+                            fax = "02-6442-9700",
+                            email = "code@linkhub.co.kr",
+                            searchAllAllowYN = True,
+                            mgtYN = False
+                            )
+        response = self.taxinvoiceService.updateContact(self.testCorpNum, contactInfo, self.testUserID)
+        print (response.message)
 
     def test_getBalance(self):
         balance = self.taxinvoiceService.getBalance(self.testCorpNum)
@@ -68,7 +121,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
     def test_getUnitCost(self):
         unitCost = self.taxinvoiceService.getUnitCost(self.testCorpNum)
         self.assertGreaterEqual(unitCost,0,"단가는 0 이상.")
-    
+
     def test_getCertificateExpireDate(self):
         expireDate = self.taxinvoiceService.getCertificateExpireDate("4108600477")
         self.assertGreaterEqual(expireDate,datetime.today(),"만료일은 오늘보다 큰날.")
@@ -87,7 +140,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
     def test_1_register(self):
 
         taxinvoice = Taxinvoice(writeDate = "20150121", #작성일자
-                                chargeDirection = "정과금", 
+                                chargeDirection = "정과금",
                                 issueType = "정발행",
                                 purposeType = "영수",
                                 issueTiming = "직접발행",
@@ -122,7 +175,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 supplyCostTotal = "100000",
                                 taxTotal = "10000",
                                 totalAmount = "110000",
-                                
+
                                 modifyCode = None,
                                 originalTaxinvoiceKey = None,
                                 serialNum = '123',
@@ -152,7 +205,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                                                  itemName = "품목2")
                                                 ],
                                 addContactList = [
-                                                    Contact(serialNum = 1, 
+                                                    Contact(serialNum = 1,
                                                             contactName='추가담당자 성명',
                                                             email='test1@test.com'),
                                                     Contact(serialNum = 2,
@@ -163,12 +216,13 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 )
 
         result = self.taxinvoiceService.register(self.testCorpNum,taxinvoice)
+        print(result.message)
         self.assertEqual(result.code,1,"등록 오류 : " + result.message)
 
     def test_update(self):
 
         taxinvoice = Taxinvoice(writeDate = "20150121", #작성일자
-                                chargeDirection = "정과금", 
+                                chargeDirection = "정과금",
                                 issueType = "정발행",
                                 purposeType = "영수",
                                 issueTiming = "직접발행",
@@ -203,7 +257,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 supplyCostTotal = "100000",
                                 taxTotal = "10000",
                                 totalAmount = "110000",
-                                
+
                                 modifyCode = None,
                                 originalTaxinvoiceKey = None,
                                 serialNum = '123',
@@ -233,7 +287,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                                                  itemName = "품목2")
                                             ],
                                 addContactList = [
-                                                    Contact(serialNum = 1, 
+                                                    Contact(serialNum = 1,
                                                             contactName='추가담당자 성명',
                                                             email='test1@test.com'),
                                                     Contact(serialNum = 2,
@@ -270,7 +324,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
 
     def test_getLogs(self):
         logs = self.taxinvoiceService.getLogs(self.testCorpNum,"SELL","1234")
+        print (logs[1].procMemo)
         self.assertGreater(len(logs),0,"로그 갯수 확인")
+
 
 if __name__ == '__main__':
     unittest.main()

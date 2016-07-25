@@ -6,7 +6,9 @@
 # http://www.popbill.com
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
-# Thanks for your interest. 
+# Contributor : Jeong Yohan (frenchofkiss@gmail.com)
+# Updated : 2016-07-22
+# Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase,PopbillException,File
 
@@ -17,16 +19,19 @@ class TaxinvoiceService(PopbillBase):
     __MgtKeyTypes = ["SELL","BUY","TRUSTEE"]
 
     def __init__(self,LinkID,SecretKey):
-        """ 생성자. 
+        """ 생성자.
             args
                 LinkID : 링크허브에서 발급받은 LinkID
                 SecretKey : 링크허브에서 발급받은 SecretKey
         """
         super(self.__class__,self).__init__(LinkID,SecretKey)
         self._addScope("110")
-        
+
+    def getChargeInfo(self, CorpNum, UserID = None):
+        return self._httpget('/Taxinvoice/ChargeInfo', CorpNum, UserID)
+
     def getURL(self,CorpNum, UserID , ToGo):
-        """ 팝빌 세금계산서 관련 URL을 확인. 
+        """ 팝빌 세금계산서 관련 URL을 확인.
             args
                 CorpNum : 회원 사업자번호
                 UserID : 팝빌 회원아이디
@@ -40,7 +45,7 @@ class TaxinvoiceService(PopbillBase):
         return result.url
 
     def getUnitCost(self,CorpNum):
-        """ 세금계산서 발행 단가 확인. 
+        """ 세금계산서 발행 단가 확인.
             args
                 CorpNum : 확인할 회원 사업자번호
             return
@@ -110,7 +115,7 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if taxinvoice == None : 
+        if taxinvoice == None :
             raise PopbillException(-99999999,"등록할 세금계산서 정보가 입력되지 않았습니다.")
         if writeSpecification :
             taxinvoice.writeSpecification = True
@@ -137,7 +142,7 @@ class TaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
         if MgtKey == None or MgtKey == "" :
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-        if taxinvoice == None : 
+        if taxinvoice == None :
             raise PopbillException(-99999999,"수정할 세금계산서 정보가 입력되지 않았습니다.")
         if writeSpecification :
             taxinvoice.writeSpecification = True
@@ -218,8 +223,8 @@ class TaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
         if MgtKey == None or MgtKey == "" :
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-        
-        req = {} 
+
+        req = {}
 
         if Memo != None and Memo != '':
             req["memo"] = Memo
@@ -313,7 +318,7 @@ class TaxinvoiceService(PopbillBase):
                 MgtKey : 파트너 관리번호
                 Memo : 처리 메모
                 EmailSubject : 발행메일 이메일 제목
-                ForceIssue : 지연발행 세금계산서 강제발행 여부. 
+                ForceIssue : 지연발행 세금계산서 강제발행 여부.
                 UserID : 팝빌 회원아이디
             return
                 처리결과. consist of code and message
@@ -332,7 +337,7 @@ class TaxinvoiceService(PopbillBase):
 
         if EmailSubject != None and EmailSubject != '':
             req["emailSubject"] = EmailSubject
-        
+
         postData = self._stringtify(req)
 
         return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"ISSUE")
@@ -549,11 +554,11 @@ class TaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
         if MgtKey == None or MgtKey == "" :
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-        
+
         return self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "/Logs",CorpNum)
 
     def attachFile(self,CorpNum,MgtKeyType,MgtKey,FilePath,UserID = None):
-        """ 파일 첨부 
+        """ 파일 첨부
             args
                 CorpNum : 회원 사업자 번호
                 MgtKeyType : 관리번호 유형 one of ['SELL','BUY','TRUSTEE']
@@ -571,7 +576,7 @@ class TaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
         if FilePath == None or FilePath == "" :
             raise PopbillException(-99999999,"파일 경로가 입력되지 않았습니다.")
-        
+
         files = []
         try:
             with open(FilePath,"rb") as F:
@@ -598,7 +603,7 @@ class TaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
         if MgtKey == None or MgtKey == "" :
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-        
+
         return self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "/Files",CorpNum)
 
     def deleteFile(self,CorpNum,MgtKeyType,MgtKey,FileID , UserID = None):
@@ -721,7 +726,7 @@ class TaxinvoiceService(PopbillBase):
         """
         if MgtKeyList == None or len(MgtKeyList) < 1:
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-       
+
         postData = self._stringtify(MgtKeyList)
 
         return self._httppost('/Taxinvoice/' + MgtKeyType ,postData,CorpNum)
@@ -732,7 +737,7 @@ class TaxinvoiceService(PopbillBase):
                 CorpNum : 회원 사업자 번호
                 MgtKeyType : 관리번호 유형 one of ['SELL','BUY','TRUSTEE']
                 MgtKeyList : 파트너 관리번호 목록
-                UserID : 팝빌 회원아이디 
+                UserID : 팝빌 회원아이디
             return
                 팝빌 URL as str
             raise
@@ -740,7 +745,7 @@ class TaxinvoiceService(PopbillBase):
         """
         if MgtKeyList == None or len(MgtKeyList) < 1:
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-       
+
         postData = self._stringtify(MgtKeyList)
 
         Result = self._httppost('/Taxinvoice/' + MgtKeyType + "?Print" ,postData,CorpNum,UserID)

@@ -1,6 +1,6 @@
 __version__ = '1.1.4'
 Version = __version__  # for backward compatibility
-__all__ = [ "PopbillException","JoinForm",
+__all__ = [ "PopbillException","JoinForm","ContactInfo","CorpInfo",
 			"TaxinvoiceService","Taxinvoice","TaxinvoiceDetail","Contact",
 			"FaxService","FaxReceiver",
 			"StatementService", "Statement","StatementDetail",
@@ -8,7 +8,7 @@ __all__ = [ "PopbillException","JoinForm",
 			"MessageService", "MessageReceiver",
 			"ClosedownService", "CorpState"]
 
-from .base import PopbillException , JoinForm
+from .base import PopbillException , JoinForm, ContactInfo, CorpInfo
 from .taxinvoiceService import *
 from .statementService import *
 from .faxService import *

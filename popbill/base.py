@@ -6,11 +6,13 @@
 # http://www.popbill.com
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
-# Updated : 2016-05-31
+# Contributor : Jeong Yohan (frenchofkiss@gmail.com)
+# Updated : 2016-07-25
 # Thanks for your interest.
 from io import BytesIO
 import datetime
 import json
+import zlib
 from time import time as stime
 from json import JSONEncoder
 from collections import namedtuple
@@ -138,6 +140,27 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         postData = self._stringtify(JoinInfo)
         return self._httppost('/Join',postData)
 
+    def checkID(self, checkID):
+        return self._httpget('/IDCheck?ID=' + checkID)
+
+    def listContact(self, CorpNum, UserID = None) :
+        return self._httpget('/IDs',CorpNum, UserID)
+
+    def updateContact(self, CorpNum, ContactInfo, UserID = None) :
+        postData = self._stringtify(ContactInfo)
+        return self._httppost('/IDs',postData,CorpNum, UserID)
+
+    def getCorpInfo(self, CorpNum, UserID = None) :
+        return self._httpget('/CorpInfo', CorpNum, UserID)
+
+    def updateCorpInfo(self, CorpNum, CorpInfo, UserID = None) :
+        postData = self._stringtify(CorpInfo)
+        return self._httppost('/CorpInfo', postData, CorpNum, UserID)
+
+    def registContact(self, CorpNum, ContactInfo, UserID = None) :
+        postData = self._stringtify(ContactInfo)
+        return self._httppost('/IDs/New', postData, CorpNum, UserID)
+
     def _getToken(self,CorpNum):
 
         try:
@@ -178,10 +201,15 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         if UserID != None:
             headers["x-pb-userid"] = UserID
 
+        #headers["Accept-Encoding"] = "gzip,deflate"
+
         conn.request('GET',url,'',headers)
 
         response = conn.getresponse()
         responseString = response.read()
+
+        if Utils.isGzip(response, responseString) :
+            responseString = Utils.gzipDecomp(responseString)
 
         if response.status != 200 :
             err = Utils.json2obj(responseString)
@@ -204,10 +232,15 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         if ActionOverride != None:
             headers["X-HTTP-Method-Override"] = ActionOverride
 
+        headers["Accept-Encoding"] = "gzip,deflate"
+
         conn.request('POST',url,postData,headers)
 
         response = conn.getresponse()
         responseString = response.read()
+
+        if Utils.isGzip(response, responseString) :
+            responseString = Utils.gzipDecomp(responseString)
 
         if response.status != 200 :
             err = Utils.json2obj(responseString)
@@ -229,6 +262,7 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         if UserID != None:
             headers["x-pb-userid"] = UserID
 
+        headers["Accept-Encoding"] = "gzip,deflate"
 
         #oraganize postData
         CRLF = '\r\n'
@@ -257,6 +291,9 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         response = conn.getresponse()
         responseString = response.read()
 
+        if Utils.isGzip(response, responseString) :
+            responseString = Utils.gzipDecomp(responseString)
+
         if response.status != 200 :
             err = Utils.json2obj(responseString)
             raise PopbillException(int(err.code),err.message)
@@ -271,6 +308,14 @@ class PopbillBase(__with_metaclass(Singleton,object)):
 
 
 class JoinForm(object):
+    def __init__(self,**kwargs):
+        self.__dict__ = kwargs
+
+class ContactInfo(object):
+    def __init__(self,**kwargs):
+        self.__dict__ = kwargs
+
+class CorpInfo(object):
     def __init__(self,**kwargs):
         self.__dict__ = kwargs
 
@@ -310,3 +355,15 @@ class Utils:
     def json2obj(data):
         if(type(data) is bytes): data = data.decode()
         return json.loads(data, object_hook=Utils._json_object_hook)
+
+    @staticmethod
+    def isGzip(response, data):
+        if (response.getheader('Content-Encoding') != None and
+            'gzip' in response.getheader('Content-Encoding') ):
+            return True
+        else :
+            return False
+
+    @staticmethod
+    def gzipDecomp(data):
+        return zlib.decompress(data, 16 + zlib.MAX_WBITS)
