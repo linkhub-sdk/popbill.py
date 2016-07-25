@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# code for console Encoding difference. Dont' mind on it 
+# code for console Encoding difference. Dont' mind on it
 import sys
 import imp
 import random
@@ -21,6 +21,70 @@ class StatementServiceTestCase(unittest.TestCase):
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
+    def test_01_registIssue(self):
+
+        statement = Statement(writeDate = "20160725",
+                                purposeType = "영수",
+                                taxType = "과세",
+                                formCode = "",
+                                itemCode = 121,
+                                mgtKey = self.testMgtKey,
+                                senderCorpNum = "1234567890",
+                                senderCorpName = "공급자 상호",
+                                senderAddr = "공급자 주소",
+                                senderCEOName = "공급자 대표자 성명",
+                                senderTaxRegID = "",
+                                senderBizClass = "업종",
+                                senderBizType = "업태",
+                                senderContactName = "공급자 담당자명",
+                                senderEmail = "test@test.com",
+                                senderTEL = "070-7510-3710",
+                                senderHP = "010-000-222",
+
+                                receiverCorpNum = "8888888888",
+                                receiverCorpName = "공급받는자 상호",
+                                receiverCEOName = "공급받는자 대표자 성명",
+                                receiverAddr = "공급받는자 주소",
+                                receiverTaxRegID = "",
+                                receiverBizClass = "공급받는자 업종",
+                                receiverBizType = "공급받는자 업태",
+                                receiverContactName = "공급받는자 담당자명",
+                                receiverEmail = "frenchofkiss@gmail.com",
+                                receiverTEL = "070111222",
+                                receiverHP = "010-111-222",
+
+                                supplyCostTotal = "20000",
+                                taxTotal = "2000",
+                                totalAmount = "22000",
+                                serialNum = "123",
+                                remark1 = "비고1",
+                                remark2 = "비고2",
+                                remark3 = "비고3",
+
+                                businessLIcenseYN = False,
+                                bankBookYN = False,
+
+                                propertyBag = {
+                                        'Balance': '20000',
+                                        'Deposit' : '5000',
+                                        'CBalance': '25000'
+                                },
+
+                                detailList = [
+                                                StatementDetail(serialNum = 1,
+                                                                itemName = "품목1",
+                                                                purchaseDT = "20150323",
+                                                                qty = 1,
+                                                                supplyCost = "20000",
+                                                                tax = "2000"),
+                                                StatementDetail(serialNum = 2,
+                                                                itemName = "품목2")
+                                ]
+                            )
+
+        Memo = "즉시발행 메모"
+        result = self.statementService.registIssue(self.testCorpNum, statement, Memo, self.testUserID)
+        print(result.message)
 
     def test_getInfos(self):
         infos = self.statementService.getInfos(self.testCorpNum,121,["20150707-01","20150706-01"])
@@ -119,13 +183,13 @@ class StatementServiceTestCase(unittest.TestCase):
                                 },
 
                                 detailList = [
-                                                StatementDetail(serialNum = 1, 
+                                                StatementDetail(serialNum = 1,
                                                                 itemName = "품목1",
                                                                 purchaseDT = "20150323",
                                                                 qty = 1,
                                                                 supplyCost = "20000",
                                                                 tax = "2000"),
-                                                StatementDetail(serialNum = 2, 
+                                                StatementDetail(serialNum = 2,
                                                                 itemName = "품목2")
                                 ]
                             )
@@ -184,13 +248,13 @@ class StatementServiceTestCase(unittest.TestCase):
                                 },
 
                                 detailList = [
-                                                StatementDetail(serialNum = 1, 
+                                                StatementDetail(serialNum = 1,
                                                                 itemName = "품목1",
                                                                 purchaseDT = "20150323",
                                                                 qty = 1,
                                                                 supplyCost = "20000",
                                                                 tax = "2000"),
-                                                StatementDetail(serialNum = 2, 
+                                                StatementDetail(serialNum = 2,
                                                                 itemName = "품목2")
                                 ]
                             )
@@ -218,16 +282,16 @@ class StatementServiceTestCase(unittest.TestCase):
             self.assertEqual(result.mgtKey, "20150325-01", "getDetail오류 :" + str(result.message))
 
     def test_07_sendEmail(self):
-        
+
             result = self.statementService.sendEmail(self.testCorpNum, 121, "20150325-01", "test@test.com")
             self.assertEqual(result.code,1, "이메일 재전송 오류 : "+result.message)
-        
+
 
     def test_08_sendSMS(self):
-        
+
         result = self.statementService.sendSMS(self.testCorpNum, 121, "20150325-01", "07075103710","010111222","문자메시지 테스트")
         self.assertEqual(result.code,1, "알림문자 전송 오류 : "+result.message)
-        
+
 
     def test_09_sendFax(self):
         result = self.statementService.sendFAX(self.testCorpNum, 121, "20150325-01", "07075103710","010111222")
@@ -236,7 +300,7 @@ class StatementServiceTestCase(unittest.TestCase):
     def test_10_getLogs(self):
         result = self.statementService.getLogs(self.testCorpNum, 121, "20150325-01")
         print(result[3].procMemo)
-    
+
     def test_021_attachFile(self):
         result = self.statementService.attachFile(self.testCorpNum, 121, "20150325-01", "test.jpeg")
         self.assertEqual(result.code,1, "파일 첨부 오류 : "+result.message)

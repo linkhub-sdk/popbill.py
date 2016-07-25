@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (frenchofkiss@gmail.com)
-# Updated : 2016-07-22
+# Updated : 2016-07-25
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase,PopbillException,File
@@ -123,6 +123,42 @@ class TaxinvoiceService(PopbillBase):
         postData = self._stringtify(taxinvoice)
 
         return self._httppost('/Taxinvoice',postData,CorpNum,UserID)
+
+    def registIssue(self, CorpNum, taxinvoice, writeSpecification = False, forceIssue = False, dealInvoiceMgtKey = None, memo = None, emailSubject = None, UserID = None) :
+        """ 문서 조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                taxinvoice : 세금계산서 객체
+                writeSpecification : 거래명세서 동시작성 여부
+                forceIssue : 지연발행 강제여부
+                dealInvoiceMgtKey : 거래명세서 문서관리번호
+                memo : 메모
+                emailSubject : 메일제목, 미기재시 기본제목으로 전송
+                UsreID : 팝빌회원 아이디
+            return
+                검색결과 정보
+            raise
+                PopbillException
+        """
+        if writeSpecification :
+            taxinvoice.writeSpecification = True
+
+        if forceIssue :
+            taxinvoice.forceIssue = True
+
+        if dealInvoiceMgtKey != None and dealInvoiceMgtKey != '':
+            taxinvoice.dealInvoiceMgtKey = dealInvoiceMgtKey
+
+        if memo != None and memo != '':
+            taxinvoice.memo = memo
+
+        if emailSubject != None and emailSubject != '':
+            taxinvoice.emailSubject = emailSubject
+
+        postData = self._stringtify(taxinvoice)
+
+        return self._httppost('/Taxinvoice', postData,CorpNum,UserID,"ISSUE")
+
 
     def update(self,CorpNum,MgtKeyType,MgtKey,taxinvoice, writeSpecification = False, UserID = None ):
         """ 수정
@@ -751,6 +787,48 @@ class TaxinvoiceService(PopbillBase):
         Result = self._httppost('/Taxinvoice/' + MgtKeyType + "?Print" ,postData,CorpNum,UserID)
 
         return Result.url
+
+    def search(self,CorpNum,MgtKeyType,DType,SDate,EDate,State,Type,TaxType,LateOnly,TaxRegIDYN,TaxRegIDType,TaxRegID,Page,PerPage,Order,UserID=None) :
+        """ 목록 조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                MgtKeyType : 세금계산서유형, SELL-매출, BUY-매입, TRUSTEE-위수탁
+                DType : 일자유형, R-등록일시, W-작성일자, I-발행일시 중 택 1
+                SDate : 시작일자, 표시형식(yyyyMMdd)
+                EDate : 종료일자, 표시형식(yyyyMMdd)
+                State : 상태코드, 2,3번째 자리에 와일드카드(*) 사용가능
+                Type : 문서형태 배열, N-일반세금계산서, M-수정세금계산서
+                TaxType : 과세형태 배열, T-과세, N-면세, Z-영세
+                LateOnly : 지연발행, 공백-전체조회, 0-정상발행조회, 1-지연발행 조회
+                TaxRegIdYN : 종사업장번호 유무, 공백-전체조회, 0-종사업장번호 없음 1-종사업장번호 있음
+                TaxRegIDType : 종사업장번호 사업자유형, S-공급자, B-공급받는자, T-수탁자
+                TaxRegID : 종사업장번호, 콤마(,)로 구분하여 구성 ex)'0001,1234'
+                Page : 페이지번호
+                PerPage : 페이지당 목록개수
+                Order : 정렬방향, D-내림차순, A-오름차순
+                UserID : 팝빌 회원아이디
+        """
+
+        uri = '/Taxinvoice/' + MgtKeyType
+        uri += '?DType=' + DType
+        uri += '&SDate=' + SDate
+        uri += '&EDate=' + EDate
+        uri += '&State=' + ','.join(State)
+        uri += '&Type=' + ','.join(Type)
+        uri += '&TaxType=' + ','.join(TaxType)
+        uri += '&TaxRegIDType=' + TaxRegIDType
+        uri += '&TaxRegID=' + TaxRegID
+        uri += '&Page=' + str(Page)
+        uri += '&PerPage=' + str(PerPage)
+        uri += '&Order=' + Order
+
+        if LateOnly != '' :
+            uri += '&LateOnly=' + LateOnly
+        if TaxRegIDYN != '' :
+            uri += '&TaxRegIDType=' + TaxRegIDType
+
+        return self._httpget(uri, CorpNum,UserID)
+
 
 
 class Taxinvoice(object):

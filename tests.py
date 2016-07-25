@@ -23,6 +23,117 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
 
+    def test_1_registIssue(self):
+
+        taxinvoice = Taxinvoice(writeDate = "20160725", #작성일자
+                                chargeDirection = "정과금",
+                                issueType = "정발행",
+                                purposeType = "영수",
+                                issueTiming = "직접발행",
+                                taxType = "과세",
+                                invoicerCorpNum = self.testCorpNum,
+                                invoicerTaxRegID = '',
+                                invoicerCorpName = "공급자 상호",
+                                invoicerMgtKey = self.testMgtKey,
+                                invoicerCEOName = "공급자 대표자 성명",
+                                invoicerAddr = "공급자 주소",
+                                invoicerBizClass = "공급자 업종",
+                                invoicerBizType = "공급자 업태",
+                                invoicerContactName = "공급자 담당자명",
+                                invoicerEmail = "test@test.com",
+                                invoicerTEL = "070-7510-6766",
+                                invoicerHP = '010-1111-2222',
+                                invoicerSMSSendYN = False,
+
+                                invoiceeType = '사업자',
+                                invoiceeCorpNum = '8888888888',
+                                invoiceeCorpName = "공급받는자 상호_#$@#$!<>&_Python",
+                                invoiceeMgtKey = None,
+                                invoiceeCEOName = "공급받는자 상호",
+                                invoiceeAddr = "공급받는자 주소",
+                                invoiceeBizClass = "공급받는자 업종",
+                                invoiceeBizType = "공급받는자 업태",
+                                invoiceeContactName1 = "공급받는자 담당자",
+                                invoiceeEmail1 = "frenchofkiss@gmail.com",
+                                invoiceeHP1 = "010-2222-1111",
+                                invoiceeFAX1 = "070-7510-6767",
+
+                                supplyCostTotal = "100000",
+                                taxTotal = "10000",
+                                totalAmount = "110000",
+
+                                modifyCode = None,
+                                originalTaxinvoiceKey = None,
+                                serialNum = '123',
+                                cash = '',
+                                chkBill = None,
+                                credit = '',
+                                remark1 = '비고1',
+                                remark2 = '비고2',
+                                remark3 = '비고3',
+                                kwon = 1,
+                                ho = 2,
+
+                                businessLicenseYN  = False,
+                                bankBookYN = False,
+
+                                detailList = [
+                                                TaxinvoiceDetail(serialNum = 1,
+                                                                 purchaseDT = '20150121',
+                                                                 itemName="품목1",
+                                                                 spec = '규격',
+                                                                 qty = 1,
+                                                                 unitCost = '100000',
+                                                                 supplyCost = '100000',
+                                                                 tax = '10000',
+                                                                 remark = '품목비고'),
+                                                TaxinvoiceDetail(serialNum = 2,
+                                                                 itemName = "품목2")
+                                                ],
+                                addContactList = [
+                                                    Contact(serialNum = 1,
+                                                            contactName='추가담당자 성명',
+                                                            email='test1@test.com'),
+                                                    Contact(serialNum = 2,
+                                                            contactName='추가담당자2',
+                                                            email='test2@test.com')
+                                                ]
+
+                                )
+
+        writeSpecification = False
+        forceIssue = False
+        dealInvoiceMgtKey = "20160725-03"
+        memo = "즉시발행 체크"
+        emailSubject = "즉시발행메일_20160725"
+
+        result = self.taxinvoiceService.registIssue(self.testCorpNum, taxinvoice, writeSpecification, forceIssue, dealInvoiceMgtKey, memo, emailSubject, self.testUserID)
+        print(result.message)
+        self.assertEqual(result.code,1,"등록 오류 : " + result.message)
+
+    def registIssue(self, CorpNum, taxinvoice, writeSpecification = False, forceIssue = False, dealInfoiceMgtKey = None, memo = None, emailSubject = None, UserID = None) :
+    def test_search(self):
+        MgtKeyType = "SELL"
+        DType = "W"
+        SDate = "20160601"
+        EDate = "20160831"
+        State = ["3**", "6**"]
+        Type = ["N", "M"]
+        TaxType = ["T", "N", "Z"]
+        LateOnly = ""
+        TaxRegIDYN = ""
+        TaxRegIDType = "S"
+        TaxRegID = ""
+        Page = 1
+        PerPage = 10
+        Order = "D"
+
+        response = self.taxinvoiceService.search(self.testCorpNum,MgtKeyType,DType,SDate,EDate,State,Type,TaxType,LateOnly,TaxRegIDYN,TaxRegIDType,TaxRegID,Page,PerPage,Order,self.testUserID)
+
+        print(response.code)
+    def test_getInfos(self):
+        infos = self.taxinvoiceService.getInfos(self.testCorpNum,"SELL",["1234","1234567890"])
+        self.assertGreater(len(infos),0,"갯수 확인")
     def test_checkID(self):
         response = self.taxinvoiceService.checkID('testkorea')
         print(response.message)
@@ -309,9 +420,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         info = self.taxinvoiceService.getInfo(self.testCorpNum,"SELL","1234")
         self.assertIsNotNone(info.itemKey,"아이템키 확인")
 
-    def test_getInfos(self):
-        infos = self.taxinvoiceService.getInfos(self.testCorpNum,"SELL",["1234","1234567890"])
-        self.assertGreater(len(infos),0,"갯수 확인")
+
 
     def test_getDetailInfo(self):
         info = self.taxinvoiceService.getDetailInfo(self.testCorpNum,"SELL","123456789012")

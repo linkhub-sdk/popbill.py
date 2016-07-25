@@ -27,14 +27,14 @@ class StatementService(PopbillBase):
         self._addScope("126")
 
     def getURL(self, CorpNum, UserID, ToGo):
-        """ 팝빌 전자명세서 관련 URL 
+        """ 팝빌 전자명세서 관련 URL
             args
                 CorpNum : 팝빌회원 사업자번호
                 UserID : 팝빌 회원아이디
                 ToGo : 전자명세서 관련 기능 지정 문자.(TBOX-임시문서함, SBOX-매출문서함)
             return
                 30초 보안 토큰을 포함한 url
-            raise 
+            raise
                 PopbillException
         """
 
@@ -45,12 +45,12 @@ class StatementService(PopbillBase):
         """ 전자명세서 발행단가 확인.
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
             return
                 발행단가 by float
-            raise 
+            raise
                 PopbillException
         """
         if ItemCode == None:
@@ -63,13 +63,13 @@ class StatementService(PopbillBase):
         """ 파트너 문서관리번호 사용여부 확인.
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 문서관리번호(최대 24자리, 숫자,영문,'-','_'로 구성)
             return
                 사용 여부 by True/False
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -86,6 +86,30 @@ class StatementService(PopbillBase):
                 return False
             raise PE
 
+
+    def registIssue(self, CorpNum, statement, Memo = None, UserID = None):
+        """ 즉시발행
+            args
+                CorpNum : 팝빌회원 사업자번호
+                statement : 등록할 전자명세서 object. made with Statement(...)
+                Memo : 즉시발행메모
+
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        if statement == None:
+            raise PopbillException(-99999999, "등록할 전자명세서 정보가 입력되지 않았습니다.")
+
+        if Memo != None and Memo != '' :
+            statement.memo = Memo
+
+        postData = self._stringtify(statement)
+
+        return self._httppost('/Statement', postData, CorpNum, UserID, "ISSUE")
+
     def register(self, CorpNum, statement, UserID = None):
         """ 임시저장
             args
@@ -94,7 +118,7 @@ class StatementService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
         """
         if statement == None:
@@ -108,15 +132,15 @@ class StatementService(PopbillBase):
         """ 임시저장
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
                 Statement : 등록할 전자명세서 object. made with Statement(...)
-                UserID : 팝빌회원 아이디 
+                UserID : 팝빌회원 아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
         """
 
@@ -135,23 +159,23 @@ class StatementService(PopbillBase):
         """ 발행
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
-                Memo : 처리메모 
-                EmailSubject : 발행메일 제목(미기재시 기본양식으로 전송) 
+                Memo : 처리메모
+                EmailSubject : 발행메일 제목(미기재시 기본양식으로 전송)
                 UserID : 팝빌회원 아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
         if ItemCode == None:
             raise PopbillException(-99999999,"명세서 코드가 입력되지 않았습니다.")
-        
+
         req = {}
         postData = ""
 
@@ -168,15 +192,15 @@ class StatementService(PopbillBase):
         """ 발행취소
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
-                Memo : 처리메모 
+                Memo : 처리메모
                 UserID : 팝빌회원 아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
         """
 
@@ -197,16 +221,16 @@ class StatementService(PopbillBase):
         """ 삭제
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
                 UserID : 팝빌회원 아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
-        """     
+        """
         if MgtKey == None or MgtKey == "":
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
         if ItemCode == None:
@@ -219,15 +243,15 @@ class StatementService(PopbillBase):
         """ 상태/요약 정보 확인
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
             return
                 문서 상태/요약정보 object
-            raise 
+            raise
                 PopbillException
-        """     
+        """
         if MgtKey == None or MgtKey == "":
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
         if ItemCode == None:
@@ -239,7 +263,7 @@ class StatementService(PopbillBase):
         """ 상태정보 다량 확인, 최대 1000건
             args
                 CorpNum : 회원 사업자 번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKeyList : 문서관리번호 목록
@@ -250,7 +274,7 @@ class StatementService(PopbillBase):
         """
         if MgtKeyList == None or len(MgtKeyList) < 1:
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-       
+
         postData = self._stringtify(MgtKeyList)
 
         return self._httppost('/Statement/' + str(ItemCode),postData,CorpNum)
@@ -259,13 +283,13 @@ class StatementService(PopbillBase):
         """ 전자명세서 상세정보 확인
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
             return
                 문서 상세정보 object
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -279,7 +303,7 @@ class StatementService(PopbillBase):
         """ 메일 재전송
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
@@ -287,7 +311,7 @@ class StatementService(PopbillBase):
                 UserID : 팝빌 회원아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -303,17 +327,17 @@ class StatementService(PopbillBase):
         """ 알림문자 전송
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
-                Sender : 발신번호 
+                Sender : 발신번호
                 Receiver : 수신번호
                 Contents : 문자메시지 내용(최대 90Byte), 최대길이를 초과한경우 길이가 조정되어 전송됨
-                UserID : 팝빌 회원아이디 
+                UserID : 팝빌 회원아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
         """
 
@@ -324,7 +348,7 @@ class StatementService(PopbillBase):
 
         postData = self._stringtify({
                                         "sender" : Sender,
-                                        "receiver" : Receiver, 
+                                        "receiver" : Receiver,
                                         "contents" : Contents
                                     })
 
@@ -334,16 +358,16 @@ class StatementService(PopbillBase):
         """ 전자명세서 팩스 전송
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
-                Sender : 발신번호 
+                Sender : 발신번호
                 Receiver : 수신 팩스번호
-                UserID : 팝빌 회원아이디 
+                UserID : 팝빌 회원아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -353,7 +377,7 @@ class StatementService(PopbillBase):
 
         postData = self._stringtify({
                                         "sender" : Sender,
-                                        "receiver" : Receiver 
+                                        "receiver" : Receiver
                                     })
 
         return self._httppost('/Statement/' + str(ItemCode) + '/' + MgtKey, postData, CorpNum, UserID, "FAX")
@@ -362,13 +386,13 @@ class StatementService(PopbillBase):
         """ 전자명세서 문서이력 목록 확인
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
             return
                 문서이력 정보 목록 as List
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -382,7 +406,7 @@ class StatementService(PopbillBase):
         """ 파일 첨부
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
@@ -390,14 +414,14 @@ class StatementService(PopbillBase):
                 UserID : 팝빌 회원아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
         if FilePath == None or FilePath == "" :
             raise PopbillException(-99999999,"파일경로가 입력되지 않았습니다.")
-        
+
         files = []
 
         try:
@@ -414,13 +438,13 @@ class StatementService(PopbillBase):
         """ 첨부파일 목록 확인
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
             return
                 첨부파일 목록 as List
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -436,15 +460,15 @@ class StatementService(PopbillBase):
         """ 첨부파일 삭제
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
-                FileID : 파일아이디, 첨부파일 목록확인(getFiles) API 응답전문의 AttachedFile 변수값 
+                FileID : 파일아이디, 첨부파일 목록확인(getFiles) API 응답전문의 AttachedFile 변수값
                 UserID : 팝빌회원 아이디
             return
                 첨부파일 정보 목록 as List
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -463,14 +487,14 @@ class StatementService(PopbillBase):
         """ 전자명세서 1장의 팝빌 화면을 볼수있는 PopUp URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -486,14 +510,14 @@ class StatementService(PopbillBase):
         """ 공급자용 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -510,14 +534,14 @@ class StatementService(PopbillBase):
         """ 공급받는자용 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -534,14 +558,14 @@ class StatementService(PopbillBase):
         """ 공급받는자용 메일 링크 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKey : 파트너 문서관리번호
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
-            raise 
+            raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "" :
@@ -559,14 +583,14 @@ class StatementService(PopbillBase):
         """ 다량 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
-                ItemCode : 명세서 코드 
+                ItemCode : 명세서 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
                 MgtKeyList : 파트너 문서관리번호 목록
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
-            raise 
+            raise
                 PopbillException
         """
         if MgtKeyList == None:
