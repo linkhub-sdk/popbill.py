@@ -22,6 +22,24 @@ class CashbillServiceTestCase(unittest.TestCase):
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
 
+    def test_search(self):
+        DType = "R"
+        SDate = "20160601"
+        EDate = "20160831"
+        State = ["3**"]
+        TradeType = ["N", "C"]
+        TradeUsage = ["P", "C"]
+        TaxationType = ["T", "N"]
+        Page = 1
+        PerPage = 10
+        Order = "D"
+
+        try:
+            result = self.cashbillService.search(self.testCorpNum,DType,SDate,EDate,State,TradeType,TradeUsage,TaxationType,Page,PerPage,Order,self.testUserID)
+            print(result.total)
+            self.assertEqual(result.code, 1, "등록 오류 : " + result.message)
+        except PopbillException as PE:
+            print(PE.message)
     def test_registIssue(self):
 
         cashbill = Cashbill(mgtKey = "20160726-02",

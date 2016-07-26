@@ -6,6 +6,7 @@
 # http://www.popbill.com
 # Author : John Yohan (yhjeong@linkhub.co.kr)
 # Written : 2015-03-20
+# Updated : 2016-07-25
 # Thanks for your interest.
 from .base import PopbillBase,PopbillException,File
 
@@ -264,6 +265,33 @@ class StatementService(PopbillBase):
 
         return self._httppost('/Statement/' + str(ItemCode) + '/' + MgtKey,'', CorpNum, UserID, "DELETE")
 
+    def search(self,CorpNum,MgtKeyType,DType,SDate,EDate,State,ItemCode,Page,PerPage,Order,UserID=None) :
+        """ 목록 조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                MgtKeyType : 세금계산서유형, SELL-매출, BUY-매입, TRUSTEE-위수탁
+                DType : 일자유형, R-등록일시, W-작성일자, I-발행일시 중 택 1
+                SDate : 시작일자, 표시형식(yyyyMMdd)
+                EDate : 종료일자, 표시형식(yyyyMMdd)
+                State : 상태코드, 2,3번째 자리에 와일드카드(*) 사용가능
+                ItemCode : 명세서 종류코드 배열, 121-명세서, 122-청구서, 123-견적서, 124-발주서 125-입금표, 126-영수증
+                Page : 페이지번호
+                PerPage : 페이지당 목록개수
+                Order : 정렬방향, D-내림차순, A-오름차순
+                UserID : 팝빌 회원아이디
+        """
+
+        uri = '/Statement/Search'
+        uri += '?DType=' + DType
+        uri += '&SDate=' + SDate
+        uri += '&EDate=' + EDate
+        uri += '&State=' + ','.join(State)
+        uri += '&ItemCode=' + ','.join(ItemCode)
+        uri += '&Page=' + str(Page)
+        uri += '&PerPage=' + str(PerPage)
+        uri += '&Order=' + Order
+
+        return self._httpget(uri, CorpNum,UserID)
 
     def getInfo(self, CorpNum, ItemCode, MgtKey):
         """ 상태/요약 정보 확인

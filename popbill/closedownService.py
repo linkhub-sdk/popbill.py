@@ -6,6 +6,7 @@
 # http://www.popbill.com
 # Author : John Yohan (yhjeong@linkhub.co.kr)
 # Written : 2015-07-16
+# Updated : 2016-07-25
 # Thanks for your interest.
 
 from .base import PopbillBase,PopbillException
@@ -29,7 +30,7 @@ class ClosedownService(PopbillBase):
                 CorpNum : 팝빌회원 사업자번호
             return
                 발행단가 by float
-            raise 
+            raise
                 PopbillException
         """
 
@@ -40,12 +41,12 @@ class ClosedownService(PopbillBase):
     def checkCorpNum(self, MemberCorpNum, CheckCorpNum):
         """ 휴폐업조회 - 단건
             args
-                MemberCorpNum : 팝빌회원 사업자번호 
-                CorpNum : 조회할 사업자번호 
+                MemberCorpNum : 팝빌회원 사업자번호
+                CorpNum : 조회할 사업자번호
                 MgtKey : 문서관리번호
             return
                 휴폐업정보 object
-            raise 
+            raise
                 PopbillException
         """
 
@@ -69,7 +70,7 @@ class ClosedownService(PopbillBase):
         """
         if CorpNumList == None or len(CorpNumList) < 1:
             raise PopbillException(-99999999,"조죄할 사업자번호 목록이 입력되지 않았습니다.")
-       
+
         postData = self._stringtify(CorpNumList)
 
         return self._httppost('/CloseDown',postData,MemberCorpNum)

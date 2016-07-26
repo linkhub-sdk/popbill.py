@@ -6,7 +6,9 @@
 # http://www.popbill.com
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
-# Thanks for your interest. 
+# Contributor : Jeong Yohan (frenchofkiss@gmail.com)
+# Updated : 2016-07-25
+# Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase,PopbillException,File
 
@@ -21,16 +23,16 @@ class FaxService(PopbillBase):
         """
         super(self.__class__,self).__init__(LinkID,SecretKey)
         self._addScope("160")
-        
+
     def getURL(self, CorpNum, UserID, ToGo):
-        """ 팩스 관련 팝빌 URL 
+        """ 팩스 관련 팝빌 URL
             args
                 CorpNum : 팝빌회원 사업자번호
                 UserID : 팝빌회원 아이디
                 TOGO : 팩스관련 기능 지정 문자. (BOX - 전송내역조회)
             return
                 30초 보안 토큰을 포함한 url
-            raise 
+            raise
                 PopbillException
         """
 
@@ -43,13 +45,45 @@ class FaxService(PopbillBase):
                 CorpNum : 팝빌회원 사업자번호
             return
                 전송 단가 by float
-            raise 
+            raise
                 PopbillException
         """
 
         result = self._httpget('/FAX/UnitCost' ,CorpNum)
         return int(result.unitCost)
 
+    def search(self,CorpNum,SDate,EDate,State,ReserveYN,SenderOnly,Page,PerPage,Order,UserID=None) :
+        """ 목록 조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                MgtKeyType : 세금계산서유형, SELL-매출, BUY-매입, TRUSTEE-위수탁
+                DType : 일자유형, R-등록일시, W-작성일자, I-발행일시 중 택 1
+                SDate : 시작일자, 표시형식(yyyyMMdd)
+                EDate : 종료일자, 표시형식(yyyyMMdd)
+                State : 전송상태 배열, 1-대기, 2-성공, 3-실패, 4-취소
+                ReserveYN : 예약여부, False-전체조회, True-예약전송건 조회
+                SenderOnly : 개인조회여부, False-개인조회, True-회사조회
+                Page : 페이지번호
+                PerPage : 페이지당 목록개수
+                Order : 정렬방향, D-내림차순, A-오름차순
+                UserID : 팝빌 회원아이디
+        """
+
+        uri = '/FAX/Search'
+        uri += '?SDate=' + SDate
+        uri += '&EDate=' + EDate
+        uri += '&State=' + ','.join(State)
+
+        if ReserveYN :
+            uri += '&ReserveYN=1'
+        if SenderOnly :
+            uri += '&SenderOnly=1'
+
+        uri += '&Page=' + str(Page)
+        uri += '&PerPage=' + str(PerPage)
+        uri += '&Order=' + Order
+
+        return self._httpget(uri, CorpNum, UserID)
 
     def getFaxResult(self, CorpNum, ReceiptNum, UserID = None):
         """ 팩스 전송결과 조회
@@ -58,8 +92,8 @@ class FaxService(PopbillBase):
                 ReceiptNum : 전송요청시 발급받은 접수번호
                 UserID : 팝빌회원 아이디
             return
-                팩스전송정보 as list 
-            raise 
+                팩스전송정보 as list
+            raise
                 PopbillException
         """
 
@@ -74,26 +108,26 @@ class FaxService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
         """
 
         return self._httpget('/FAX/' + ReceiptNum + '/Cancel', CorpNum, UserID)
-    
+
 
     def sendFax(self, CorpNum, SenderNum, ReceiverNum, ReceiverName, FilePath, ReserveDT = None, UserID = None):
         """ 팩스 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
-                SenderNum : 발신자 번호 
+                SenderNum : 발신자 번호
                 ReceiverNum : 수신자 번호
-                ReceiverName : 수신자 명 
-                FilePath : 발신 파일경로 
+                ReceiverName : 수신자 명
+                FilePath : 발신 파일경로
                 ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
         receivers  = []
@@ -109,12 +143,12 @@ class FaxService(PopbillBase):
                 CorpNum : 팝빌회원 사업자번호
                 SenderNum : 발신자 번호 (동보전송용)
                 Receiver : 수신자 번호(동보전송용)
-                FilePath : 발신 파일경로 
+                FilePath : 발신 파일경로
                 ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
 
@@ -133,9 +167,9 @@ class FaxService(PopbillBase):
 
         req = {"snd" : SenderNum , "fCnt": 1 if type(FilePath) is str else len(FilePath) , "rcvs" : [] , "sndDT" : None}
 
-        if(type(Receiver) is str):        
+        if(type(Receiver) is str):
             Receiver = FaxReceiver(receiveNum=Receiver)
-            
+
         if(type(Receiver) is FaxReceiver):
             Receiver = [Receiver]
 
@@ -149,7 +183,7 @@ class FaxService(PopbillBase):
 
         if(type(FilePath) is str):
             FilePath = [FilePath]
-        
+
         files = []
 
         for filePath in FilePath:
@@ -158,7 +192,7 @@ class FaxService(PopbillBase):
                               fileName=f.name,
                               fileData=f.read())
                             )
-                
+
         result = self._httppost_files('/FAX',postData,files,CorpNum,UserID)
 
         return result.receiptNum

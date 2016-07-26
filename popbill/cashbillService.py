@@ -6,6 +6,7 @@
 # http://www.popbill.com
 # Author : John Yohan (yhjeong@linkhub.co.kr)
 # Written : 2015-03-24
+# Updated : 2016-07-25
 # Thanks for your interest.
 
 from .base import PopbillBase,PopbillException
@@ -210,6 +211,37 @@ class CashbillService(PopbillBase):
             raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
 
         return self._httppost('/Cashbill/' + MgtKey,'', CorpNum, UserID, "DELETE")
+
+    def search(self,CorpNum,DType,SDate,EDate,State,TradeType,TradeUsage,TaxationType,Page,PerPage,Order,UserID=None) :
+        """ 목록 조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                MgtKeyType : 세금계산서유형, SELL-매출, BUY-매입, TRUSTEE-위수탁
+                DType : 일자유형, R-등록일시, W-작성일자, I-발행일시 중 택 1
+                SDate : 시작일자, 표시형식(yyyyMMdd)
+                EDate : 종료일자, 표시형식(yyyyMMdd)
+                State : 상태코드, 2,3번째 자리에 와일드카드(*) 사용가능
+                TradeType : 현금영수증 형태 배열, N-일반현금영수증, C-취소현금영수증
+                TradeUsage : 거래용도 배열, P-소득공제용, C-지출증빙용
+                Page : 페이지번호
+                PerPage : 페이지당 목록개수
+                Order : 정렬방향, D-내림차순, A-오름차순
+                UserID : 팝빌 회원아이디
+        """
+
+        uri = '/Cashbill/Search'
+        uri += '?DType=' + DType
+        uri += '&SDate=' + SDate
+        uri += '&EDate=' + EDate
+        uri += '&State=' + ','.join(State)
+        uri += '&TradeUsage=' + ','.join(TradeUsage)
+        uri += '&TradeType=' + ','.join(TradeType)
+        uri += '&TaxationType=' + ','.join(TaxationType)
+        uri += '&Page=' + str(Page)
+        uri += '&PerPage=' + str(PerPage)
+        uri += '&Order=' + Order
+
+        return self._httpget(uri, CorpNum,UserID)
 
     def getInfo(self, CorpNum, MgtKey):
         """ 상태/요약 정보 조회

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# code for console Encoding difference. Dont' mind on it 
+# code for console Encoding difference. Dont' mind on it
 import sys
 import imp
 import random
@@ -16,10 +16,23 @@ from popbill import *
 class FaxServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.faxService =  FaxService('TESTER','r1bp+HzSDrMkSS8921B8Dyrn83Y/yDcOnru2OBTT2Z8=')
+        self.faxService =  FaxService('TESTER','SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.faxService.IsTest = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
+
+    def test_search(self):
+        SDate = "20160601"
+        EDate = "20160831"
+        State = ["1","2","3","4"]
+        ReserveYN = False
+        SenderOnly = False
+        Page = 1
+        PerPage = 10
+        Order = "D"
+
+        response = self.faxService.search(self.testCorpNum,SDate,EDate,State,ReserveYN,SenderOnly,Page,PerPage,Order,self.testUserID)
+        print(response.list[1].fileNames[0])
 
     def test_01_getURL(self):
         url = self.faxService.getURL(self.testCorpNum,self.testUserID,"BOX")
@@ -38,7 +51,7 @@ class FaxServiceTestCase(unittest.TestCase):
         for x in range(0, 5):
             receivers.append(FaxReceiver(receiveNum="00011112222",receiveName="수신자명칭"))
 
-        receiptNum = self.faxService.sendFax_multi(   
+        receiptNum = self.faxService.sendFax_multi(
                                                 self.testCorpNum,
                                                 "070-7510-3710",
                                                 receivers,
@@ -58,7 +71,7 @@ class FaxServiceTestCase(unittest.TestCase):
         filepath = "test2.jpeg"
 
         reserveDT = '20150325200000'
-        receiptNum = self.faxService.sendFax_multi(   
+        receiptNum = self.faxService.sendFax_multi(
                                                 self.testCorpNum,
                                                 "070-7510-3711",
                                                 receivers,
@@ -79,6 +92,6 @@ class FaxServiceTestCase(unittest.TestCase):
         receiptNum = self.faxService.sendFax(self.testCorpNum, '07075103710', '070123','수신자명', 'test2.jpeg')
 
         self.assertIsNotNone(receiptNum," 접수번호 확인완료")
-        
+
 if __name__ == '__main__':
     unittest.main()
