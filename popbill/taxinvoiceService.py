@@ -807,6 +807,10 @@ class TaxinvoiceService(PopbillBase):
                 PerPage : 페이지당 목록개수
                 Order : 정렬방향, D-내림차순, A-오름차순
                 UserID : 팝빌 회원아이디
+            return
+                조회목록 Object
+            raise
+                PopbillException
         """
 
         uri = '/Taxinvoice/' + MgtKeyType
@@ -829,6 +833,53 @@ class TaxinvoiceService(PopbillBase):
 
         return self._httpget(uri, CorpNum,UserID)
 
+    def attachStatement (self,CorpNum,MgtKeyType,MgtKey,ItemCode,StmtMgtKey,UserID=None):
+        """ 전자명세서 첨부
+            args
+                CorpNum : 팝빌회원 사업자번호
+                MgtKeyType : 세금계산서 유형, SELL-매출, BUY-매입, TRUSTEE-위수탁
+                MgtKey : 세금계산서 문서관리번호
+                StmtCode : 명세서 종류코드, 121-명세서, 122-청구서, 123-견적서, 124-발주서 125-입금표, 126-영수증
+                StmtMgtKey : 전자명세서 문서관리번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+
+        uri = '/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '/AttachStmt'
+
+        postData = self._stringtify({"ItemCode" : ItemCode, "MgtKey" : StmtMgtKey})
+
+        return self._httppost(uri, postData, CorpNum, UserID)
+
+    def detachStatement (self,CorpNum,MgtKeyType,MgtKey,ItemCode,StmtMgtKey,UserID=None):
+        """ 전자명세서 첨부해제
+            args
+                CorpNum : 팝빌회원 사업자번호
+                MgtKeyType : 세금계산서 유형, SELL-매출, BUY-매입, TRUSTEE-위수탁
+                MgtKey : 세금계산서 문서관리번호
+                StmtCode : 명세서 종류코드, 121-명세서, 122-청구서, 123-견적서, 124-발주서 125-입금표, 126-영수증
+                StmtMgtKey : 전자명세서 문서관리번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        uri = '/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '/DetachStmt'
+
+        req = {}
+
+        if ItemCode != None or Sender != '':
+            req['ItemCode'] = ItemCode
+        if StmtMgtKey != None or StmtMgtKey != '':
+            req['MgtKey'] = StmtMgtKey
+
+        postData = self._stringtify(req)
+
+        return self._httppost(uri, postData, CorpNum, UserID)
 
 
 class Taxinvoice(object):

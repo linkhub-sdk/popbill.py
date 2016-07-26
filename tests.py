@@ -23,6 +23,14 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
 
+    def test_attachStmt(self):
+        response = self.taxinvoiceService.attachStatement(self.testCorpNum, "SELL", "chzovl6d5u", "121", "fbrdavxpsn", self.testUserID)
+        print(response.message)
+
+    def test_detachStmt(self):
+        response = self.taxinvoiceService.detachStatement(self.testCorpNum, "SELL", "chzovl6d5u", "121", "fbrdavxpsn", self.testUserID)
+        print(response.message)
+
     def test_1_registIssue(self):
 
         taxinvoice = Taxinvoice(writeDate = "20160725", #작성일자
@@ -111,7 +119,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         print(result.message)
         self.assertEqual(result.code,1,"등록 오류 : " + result.message)
 
-    
+
     def test_search(self):
         MgtKeyType = "SELL"
         DType = "W"
@@ -415,12 +423,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         result = self.taxinvoiceService.attachFile(self.testCorpNum,"SELL",self.testMgtKey,"test.jpeg")
         self.assertEqual(result.code,1,"첩부 오류 : " + result.message)
 
-
     def test_getInfo(self):
         info = self.taxinvoiceService.getInfo(self.testCorpNum,"SELL","1234")
         self.assertIsNotNone(info.itemKey,"아이템키 확인")
-
-
 
     def test_getDetailInfo(self):
         info = self.taxinvoiceService.getDetailInfo(self.testCorpNum,"SELL","123456789012")
