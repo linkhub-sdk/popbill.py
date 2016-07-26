@@ -11,7 +11,7 @@ from .base import PopbillBase,PopbillException,File
 
 class MessageService(PopbillBase):
     """ 팝빌 문자 API Service Implementation. """
-    
+
     def __init__(self,LinkID,SecretKey):
         """생성자
             args
@@ -30,7 +30,7 @@ class MessageService(PopbillBase):
                 MsgType : 문자 유형(SMS, LMS)
             return
                 전송 단가 by float
-            raise 
+            raise
                 PopbillException
         """
         if MsgType == None or MsgType == "" :
@@ -39,11 +39,11 @@ class MessageService(PopbillBase):
         result = self._httpget('/Message/UnitCost?Type=' + MsgType, CorpNum)
         return float(result.unitCost)
 
-    def sendSMS(self, CorpNum, Sender, Receiver, ReceiverName, Contents, reserveDT, UserID = None):
+    def sendSMS(self, CorpNum, Sender, Receiver, ReceiverName, Contents, reserveDT, adsYN = False, UserID = None):
         """ 단문 문자메시지 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
-                Sender : 발신번호 
+                Sender : 발신번호
                 Receiver : 수신번호
                 ReceiverName : 수신자명
                 Contents : 메시지 내용(90Byte 초과시 길이가 조정되어 전송됨)
@@ -51,7 +51,7 @@ class MessageService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
         Messages = []
@@ -62,10 +62,10 @@ class MessageService(PopbillBase):
                                     msg = Contents)
                         )
 
-        return self.sendMessage("SMS", CorpNum, Sender, '', Contents, Messages, reserveDT, UserID)
+        return self.sendMessage("SMS", CorpNum, Sender, '', Contents, Messages, reserveDT, adsYN, UserID)
 
 
-    def sendSMS_multi(self, CorpNum, Sender, Contents, Messages, reserveDT, UserID = None):
+    def sendSMS_multi(self, CorpNum, Sender, Contents, Messages, reserveDT, adsYN = False, UserID = None):
         """ 단문 문자메시지 다량전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -76,17 +76,17 @@ class MessageService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
 
-        return self.sendMessage("SMS", CorpNum, Sender, '', Contents, Messages, reserveDT, UserID)
+        return self.sendMessage("SMS", CorpNum, Sender, '', Contents, Messages, reserveDT, adsYN, UserID)
 
-    def sendLMS(self, CorpNum, Sender, Receiver, ReceiverName, Subject, Contents, reserveDT, UserID = None):
+    def sendLMS(self, CorpNum, Sender, Receiver, ReceiverName, Subject, Contents, reserveDT, adsYN = False, UserID = None):
         """ 장문 문자메시지 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
-                Sender : 발신번호 
+                Sender : 발신번호
                 Receiver : 수신번호
                 ReceiverName : 수신자명
                 Subject : 메시지 제목
@@ -95,7 +95,7 @@ class MessageService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
 
@@ -108,9 +108,9 @@ class MessageService(PopbillBase):
                                     sjt= Subject)
                         )
 
-        return self.sendMessage("LMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, UserID)
+        return self.sendMessage("LMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN, UserID)
 
-    def sendLMS_multi(self, CorpNum, Sender, Subject, Contents, Messages, reserveDT, UserID = None):
+    def sendLMS_multi(self, CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN = False, UserID = None):
         """ 장문 문자메시지 다량전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -122,17 +122,17 @@ class MessageService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
 
-        return self.sendMessage("LMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, UserID)
+        return self.sendMessage("LMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN, UserID)
 
-    def sendMMS(self, CorpNum, Sender, Receiver, ReceiverName, Subject, Contents, filePath, reserveDT, UserID = None):
+    def sendMMS(self, CorpNum, Sender, Receiver, ReceiverName, Subject, Contents, filePath, reserveDT, adsYN = False, UserID = None):
         """ 멀티 문자메시지 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
-                Sender : 발신번호 
+                Sender : 발신번호
                 Receiver : 수신번호
                 ReceiverName : 수신자명
                 Subject : 메시지 제목
@@ -142,7 +142,7 @@ class MessageService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
         Messages = []
@@ -154,9 +154,9 @@ class MessageService(PopbillBase):
                                     sjt= Subject)
                         )
 
-        return self.sendMMS_Multi(CorpNum, Sender, Subject, Contents, Messages, filePath, reserveDT, UserID)
+        return self.sendMMS_Multi(CorpNum, Sender, Subject, Contents, Messages, filePath, reserveDT, adsYN, UserID)
 
-    def sendMMS_Multi(self, CorpNum, Sender, Subject, Contents, Messages, FilePath, reserveDT, UserID = None):
+    def sendMMS_Multi(self, CorpNum, Sender, Subject, Contents, Messages, FilePath, reserveDT, adsYN = False, UserID = None):
         """ 멀티 문자메시지 다량 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -169,7 +169,7 @@ class MessageService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
         if Messages == None or len(Messages) < 1 :
@@ -187,6 +187,8 @@ class MessageService(PopbillBase):
             req['sndDT'] = reserveDT
         if Messages != None or Messages != '':
             req['msgs'] = Messages
+        if adsYN :
+            req['adsYN'] = True
 
         postData = self._stringtify(req)
 
@@ -205,11 +207,11 @@ class MessageService(PopbillBase):
 
 
 
-    def sendXMS(self, CorpNum, Sender, Receiver, ReceiverName, Subject, Contents, reserveDT, UserID = None):
+    def sendXMS(self, CorpNum, Sender, Receiver, ReceiverName, Subject, Contents, reserveDT, adsYN = False, UserID = None):
         """ 단/장문 자동인식 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
-                Sender : 발신번호 
+                Sender : 발신번호
                 Receiver : 수신번호
                 ReceiverName : 수신자명
                 Subject : 메시지 제목
@@ -218,7 +220,7 @@ class MessageService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
 
@@ -231,9 +233,9 @@ class MessageService(PopbillBase):
                                     sjt= Subject)
                         )
 
-        return self.sendMessage("XMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, UserID)
+        return self.sendMessage("XMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN, UserID)
 
-    def sendXMS_multi(self, CorpNum, Sender, Subject, Contents, Messages, reserveDT, UserID = None):
+    def sendXMS_multi(self, CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN = False, UserID = None):
         """ 단/장문 자동인식 다량 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -245,13 +247,13 @@ class MessageService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
 
-        return self.sendMessage("XMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, UserID)
+        return self.sendMessage("XMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN, UserID)
 
-    def sendMessage(self, MsgType, CorpNum, Sender, Subject, Contents, Messages, reserveDT, UserID = None):
+    def sendMessage(self, MsgType, CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN = False, UserID = None):
         """ 문자 메시지 전송
             args
                 MsgType : 문자 전송 유형(단문:SMS, 장문:LMS, 단/장문:XMS)
@@ -264,7 +266,7 @@ class MessageService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
-            raise 
+            raise
                 PopbillException
         """
         if Messages == None or len(Messages) < 1 :
@@ -282,6 +284,8 @@ class MessageService(PopbillBase):
             req['sndDT'] = reserveDT
         if Messages != None or Messages != '':
             req['msgs'] = Messages
+        if adsYN :
+            req['adsYN'] = True
 
         postData = self._stringtify(req)
 
@@ -296,8 +300,8 @@ class MessageService(PopbillBase):
                 ReceiptNum : 전송요청시 발급받은 접수번호
                 UserID : 팝빌회원 아이디
             return
-                전송정보 as list 
-            raise 
+                전송정보 as list
+            raise
                 PopbillException
         """
         if ReceiptNum == None or ReceiptNum == '' :
@@ -313,7 +317,7 @@ class MessageService(PopbillBase):
                 UserID : 팝빌회원 아이디
             return
                 처리결과. consist of code and message
-            raise 
+            raise
                 PopbillException
         """
         if ReceiptNum == None or ReceiptNum == '' :
@@ -321,21 +325,49 @@ class MessageService(PopbillBase):
 
         return self._httpget('/Message/' + ReceiptNum + '/Cancel', CorpNum)
 
+    def search(self, CorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, UserID = None) :
+        """ 문자전송 목록조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                SDate : 시작일자, 표시형식(yyyyMMdd)
+                EDate : 종료일자, 표시형식(yyyyMMdd)
+                State : 전송상태 배열, 1-대기, 2-성공, 3-실패, 4-취소
+                Item : 검색대상, SMS-단문, LMS-장문, MMS-포토
+                ReserveYN : 예약여부 0-전체조회, 1-예약전송 조회
+                SenderYN : 개인조회 여부, 0-전체조회, 1-개인조회
+                Page : 페이지번호
+                PerPage : 페이지당 목록개수
+                Order : 정렬방향, D-내림차순, A-오름차순
+                UserID : 팝빌 회원아이디
+        """
+
+        uri = '/Message/Search'
+        uri += '?SDate=' + SDate
+        uri += '&EDate=' + EDate
+        uri += '&State=' + ','.join(State)
+        uri += '&Item=' + ','.join(Item)
+        uri += '&ReserveYN=' + ReserveYN
+        uri += '&SenderYN=' + SenderYN
+        uri += '&Page=' + str(Page)
+        uri += '&PerPage=' + str(PerPage)
+        uri += '&Order=' + Order
+
+        return self._httpget(uri, CorpNum, UserID)
 
     def getURL(self, CorpNum, UserID, TOGO):
-        """ 문자 관련 팝빌 URL 
+        """ 문자 관련 팝빌 URL
             args
                 CorpNum : 팝빌회원 사업자번호
                 UserID : 팝빌회원 아이디
                 TOGO : BOX (전송내역조회 팝업)
             return
                 팝빌 URL
-            raise 
+            raise
                 PopbillException
         """
 
         result = self._httpget('/Message/?TG=' + TOGO, CorpNum, UserID)
-        
+
         return result.url
 
 class MessageReceiver(object):

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# code for console Encoding difference. Dont' mind on it 
+# code for console Encoding difference. Dont' mind on it
 import sys
 import imp
 import random
@@ -21,7 +21,37 @@ class CashbillServiceTestCase(unittest.TestCase):
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
-    
+
+    def test_registIssue(self):
+
+        cashbill = Cashbill(mgtKey = "20160726-02",
+                            tradeType = "승인거래",
+                            tradeUsage = "소득공제용",
+                            taxationType = "과세",
+                            identityNum = "01012341234",
+                            franchiseCorpNum = "1234567890",
+                            franchiseCorpName = "발행자 상호",
+                            franchiseCEOName = "발행 대표자 성명",
+                            franchiseAddr = "발행자 주소",
+                            franchiseTEL = "07075103710",
+                            smssendYN = False,
+                            customerName = "고객명",
+                            itemName = "상품명",
+                            orderNumber = "주문번호",
+                            email = "test@test.com",
+                            hp = "010000000",
+                            fax = "07075103710",
+                            supplyCost = "15000",
+                            tax = "5000",
+                            serviceFee = "0",
+                            totalAmount = "20000"
+                            )
+        try:
+            result = self.cashbillService.registIssue(self.testCorpNum,cashbill,"발행메모")
+            self.assertEqual(result.code, 1, "등록 오류 : " + result.message)
+        except PopbillException as PE:
+            print(PE.message)
+
     def test_getInfos(self):
         infos = self.cashbillService.getInfos(self.testCorpNum,["20150707-01","20150706-01"])
         for info in infos:
@@ -40,7 +70,7 @@ class CashbillServiceTestCase(unittest.TestCase):
         balance = self.cashbillService.getPartnerBalance(self.testCorpNum)
         print(balance)
         self.assertGreaterEqual(balance,0,'잔액 0 이상.')
-    
+
     def test_checkIsMember(self):
         result = self.cashbillService.checkIsMember(self.testCorpNum)
         self.assertEqual(result.code,1,result.message + ", 가입시 코드는 1")
@@ -74,7 +104,7 @@ class CashbillServiceTestCase(unittest.TestCase):
                             tradeType = "승인거래",
                             tradeUsage = "소득공제용",
                             taxationType = "과세",
-                            identityNum = "01043255117",
+                            identityNum = "010000000",
                             franchiseCorpNum = "1234567890",
                             franchiseCorpName = "발행자 상호",
                             franchiseCEOName = "발행 대표자 성명",
@@ -85,7 +115,7 @@ class CashbillServiceTestCase(unittest.TestCase):
                             itemName = "상품명",
                             orderNumber = "주문번호",
                             email = "test@test.com",
-                            hp = "01043255117",
+                            hp = "010000000",
                             fax = "07075103710",
                             supplyCost = "15000",
                             tax = "5000",
@@ -103,7 +133,7 @@ class CashbillServiceTestCase(unittest.TestCase):
                             tradeType = "승인거래",
                             tradeUsage = "소득공제용",
                             taxationType = "과세",
-                            identityNum = "01043255117",
+                            identityNum = "01012341234",
                             franchiseCorpNum = "1234567890",
                             franchiseCorpName = "발행자 상호",
                             franchiseCEOName = "발행 대표자 성명",
@@ -114,7 +144,7 @@ class CashbillServiceTestCase(unittest.TestCase):
                             itemName = "상품명",
                             orderNumber = "주문번호",
                             email = "test@test.com",
-                            hp = "01043255117",
+                            hp = "010000000",
                             fax = "07075103710",
                             supplyCost = "15000",
                             tax = "5000",
@@ -141,7 +171,7 @@ class CashbillServiceTestCase(unittest.TestCase):
         result = self.cashbillService.cancelIssue(self.testCorpNum, "20150325-01", "발행취소 메모1")
         self.assertEqual(result.code, 1, "발행취소 오류 : "+result.message)
 
-    def test_05_getInfo(self):        
+    def test_05_getInfo(self):
             result = self.cashbillService.getInfo(self.testCorpNum, "20150325-01")
             print(result.itemKey)
             self.assertEqual(result.mgtKey, "20150325-01","getInfo 오류 :" + str(result.message))
@@ -152,16 +182,16 @@ class CashbillServiceTestCase(unittest.TestCase):
             self.assertEqual(result.mgtKey, "20150325-01", "getDetail오류 :" + str(result.message))
 
     def test_07_sendEmail(self):
-        
+
             result = self.cashbillService.sendEmail(self.testCorpNum, "20150325-01", "test@test.com")
             self.assertEqual(result.code,1, "이메일 재전송 오류 : "+result.message)
-        
+
 
     def test_08_sendSMS(self):
-       
+
         result = self.cashbillService.sendSMS(self.testCorpNum, "20150325-01", "07075103710","010111222","문자메시지 테스트")
         self.assertEqual(result.code,1, "알림문자 전송 오류 : "+result.message)
-        
+
 
     def test_09_sendFax(self):
         result = self.cashbillService.sendFAX(self.testCorpNum, "20150325-01", "07075103710","010111222")
@@ -170,7 +200,7 @@ class CashbillServiceTestCase(unittest.TestCase):
     def test_10_getLogs(self):
         result = self.cashbillService.getLogs(self.testCorpNum, "20150325-01")
         print(result[0].log)
-    
+
     def test_12_getPopUpURL(self):
         url = self.cashbillService.getPopUpURL(self.testCorpNum, "20150325-01", self.testUserID)
         self.assertEqual(url[:5], "https", "https로 시작 ")

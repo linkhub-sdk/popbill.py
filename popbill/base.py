@@ -306,7 +306,7 @@ class PopbillBase(__with_metaclass(Singleton,object)):
 
     def _httppost_files(self,url,postData,Files,CorpNum,UserID = None):
 
-        conn = self._getConn
+        conn = self._getConn();
 
         boundary = "--POPBILL_PYTHON--"
 
