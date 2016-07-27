@@ -22,6 +22,10 @@ class MessageServiceTestCase(unittest.TestCase):
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
 
+    def test_getAutoDenyList(self):
+        autoDenyList = self.messageService.getAutoDenyList(self.testCorpNum, self.testUserID)
+        print(autoDenyList[5].number)
+
     def test_getMessage(self):
         SDate = "20160601"
         EDate = "20160831"

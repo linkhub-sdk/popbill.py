@@ -22,6 +22,22 @@ class StatementServiceTestCase(unittest.TestCase):
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
 
+    def test_attachStatement(self):
+        ItemCode = "121"
+        MgtKey = "7czksfi09b"
+        SubItemCode = "121"
+        SubMgtKey = "fbrdavxpsn"
+        response = self.statementService.attachStatement(self.testCorpNum,ItemCode,MgtKey,SubItemCode,SubMgtKey,self.testUserID)
+        print(response.message)
+
+    def test_detachStatement(self):
+        ItemCode = "121"
+        MgtKey = "7czksfi09b"
+        SubItemCode = "121"
+        SubMgtKey = "fbrdavxpsn"
+        response = self.statementService.detachStatement(self.testCorpNum,ItemCode,MgtKey,SubItemCode,SubMgtKey,self.testUserID)
+        print(response.message)
+
     def test_search(self):
         MgtKeyType = "SELL"
         DType = "W"

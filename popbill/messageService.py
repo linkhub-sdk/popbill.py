@@ -24,6 +24,9 @@ class MessageService(PopbillBase):
         self._addScope("151")
         self._addScope("152")
 
+    def getAutoDenyList(self, CorpNum, UserID = None) :
+        return self._httpget('/Message/Denied', CorpNum, UserID)
+
     def getUnitCost(self, CorpNum, MsgType):
         """ 문자 전송 단가 확인
             args
