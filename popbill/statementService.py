@@ -28,6 +28,16 @@ class StatementService(PopbillBase):
         self._addScope("126")
 
     def getChargeInfo(self, CorpNum, ItemCode, UserID = None):
+        """ 과금정보 확인
+            args
+                CorpNum : 회원 사업자번호
+                ItemCode : 전자명세서 종류코드
+                UserID : 팝빌 회원아이디
+            return
+                과금정보 객체
+            raise
+                PopbillException
+        """
         return self._httpget('/Statement/ChargeInfo/' + ItemCode, CorpNum, UserID)
 
     def getURL(self, CorpNum, UserID, ToGo):

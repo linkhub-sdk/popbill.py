@@ -25,6 +25,15 @@ class FaxService(PopbillBase):
         self._addScope("160")
 
     def getChargeInfo(self, CorpNum, UserID = None):
+        """ 과금정보 확인
+            args
+                CorpNum : 회원 사업자번호
+                UserID : 팝빌 회원아이디
+            return
+                과금정보 객체
+            raise
+                PopbillException
+        """
         return self._httpget('/FAX/ChargeInfo', CorpNum, UserID)
 
     def getURL(self, CorpNum, UserID, ToGo):

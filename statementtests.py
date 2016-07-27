@@ -119,7 +119,7 @@ class StatementServiceTestCase(unittest.TestCase):
                             )
 
         SendNum = "070-7510-3710"
-        ReceiveNum = "02-6442-9700"
+        ReceiveNum = "070-111-222"
 
         result = self.statementService.FAXSend(self.testCorpNum, statement, SendNum, ReceiveNum, self.testUserID)
         print(result)

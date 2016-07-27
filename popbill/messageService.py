@@ -27,9 +27,28 @@ class MessageService(PopbillBase):
         self._addScope("152")
 
     def getChargeInfo(self, CorpNum, MsgType, UserID = None):
+        """ 과금정보 확인
+            args
+                CorpNum : 회원 사업자번호
+                MsgType : 문자전송 유형
+                UserID : 팝빌 회원아이디
+            return
+                과금정보 객체
+            raise
+                PopbillException
+        """
         return self._httpget('/Message/ChargeInfo?Type=' + MsgType, CorpNum, UserID)
 
     def getAutoDenyList(self, CorpNum, UserID = None) :
+        """ 080수신거부 목록 확인
+            args
+                number : 수신거부번호
+                regDT : 등록일시
+            return
+                수신거부 목록
+            raise
+                PopbillException
+        """
         return self._httpget('/Message/Denied', CorpNum, UserID)
 
     def getUnitCost(self, CorpNum, MsgType):
