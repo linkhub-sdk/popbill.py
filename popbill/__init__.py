@@ -6,7 +6,7 @@ __all__ = [ "PopbillException","JoinForm","ContactInfo","CorpInfo",
 			"StatementService", "Statement","StatementDetail",
 			"CashbillService", "Cashbill",
 			"MessageService", "MessageReceiver",
-            "HTTaxinvoiceService",
+            "HTTaxinvoiceService", "HTCashbillService",
             "ClosedownService"]
 
 from .base import PopbillException , JoinForm, ContactInfo, CorpInfo
@@ -16,4 +16,5 @@ from .faxService import *
 from .cashbillService import *
 from .messageService import *
 from .htTaxinvoiceService import *
+from .htCashbillService import *
 from .closedownService import *
