@@ -24,6 +24,9 @@ class CashbillService(PopbillBase):
         super(self.__class__,self).__init__(LinkID,SecretKey)
         self._addScope("140")
 
+    def getChargeInfo(self, CorpNum, UserID = None):
+        return self._httpget('/Cashbill/ChargeInfo', CorpNum, UserID)
+
     def getURL(self, CorpNum, UserID, ToGo):
         """ 팝빌 현금영수증 관련 URL
             args

@@ -22,6 +22,13 @@ class StatementServiceTestCase(unittest.TestCase):
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
 
+    def test_getChargeInfo(self):
+        ItemCode = "126"
+        chrgInfo = self.statementService.getChargeInfo(self.testCorpNum, ItemCode, self.testUserID)
+        print(chrgInfo.rateSystem)
+        print(chrgInfo.unitCost)
+        print(chrgInfo.chargeMethod)
+
     def test_attachStatement(self):
         ItemCode = "121"
         MgtKey = "7czksfi09b"

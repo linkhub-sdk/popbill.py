@@ -24,6 +24,9 @@ class ClosedownService(PopbillBase):
         super(self.__class__,self).__init__(LinkID,SecretKey)
         self._addScope("170")
 
+    def getChargeInfo(self, CorpNum, UserID = None):
+        return self._httpget('/CloseDown/ChargeInfo', CorpNum, UserID)
+
     def getUnitCost(self, CorpNum):
         """ 휴폐업조회 단가 확인.
             args

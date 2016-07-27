@@ -174,9 +174,12 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
     def test_getCorpInfo(self):
         corpInfo = self.taxinvoiceService.getCorpInfo(self.testCorpNum, self.testUserID)
         print(corpInfo.addr)
+
     def test_getChargeInfo(self):
         chrgInfo = self.taxinvoiceService.getChargeInfo(self.testCorpNum,self.testUserID)
         print (chrgInfo.unitCost)
+        print (chrgInfo.rateSystem)
+
 
     def test_listContact(self):
         contactList = self.taxinvoiceService.listContact(self.testCorpNum)

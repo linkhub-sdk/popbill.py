@@ -22,6 +22,12 @@ class CashbillServiceTestCase(unittest.TestCase):
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
 
+    def test_getChargeInfo(self):
+        chrgInfo = self.cashbillService.getChargeInfo(self.testCorpNum, self.testUserID)
+        print(chrgInfo.unitCost)
+        print(chrgInfo.rateSystem)
+        print(chrgInfo.chargeMethod)
+
     def test_search(self):
         DType = "R"
         SDate = "20160601"

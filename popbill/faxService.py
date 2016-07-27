@@ -24,6 +24,9 @@ class FaxService(PopbillBase):
         super(self.__class__,self).__init__(LinkID,SecretKey)
         self._addScope("160")
 
+    def getChargeInfo(self, CorpNum, UserID = None):
+        return self._httpget('/FAX/ChargeInfo', CorpNum, UserID)
+
     def getURL(self, CorpNum, UserID, ToGo):
         """ 팩스 관련 팝빌 URL
             args

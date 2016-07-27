@@ -21,6 +21,12 @@ class FaxServiceTestCase(unittest.TestCase):
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
 
+    def test_getChargeInfo(self):
+        chrgInfo = self.faxService.getChargeInfo(self.testCorpNum, self.testUserID)
+        print(chrgInfo.unitCost)
+        print(chrgInfo.chargeMethod)
+        print(chrgInfo.rateSystem)
+
     def test_search(self):
         SDate = "20160601"
         EDate = "20160831"

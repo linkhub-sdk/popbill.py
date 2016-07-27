@@ -257,7 +257,7 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         if UserID != None:
             headers["x-pb-userid"] = UserID
 
-        #headers["Accept-Encoding"] = "gzip,deflate"
+        headers["Accept-Encoding"] = "gzip,deflate"
 
         conn.request('GET',url,'',headers)
 

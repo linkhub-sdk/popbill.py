@@ -22,6 +22,12 @@ class MessageServiceTestCase(unittest.TestCase):
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
 
+    def test_getChargeInfo(self):
+        chrgInfo = self.messageService.getChargeInfo(self.testCorpNum, "MMS", self.testUserID)
+        print(chrgInfo.unitCost)
+        print(chrgInfo.chargeMethod)
+        print(chrgInfo.rateSystem)
+
     def test_getAutoDenyList(self):
         autoDenyList = self.messageService.getAutoDenyList(self.testCorpNum, self.testUserID)
         print(autoDenyList[5].number)
@@ -240,9 +246,6 @@ class MessageServiceTestCase(unittest.TestCase):
 
         except PopbillException as PE:
             print(PE.message)
-
-
-
 
 if __name__ == '__main__':
     unittest.main()

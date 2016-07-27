@@ -13,6 +13,8 @@ from .base import PopbillBase,PopbillException,File
 class MessageService(PopbillBase):
     """ 팝빌 문자 API Service Implementation. """
 
+    __MsgTypes = ["SMS","LMS","MMS"]
+
     def __init__(self,LinkID,SecretKey):
         """생성자
             args
@@ -23,6 +25,9 @@ class MessageService(PopbillBase):
         self._addScope("150")
         self._addScope("151")
         self._addScope("152")
+
+    def getChargeInfo(self, CorpNum, MsgType, UserID = None):
+        return self._httpget('/Message/ChargeInfo?Type=' + MsgType, CorpNum, UserID)
 
     def getAutoDenyList(self, CorpNum, UserID = None) :
         return self._httpget('/Message/Denied', CorpNum, UserID)
