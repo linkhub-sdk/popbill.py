@@ -18,8 +18,8 @@ class HTCashbillServiceTestCase(unittest.TestCase):
     def setUpClass(self):
         self.htCashbillService =  HTCashbillService('TESTER','SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.htCashbillService.IsTest = True
-        self.testCorpNum = "4108600477"
-        self.testUserID = "innoposttest"
+        self.testCorpNum = "1234567890"
+        self.testUserID = "testkorea"
 
     def test_checkID(self):
         response = self.htCashbillService.checkID("testkorea")
@@ -91,7 +91,7 @@ class HTCashbillServiceTestCase(unittest.TestCase):
 
 
     def test_getJobState(self):
-        JobID = "016072810000000041"
+        JobID = "016072811000000010"
 
         state = self.htCashbillService.getJobState(self.testCorpNum, JobID, self.testUserID)
         self.assertIsNotNone(state, "수집 상태 조회")
@@ -135,7 +135,7 @@ class HTCashbillServiceTestCase(unittest.TestCase):
 
 
     def test_search(self):
-        JobID = "016072810000000041"
+        JobID = "016072811000000010"
         TradeType = ["N", "C"]
         TradeUsage = ["P", "C"]
         Page = 1
@@ -155,7 +155,7 @@ class HTCashbillServiceTestCase(unittest.TestCase):
         print(tmp)
 
     def test_summary(self):
-        JobID = "016072810000000041"
+        JobID = "016072811000000010"
         TradeType = ["N", "C"]
         TradeUsage = ["P", "C"]
         Page = 1

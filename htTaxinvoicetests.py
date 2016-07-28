@@ -18,8 +18,8 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
     def setUpClass(self):
         self.htTaxinvoiceService =  HTTaxinvoiceService('TESTER','SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.htTaxinvoiceService.IsTest = True
-        self.testCorpNum = "4108600477"
-        self.testUserID = "innoposttest"
+        self.testCorpNum = "1234567890"
+        self.testUserID = "testkorea"
 
     def test_checkID(self):
         response = self.htTaxinvoiceService.checkID("testkorea")
