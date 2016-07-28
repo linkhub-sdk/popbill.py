@@ -445,4 +445,5 @@ class StatementServiceTestCase(unittest.TestCase):
         self.assertEqual(result.code,1, "삭제 오류 : "+result.message)
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(StatementServiceTestCase)
+    unittest.TextTestRunner(verbosity=2).run(suite)

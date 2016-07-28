@@ -18,14 +18,65 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
     def setUpClass(self):
         self.htTaxinvoiceService =  HTTaxinvoiceService('TESTER','SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.htTaxinvoiceService.IsTest = True
-        self.testCorpNum = "1234567890"
-        self.testUserID = "testkorea"
+        self.testCorpNum = "4108600477"
+        self.testUserID = "innoposttest"
+
+    def test_checkID(self):
+        response = self.htTaxinvoiceService.checkID("testkorea")
+        self.assertEqual(response.code, 1, "해당 아이디 사용중")
+
+    def test_registContact(self):
+        contactInfo = ContactInfo (
+                        id = "testkorea_0726",
+                        pwd = "popbill",
+                        personName = "정씨네",
+                        tel = "010-1234-1234",
+                        hp = "010-4324-5117",
+                        fax = "070-7510-3710",
+                        email = "code@linkhub.co.kr",
+                        searchAllAllowYN = True,
+                        mgrYN = False
+                        )
+        response = self.htTaxinvoiceService.registContact(self.testCorpNum, contactInfo, self.testUserID)
+        self.assertEqual(response.code, 1, "담당자 추가 성공")
+
+    def test_listContact(self):
+        contactList = self.htTaxinvoiceService.listContact(self.testCorpNum, self.testUserID)
+        self.assertGreater(len(contactList), 0, "담당자 목록 조회")
+
+    def test_updateContact(self):
+        contactInfo = ContactInfo(
+                            personName = "담당자 성명_0728",
+                            tel = "010-8888-8888",
+                            hp = "010-8888-8888",
+                            fax = "02-6442-9700",
+                            email = "weicome@linkhub.co.kr",
+                            searchAllAllowYN = True,
+                            mgtYN = False
+                            )
+        response = self.htTaxinvoiceService.updateContact(self.testCorpNum, contactInfo, self.testUserID)
+        self.assertEqual(response.code, 1, "담당자 정보 수정성공.")
+
+    def test_getCorpInfo(self):
+        corpInfo = self.htTaxinvoiceService.getCorpInfo(self.testCorpNum, self.testUserID)
+        self.assertIsNotNone(corpInfo)
+
+    def test_updateCorpInfo(self):
+        corpInfo = CorpInfo (
+                        ceoname = "대표자성명_0728",
+                        corpName = "상호_0728",
+                        addr = "주소_0728",
+                        bizType = "업태_0728",
+                        bizClass = "종목_0728"
+                        )
+        response = self.htTaxinvoiceService.updateCorpInfo(self.testCorpNum, corpInfo, self.testUserID)
+        self.assertEqual(response.code, 1, "회사정보 수정성공")
 
     def test_getChrgInfo(self):
         chrgInfo = self.htTaxinvoiceService.getChargeInfo(self.testCorpNum, self.testUserID)
-        print(chrgInfo.rateSystem)
-        print(chrgInfo.chargeMethod)
-        print(chrgInfo.unitCost)
+        self.assertIsNotNone(chrgInfo)
+        print("단가 : " +chrgInfo.unitCost)
+
 
     def test_requestJob(self):
         Type = "SELL"
@@ -33,50 +84,53 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         SDate = "20160601"
         EDate = "20160831"
         jobID = self.htTaxinvoiceService.requestJob(self.testCorpNum, Type, DType, SDate, EDate, self.testUserID)
-        print (jobID)
+        print("작업아이디 : " + jobID)
+        self.assertIsNotNone(jobID, "수집요청 작업아이디 확인")
 
     def test_getJobState(self):
-        JobID = "016072714000000003"
+        JobID = "016072810000000006"
 
         state = self.htTaxinvoiceService.getJobState(self.testCorpNum, JobID, self.testUserID)
+        self.assertIsNotNone(state, "수집 상태 확인")
 
-        tmp = '======== getJobState Response ========\n'
-        tmp += 'jobID : ' + state.jobID + '\n'
-        tmp += 'jobState : ' + str(state.jobState) + '\n'
-        tmp += 'queryType : ' + state.queryType + '\n'
-        tmp += 'queryDateType : ' + state.queryDateType + '\n'
-        tmp += 'queryStDate : ' + state.queryStDate + '\n'
-        tmp += 'queryEnDate : ' + state.queryEnDate + '\n'
-        tmp += 'errorCode : ' + str(state.errorCode) + '\n'
-        tmp += 'errorReason : ' + state.errorReason + '\n'
-        tmp += 'jobStartDT : ' + state.jobStartDT + '\n'
-        tmp += 'jobEndDT : ' + state.jobEndDT + '\n'
-        tmp += 'collectCount : ' + str(state.collectCount) + '\n'
-        tmp += 'regDT : ' + state.regDT + '\n'
+        tmp = '\n\t======== getJobState Response ========\n'
+        tmp += '\tjobID : ' + state.jobID + '\n'
+        tmp += '\tjobState : ' + str(state.jobState) + '\n'
+        tmp += '\tqueryType : ' + state.queryType + '\n'
+        tmp += '\tqueryDateType : ' + state.queryDateType + '\n'
+        tmp += '\tqueryStDate : ' + state.queryStDate + '\n'
+        tmp += '\tqueryEnDate : ' + state.queryEnDate + '\n'
+        tmp += '\terrorCode : ' + str(state.errorCode) + '\n'
+        tmp += '\terrorReason : ' + state.errorReason + '\n'
+        tmp += '\tjobStartDT : ' + state.jobStartDT + '\n'
+        tmp += '\tjobEndDT : ' + state.jobEndDT + '\n'
+        tmp += '\tcollectCount : ' + str(state.collectCount) + '\n'
+        tmp += '\tregDT : ' + state.regDT
         print(tmp)
 
     def test_listACtiveJob(self):
         jobInfos = self.htTaxinvoiceService.listActiveJob(self.testCorpNum, self.testUserID)
+        self.assertIsNotNone(jobInfos, "수집 목록 확인")
 
-        state = jobInfos[1]
+        state = jobInfos[0]
 
-        tmp = '======== listACtiveJob Response ========\n'
-        tmp += 'jobID : ' + state.jobID + '\n'
-        tmp += 'jobState : ' + str(state.jobState) + '\n'
-        tmp += 'queryType : ' + state.queryType + '\n'
-        tmp += 'queryDateType : ' + state.queryDateType + '\n'
-        tmp += 'queryStDate : ' + state.queryStDate + '\n'
-        tmp += 'queryEnDate : ' + state.queryEnDate + '\n'
-        tmp += 'errorCode : ' + str(state.errorCode) + '\n'
-        tmp += 'errorReason : ' + state.errorReason + '\n'
-        tmp += 'jobStartDT : ' + state.jobStartDT + '\n'
-        tmp += 'jobEndDT : ' + state.jobEndDT + '\n'
-        tmp += 'collectCount : ' + str(state.collectCount) + '\n'
-        tmp += 'regDT : ' + state.regDT + '\n'
+        tmp = '\n\t======== listACtiveJob Response ========\n'
+        tmp += '\tjobID : ' + state.jobID + '\n'
+        tmp += '\tjobState : ' + str(state.jobState) + '\n'
+        tmp += '\tqueryType : ' + state.queryType + '\n'
+        tmp += '\tqueryDateType : ' + state.queryDateType + '\n'
+        tmp += '\tqueryStDate : ' + state.queryStDate + '\n'
+        tmp += '\tqueryEnDate : ' + state.queryEnDate + '\n'
+        tmp += '\terrorCode : ' + str(state.errorCode) + '\n'
+        tmp += '\terrorReason : ' + state.errorReason + '\n'
+        tmp += '\tjobStartDT : ' + state.jobStartDT + '\n'
+        tmp += '\tjobEndDT : ' + state.jobEndDT + '\n'
+        tmp += '\tcollectCount : ' + str(state.collectCount) + '\n'
+        tmp += '\tregDT : ' + state.regDT
         print(tmp)
 
     def test_search(self):
-        JobID = "016072714000000003"
+        JobID = "016072810000000013"
         Type = ["N", "M"]
         TaxType = ["T", "N", "Z"]
         PurposeType = ["R", "C", "N"]
@@ -88,12 +142,22 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         Order = "D"
 
         searchInfo = self.htTaxinvoiceService.search(self.testCorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, Page, PerPage, Order, self.testUserID)
+        self.assertIsNotNone(searchInfo, "수집 결과 조회")
 
-        print(searchInfo.total)
-        print(searchInfo.list[0].ntsconfirmNum)
+        tmp = '\n\t======== search Response ========\n'
+        tmp += '\t code : ' + str(searchInfo.code) + '\n'
+        tmp += '\t message : ' + searchInfo.message + '\n'
+        tmp += '\t total : ' + str(searchInfo.total) + '\n'
+        tmp += '\t perPage : ' + str(searchInfo.perPage) + '\n'
+        tmp += '\t pageNum : ' + str(searchInfo.pageNum) + '\n'
+        tmp += '\t pageCount : ' + str(searchInfo.pageCount) + '\n'
+
+        print(tmp)
+
+
 
     def test_summary(self):
-        JobID = "016072714000000003"
+        JobID = "016072810000000013"
         Type = ["N", "M"]
         TaxType = ["T", "N", "Z"]
         PurposeType = ["R", "C", "N"]
@@ -102,41 +166,41 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         TaxRegID = ""
 
         summaryInfo = self.htTaxinvoiceService.summary(self.testCorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, self.testUserID)
+        self.assertIsNotNone(summaryInfo, "수집결과 요약정보 조회")
 
-        print(summaryInfo.count)
+        tmp = '\n\t======== Summary Response ========\n'
+        tmp += '\t count : ' + str(summaryInfo.count) + '\n'
+        tmp += '\t supplyCostTotal : ' + str(summaryInfo.supplyCostTotal) + '\n'
+        tmp += '\t taxTotal : ' + str(summaryInfo.taxTotal) + '\n'
+        tmp += '\t amountTotal : ' + str(summaryInfo.amountTotal) + '\n'
+
+        print(tmp)
+
 
     def test_getTaxinvoice(self):
         NTSConfirmNum = "201607274100002900000209"
-
         taxinvoiceInfo = self.htTaxinvoiceService.getTaxinvoice(self.testCorpNum, NTSConfirmNum, self.testUserID)
-
-        print(taxinvoiceInfo.ntsconfirmNum)
+        self.assertIsNotNone(taxinvoiceInfo, "상세정보 조회")
 
     def test_getXML(self):
         NTSConfirmNum = "201607274100002900000209"
+        taxinvoiceXML = self.htTaxinvoiceService.getXML(self.testCorpNum, NTSConfirmNum, self.testUserID)
+        self.assertIsNotNone(taxinvoiceXML, "상세정보 조회-XML")
 
-        taxinvoiceInfo = self.htTaxinvoiceService.getXML(self.testCorpNum, NTSConfirmNum, self.testUserID)
-
-        print(taxinvoiceInfo.retObject)
 
     def test_getFlatRatePopUpURL(self):
-
         url = self.htTaxinvoiceService.getCertificatePopUpURL(self.testCorpNum, self.testUserID)
-
-        print(url)
+        self.assertIsNotNone(url, "정액제 결제 신청 URL")
 
     def test_getFlatRateState(self):
-
         flatRateInfo = self.htTaxinvoiceService.getFlatRateState(self.testCorpNum, self.testUserID)
-
-        print(flatRateInfo.unPaidYN)
+        self.assertEqual(flatRateInfo.referenceID, self.testCorpNum)
 
     def test_getCertificateExpireDate(self):
-
         expireDate = self.htTaxinvoiceService.getCertificateExpireDate(self.testCorpNum, self.testUserID)
-
-        print(expireDate)
+        self.assertIsNotNone(expireDate, "홈택스 공인인증서 만료일시 확인")
 
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(HTTaxinvoiceServiceTestCase)
+    unittest.TextTestRunner(verbosity=2).run(suite)

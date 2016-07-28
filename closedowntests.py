@@ -86,4 +86,5 @@ class ClosedownServiceTestCase(unittest.TestCase):
         self.assertGreater(len(resultList),0,"갯수 확인")
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(ClosedownServiceTestCase)
+    unittest.TextTestRunner(verbosity=2).run(suite)

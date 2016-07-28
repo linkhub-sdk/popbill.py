@@ -100,4 +100,5 @@ class FaxServiceTestCase(unittest.TestCase):
         self.assertIsNotNone(receiptNum," 접수번호 확인완료")
 
 if __name__ == '__main__':
-    unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(FaxServiceTestCase)
+    unittest.TextTestRunner(verbosity=2).run(suite)
