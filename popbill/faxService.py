@@ -68,8 +68,6 @@ class FaxService(PopbillBase):
         """ 목록 조회
             args
                 CorpNum : 팝빌회원 사업자번호
-                MgtKeyType : 세금계산서유형, SELL-매출, BUY-매입, TRUSTEE-위수탁
-                DType : 일자유형, R-등록일시, W-작성일자, I-발행일시 중 택 1
                 SDate : 시작일자, 표시형식(yyyyMMdd)
                 EDate : 종료일자, 표시형식(yyyyMMdd)
                 State : 전송상태 배열, 1-대기, 2-성공, 3-실패, 4-취소

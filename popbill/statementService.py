@@ -278,11 +278,10 @@ class StatementService(PopbillBase):
 
         return self._httppost('/Statement/' + str(ItemCode) + '/' + MgtKey,'', CorpNum, UserID, "DELETE")
 
-    def search(self,CorpNum,MgtKeyType,DType,SDate,EDate,State,ItemCode,Page,PerPage,Order,UserID=None) :
+    def search(self,CorpNum,DType,SDate,EDate,State,ItemCode,Page,PerPage,Order,UserID=None) :
         """ 목록 조회
             args
                 CorpNum : 팝빌회원 사업자번호
-                MgtKeyType : 세금계산서유형, SELL-매출, BUY-매입, TRUSTEE-위수탁
                 DType : 일자유형, R-등록일시, W-작성일자, I-발행일시 중 택 1
                 SDate : 시작일자, 표시형식(yyyyMMdd)
                 EDate : 종료일자, 표시형식(yyyyMMdd)

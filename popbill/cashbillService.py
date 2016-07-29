@@ -228,13 +228,13 @@ class CashbillService(PopbillBase):
         """ 목록 조회
             args
                 CorpNum : 팝빌회원 사업자번호
-                MgtKeyType : 세금계산서유형, SELL-매출, BUY-매입, TRUSTEE-위수탁
-                DType : 일자유형, R-등록일시, W-작성일자, I-발행일시 중 택 1
+                DType : 일자유형, R-등록일자, T-거래일자, I-발행일자 중 택 1
                 SDate : 시작일자, 표시형식(yyyyMMdd)
                 EDate : 종료일자, 표시형식(yyyyMMdd)
-                State : 상태코드, 2,3번째 자리에 와일드카드(*) 사용가능
+                State : 상태코드 배열, 2,3번째 자리에 와일드카드(*) 사용가능
                 TradeType : 현금영수증 형태 배열, N-일반현금영수증, C-취소현금영수증
                 TradeUsage : 거래용도 배열, P-소득공제용, C-지출증빙용
+                TaxationType : 과세형태 배열, T-과세, N-비과세
                 Page : 페이지번호
                 PerPage : 페이지당 목록개수
                 Order : 정렬방향, D-내림차순, A-오름차순
