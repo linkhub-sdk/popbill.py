@@ -46,7 +46,6 @@ class StatementServiceTestCase(unittest.TestCase):
         print(response.message)
 
     def test_search(self):
-        MgtKeyType = "SELL"
         DType = "W"
         SDate = "20160601"
         EDate = "20160831"
@@ -56,7 +55,7 @@ class StatementServiceTestCase(unittest.TestCase):
         PerPage = 10
         Order = "D"
 
-        response = self.statementService.search(self.testCorpNum,MgtKeyType,DType,SDate,EDate,State,ItemCode,Page,PerPage,Order,self.testUserID)
+        response = self.statementService.search(self.testCorpNum,DType,SDate,EDate,State,ItemCode,Page,PerPage,Order,self.testUserID)
 
     def test_FAXSend(self):
         statement = Statement(writeDate = "20160725",
