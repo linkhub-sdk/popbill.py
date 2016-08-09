@@ -4,9 +4,9 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : John Yohan (yhjeong@linkhub.co.kr)
+# Author : Jeong Yohan (yhjeong@linkhub.co.kr)
 # Written : 2015-03-20
-# Updated : 2016-07-25
+# Updated : 2016-08-08
 # Thanks for your interest.
 from .base import PopbillBase,PopbillException,File
 
@@ -67,15 +67,17 @@ class MessageService(PopbillBase):
         result = self._httpget('/Message/UnitCost?Type=' + MsgType, CorpNum)
         return float(result.unitCost)
 
-    def sendSMS(self, CorpNum, Sender, Receiver, ReceiverName, Contents, reserveDT, adsYN = False, UserID = None):
+    def sendSMS(self, CorpNum, Sender, SenderName, Receiver, ReceiverName, Contents, reserveDT, adsYN = False, UserID = None):
         """ 단문 문자메시지 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
                 Sender : 발신번호
+                SenderName : 발신자명
                 Receiver : 수신번호
                 ReceiverName : 수신자명
                 Contents : 메시지 내용(90Byte 초과시 길이가 조정되어 전송됨)
                 reserveDT : 예약전송시간 (형식. yyyyMMddHHmmss)
+                adsYN : 광고문자 전송여부
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
@@ -85,22 +87,25 @@ class MessageService(PopbillBase):
         Messages = []
         Messages.append(MessageReceiver(
                                     snd = Sender,
+                                    sndnm = SenderName,
                                     rcv = Receiver,
                                     rcvnm = ReceiverName,
                                     msg = Contents)
                         )
 
-        return self.sendMessage("SMS", CorpNum, Sender, '', Contents, Messages, reserveDT, adsYN, UserID)
+        return self.sendMessage("SMS", CorpNum, Sender, SenderName, '', Contents, Messages, reserveDT, adsYN, UserID)
 
 
-    def sendSMS_multi(self, CorpNum, Sender, Contents, Messages, reserveDT, adsYN = False, UserID = None):
+    def sendSMS_multi(self, CorpNum, Sender, SenderName, Contents, Messages, reserveDT, adsYN = False, UserID = None):
         """ 단문 문자메시지 다량전송
             args
                 CorpNum : 팝빌회원 사업자번호
                 Sender : 발신자번호 (동보전송용)
+                SenderName : 발신자명 (동보전송용)
                 Contents : 문자 내용 (동보전송용)
                 Messages : 개별전송정보 배열
                 reserveDT : 예약전송시간 (형식. yyyyMMddHHmmss)
+                adsYN : 광고문자 전송여부
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
@@ -108,18 +113,20 @@ class MessageService(PopbillBase):
                 PopbillException
         """
 
-        return self.sendMessage("SMS", CorpNum, Sender, '', Contents, Messages, reserveDT, adsYN, UserID)
+        return self.sendMessage("SMS", CorpNum, Sender, SenderName, '', Contents, Messages, reserveDT, adsYN, UserID)
 
-    def sendLMS(self, CorpNum, Sender, Receiver, ReceiverName, Subject, Contents, reserveDT, adsYN = False, UserID = None):
+    def sendLMS(self, CorpNum, Sender, SenderName, Receiver, ReceiverName, Subject, Contents, reserveDT, adsYN = False, UserID = None):
         """ 장문 문자메시지 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
                 Sender : 발신번호
+                SenderName : 발신자명
                 Receiver : 수신번호
                 ReceiverName : 수신자명
                 Subject : 메시지 제목
                 Contents : 메시지 내용(2000Byte 초과시 길이가 조정되어 전송됨)
                 reserveDT : 예약전송시간 (형식. yyyyMMddHHmmss)
+                adsYN : 광고문자 전송여부
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
@@ -130,23 +137,26 @@ class MessageService(PopbillBase):
         Messages = []
         Messages.append(MessageReceiver(
                                     snd = Sender,
+                                    sndnm = SenderName,
                                     rcv = Receiver,
                                     rcvnm = ReceiverName,
                                     msg = Contents,
                                     sjt= Subject)
                         )
 
-        return self.sendMessage("LMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN, UserID)
+        return self.sendMessage("LMS", CorpNum, Sender, SenderName, Subject, Contents, Messages, reserveDT, adsYN, UserID)
 
-    def sendLMS_multi(self, CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN = False, UserID = None):
+    def sendLMS_multi(self, CorpNum, Sender, SenderName, Subject, Contents, Messages, reserveDT, adsYN = False, UserID = None):
         """ 장문 문자메시지 다량전송
             args
                 CorpNum : 팝빌회원 사업자번호
                 Sender : 발신자번호 (동보전송용)
+                SenderName : 발신자명 (동보전송용)
                 Subject : 장문 메시지 제목 (동보전송용)
                 Contents : 장문 문자 내용 (동보전송용)
                 Messages : 개별전송정보 배열
                 reserveDT : 예약시간 (형식. yyyyMMddHHmmss)
+                adsYN : 광고문자 전송여부
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
@@ -154,19 +164,21 @@ class MessageService(PopbillBase):
                 PopbillException
         """
 
-        return self.sendMessage("LMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN, UserID)
+        return self.sendMessage("LMS", CorpNum, Sender, SenderName, Subject, Contents, Messages, reserveDT, adsYN, UserID)
 
-    def sendMMS(self, CorpNum, Sender, Receiver, ReceiverName, Subject, Contents, filePath, reserveDT, adsYN = False, UserID = None):
+    def sendMMS(self, CorpNum, Sender, SenderName, Receiver, ReceiverName, Subject, Contents, filePath, reserveDT, adsYN = False, UserID = None):
         """ 멀티 문자메시지 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
                 Sender : 발신번호
+                SenderName : 발신자명
                 Receiver : 수신번호
                 ReceiverName : 수신자명
                 Subject : 메시지 제목
                 Contents : 메시지 내용(2000Byte 초과시 길이가 조정되어 전송됨)
                 filePath : 전송하고자 하는 파일 경로
                 reserveDT : 예약전송시간 (형식. yyyyMMddHHmmss)
+                adsYN : 광고문자 전송여부
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
@@ -176,24 +188,27 @@ class MessageService(PopbillBase):
         Messages = []
         Messages.append(MessageReceiver(
                                     snd = Sender,
+                                    sndnm = SenderName,
                                     rcv = Receiver,
                                     rcvnm = ReceiverName,
                                     msg = Contents,
                                     sjt= Subject)
                         )
 
-        return self.sendMMS_Multi(CorpNum, Sender, Subject, Contents, Messages, filePath, reserveDT, adsYN, UserID)
+        return self.sendMMS_Multi(CorpNum, Sender, SenderName, Subject, Contents, Messages, filePath, reserveDT, adsYN, UserID)
 
-    def sendMMS_Multi(self, CorpNum, Sender, Subject, Contents, Messages, FilePath, reserveDT, adsYN = False, UserID = None):
+    def sendMMS_Multi(self, CorpNum, Sender, SenderName, Subject, Contents, Messages, FilePath, reserveDT, adsYN = False, UserID = None):
         """ 멀티 문자메시지 다량 전송
             args
                 CorpNum : 팝빌회원 사업자번호
                 Sender : 발신자번호 (동보전송용)
+                SenderName : 발신자명 (동보전송용)
                 Subject : 장문 메시지 제목 (동보전송용)
                 Contents : 장문 문자 내용 (동보전송용)
                 Messages : 개별전송정보 배열
                 FilePath : 전송하고자 하는 파일 경로
                 reserveDT : 예약전송시간 (형식. yyyyMMddHHmmss)
+                adsYN : 광고문자 전송여부
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
@@ -207,6 +222,8 @@ class MessageService(PopbillBase):
 
         if Sender != None or Sender != '':
             req['snd'] = Sender
+        if SenderName != None or SenderName != '':
+            req['sndnm'] = SenderName
         if Contents != None or Contents != '':
             req['content'] = Contents
         if Subject != None or Subject != '':
@@ -235,16 +252,18 @@ class MessageService(PopbillBase):
 
 
 
-    def sendXMS(self, CorpNum, Sender, Receiver, ReceiverName, Subject, Contents, reserveDT, adsYN = False, UserID = None):
+    def sendXMS(self, CorpNum, Sender, SenderName, Receiver, ReceiverName, Subject, Contents, reserveDT, adsYN = False, UserID = None):
         """ 단/장문 자동인식 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
                 Sender : 발신번호
+                SenderName : 발신자명
                 Receiver : 수신번호
                 ReceiverName : 수신자명
                 Subject : 메시지 제목
                 Contents : 메시지 내용(90Byte를 기준으로 문자유형이 자동인식 되어 전송)
                 reserveDT : 예약전송시간 (형식. yyyyMMddHHmmss)
+                adsYN : 광고문자 전송여부
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
@@ -255,23 +274,26 @@ class MessageService(PopbillBase):
         Messages = []
         Messages.append(MessageReceiver(
                                     snd = Sender,
+                                    sndnm = SenderName,
                                     rcv = Receiver,
                                     rcvnm = ReceiverName,
                                     msg = Contents,
                                     sjt= Subject)
                         )
 
-        return self.sendMessage("XMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN, UserID)
+        return self.sendMessage("XMS", CorpNum, Sender, SenderName, Subject, Contents, Messages, reserveDT, adsYN, UserID)
 
-    def sendXMS_multi(self, CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN = False, UserID = None):
+    def sendXMS_multi(self, CorpNum, Sender, SenderName, Subject, Contents, Messages, reserveDT, adsYN = False, UserID = None):
         """ 단/장문 자동인식 다량 전송
             args
                 CorpNum : 팝빌회원 사업자번호
                 Sender : 발신자번호 (동보전송용)
+                SenderName : 발신자명
                 Subject : 장문 메시지 제목 (동보전송용)
                 Contents : 장문 문자 내용 (동보전송용)
                 Messages : 개별전송정보 배열
                 reserveDT : 예약전송시간 (형식. yyyyMMddHHmmss)
+                adsYN : 광고문자 전송여부
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
@@ -279,18 +301,20 @@ class MessageService(PopbillBase):
                 PopbillException
         """
 
-        return self.sendMessage("XMS", CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN, UserID)
+        return self.sendMessage("XMS", CorpNum, Sender, SenderName, Subject, Contents, Messages, reserveDT, adsYN, UserID)
 
-    def sendMessage(self, MsgType, CorpNum, Sender, Subject, Contents, Messages, reserveDT, adsYN = False, UserID = None):
+    def sendMessage(self, MsgType, CorpNum, Sender, SenderName, Subject, Contents, Messages, reserveDT, adsYN = False, UserID = None):
         """ 문자 메시지 전송
             args
                 MsgType : 문자 전송 유형(단문:SMS, 장문:LMS, 단/장문:XMS)
                 CorpNum : 팝빌회원 사업자번호
                 Sender : 발신자번호 (동보전송용)
+                SenderName : 발신자명
                 Subject : 장문 메시지 제목 (동보전송용)
                 Contents : 장문 문자 내용 (동보전송용)
                 Messages : 개별전송정보 배열
                 reserveDT : 예약전송시간 (형식. yyyyMMddHHmmss)
+                adsYN : 광고문자 전송여부
                 UserID : 팝빌회원 아이디
             return
                 접수번호 (receiptNum)
@@ -304,6 +328,8 @@ class MessageService(PopbillBase):
 
         if Sender != None or Sender != '':
             req['snd'] = Sender
+        if SenderName != None or SenderName != '':
+            req['sndnm'] = SenderName
         if Contents != None or Contents != '':
             req['content'] = Contents
         if Subject != None or Subject != '':

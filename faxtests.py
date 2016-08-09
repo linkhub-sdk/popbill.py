@@ -38,7 +38,7 @@ class FaxServiceTestCase(unittest.TestCase):
         Order = "D"
 
         response = self.faxService.search(self.testCorpNum,SDate,EDate,State,ReserveYN,SenderOnly,Page,PerPage,Order,self.testUserID)
-        print(response.list[1].fileNames[0])
+        print(response.list[1].senderName)
 
     def test_01_getURL(self):
         url = self.faxService.getURL(self.testCorpNum,self.testUserID,"BOX")
@@ -60,6 +60,7 @@ class FaxServiceTestCase(unittest.TestCase):
         receiptNum = self.faxService.sendFax_multi(
                                                 self.testCorpNum,
                                                 "070-7510-3710",
+                                                '발신자명',
                                                 receivers,
                                                 filepath
                                             )
@@ -67,6 +68,7 @@ class FaxServiceTestCase(unittest.TestCase):
 
         result = self.faxService.getFaxResult(self.testCorpNum, receiptNum, self.testUserID)
 
+        print(result[0].senderName)
         print(result[0].sendState)
         print(result[0].convState)
         print(result[0].sendResult)
@@ -92,12 +94,17 @@ class FaxServiceTestCase(unittest.TestCase):
         except PopbillException as PE:
             print(PE.message)
 
-
     def test_05_sendFax(self):
 
-        receiptNum = self.faxService.sendFax(self.testCorpNum, '07075103710', '070123','수신자명', 'test2.jpeg')
-
+        receiptNum = self.faxService.sendFax(self.testCorpNum, '07075103710','발신자명', '070123','수신자명', 'test2.jpeg')
+        print(receiptNum)
         self.assertIsNotNone(receiptNum," 접수번호 확인완료")
+
+    def test_06_getFaxResult(self):
+        receiptNum = "016080909493900001"
+        result = self.faxService.getFaxResult(self.testCorpNum, receiptNum, self.testUserID)
+        print(result[0].sendNum)
+        print(result[0].senderName)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(FaxServiceTestCase)
