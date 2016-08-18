@@ -123,7 +123,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
     def test_search(self):
         MgtKeyType = "SELL"
         DType = "W"
-        SDate = "20160601"
+        SDate = "20160701"
         EDate = "20160831"
         State = ["3**", "6**"]
         Type = ["N", "M"]
@@ -135,10 +135,11 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         Page = 1
         PerPage = 10
         Order = "D"
+        QString = "투탑"
 
-        response = self.taxinvoiceService.search(self.testCorpNum,MgtKeyType,DType,SDate,EDate,State,Type,TaxType,LateOnly,TaxRegIDYN,TaxRegIDType,TaxRegID,Page,PerPage,Order,self.testUserID)
+        response = self.taxinvoiceService.search(self.testCorpNum,MgtKeyType,DType,SDate,EDate,State,Type,TaxType,LateOnly,TaxRegIDYN,TaxRegIDType,TaxRegID,Page,PerPage,Order,self.testUserID,QString)
 
-        print(response.code)
+        print(response.total)
     def test_getInfos(self):
         infos = self.taxinvoiceService.getInfos(self.testCorpNum,"SELL",["1234","1234567890"])
         self.assertGreater(len(infos),0,"갯수 확인")

@@ -47,15 +47,17 @@ class StatementServiceTestCase(unittest.TestCase):
 
     def test_search(self):
         DType = "W"
-        SDate = "20160601"
+        SDate = "20160701"
         EDate = "20160831"
         State = ["2**", "3**"]
         ItemCode = ["121", "122", "123","124", "125", "126"]
         Page = 1
         PerPage = 10
         Order = "D"
+        QString = ""
 
-        response = self.statementService.search(self.testCorpNum,DType,SDate,EDate,State,ItemCode,Page,PerPage,Order,self.testUserID)
+        response = self.statementService.search(self.testCorpNum,DType,SDate,EDate,State,ItemCode,Page,PerPage,Order,self.testUserID,QString)
+        print(response.total)
 
     def test_FAXSend(self):
         statement = Statement(writeDate = "20160725",
