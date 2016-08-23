@@ -32,7 +32,7 @@ class MessageServiceTestCase(unittest.TestCase):
         autoDenyList = self.messageService.getAutoDenyList(self.testCorpNum, self.testUserID)
         print(autoDenyList[5].number)
 
-    def test_search(self):
+    def test_getMessage(self):
         SDate = "20160601"
         EDate = "20160831"
         State = ['1','2','3','4']
@@ -44,8 +44,8 @@ class MessageServiceTestCase(unittest.TestCase):
         Order = "D"
 
         info = self.messageService.search(self.testCorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, self.testUserID)
-        for i in range(1, 10):
-            print(info.list[i].receiveNum +' '+info.list[i].tranNet)
+        for i in range(1, 2):
+            print(info.list[i].receiveNum)
 
     def test_01_getBalance(self):
         balance = self.messageService.getBalance(self.testCorpNum)
@@ -78,7 +78,7 @@ class MessageServiceTestCase(unittest.TestCase):
 
     def test_06_sendSMS_one(self):
         try:
-            receiptNum = self.messageService.sendSMS(self.testCorpNum, "07075103710", "발신자명", "010000000", "수신자명","단건전송 내용", "", True)
+            receiptNum = self.messageService.sendSMS(self.testCorpNum, "07075103710", "010000000", "수신자명","단건전송 내용", "", True)
             print("sendSMS_one : " +receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -89,7 +89,6 @@ class MessageServiceTestCase(unittest.TestCase):
         messages.append(
                         MessageReceiver(
                                         snd='07075103710',
-                                        sndnm='발신자명',
                                         rcv='010000000',
                                         rcvnm='수신자명',
                                         msg='문자 API TEST'
@@ -97,7 +96,7 @@ class MessageServiceTestCase(unittest.TestCase):
                         )
 
 
-        receiptNum = self.messageService.sendSMS_multi(self.testCorpNum, "07075103710", "발신자명", "동보전송 메시지 내용", messages, reserveDT)
+        receiptNum = self.messageService.sendSMS_multi(self.testCorpNum, "07075103710", "동보전송 메시지 내용", messages, reserveDT)
         print(receiptNum)
 
     def test_08_sendSMS_Multi(self):
@@ -108,7 +107,6 @@ class MessageServiceTestCase(unittest.TestCase):
             messages.append(
                         MessageReceiver(
                                         snd='07075103710',
-                                        sndnm = '발신자명',
                                         rcv='010000000',
                                         rcvnm='수신자명',
                                         msg='문자 API TEST'
@@ -118,67 +116,67 @@ class MessageServiceTestCase(unittest.TestCase):
 
 
 
-        receiptNum = self.messageService.sendSMS_multi(self.testCorpNum, "07075103710", "발신자명", "동보전송 메시지 내용", messages, reserveDT)
+        receiptNum = self.messageService.sendSMS_multi(self.testCorpNum, "07075103710", "동보전송 메시지 내용", messages, reserveDT)
         print(receiptNum)
 
 
 
     def test_09__sendLMS_one(self):
-        Sender = "07075103710"
-        SenderName = "발신자명"
-        Receiver = "010111222"
-        ReceiverName = "수신자명"
-        Subject = "장문메시지 제목"
-        Contents = "장문 메시지 내용"
         reserveDT = ''
-
         try:
-            receiptNum = self.messageService.sendLMS(self.testCorpNum, Sender, SenderName, Receiver, ReceiverName, Subject, Contents, reserveDT, False)
-            print("sendLMS_one : "+ receiptNum)
+                receiptNum = self.messageService.sendLMS(self.testCorpNum, "07075103710", "010000000", "수신자명", "장문메시지 제목", "장문 메시지 내용", reserveDT, False)
+                print("sendLMS_one : "+ receiptNum)
         except PopbillException as PE:
             print(PE.message)
 
     def test_10_sendLMS(self):
-        Sender = "07075103710"
-        SenderName = "발신자명"
         Subject = '동보전송 제목'
-        Contents = "동보전송 메시지, 2000byte 초과된 내용은 삭제되어 전송됨. "
         reserveDT = ''
         messages = []
         messages.append(
                         MessageReceiver(
                                         snd='07075103710',
-                                        sndnm = '발신자명',
                                         rcv='010000000',
                                         rcvnm='수신자명',
                                         msg='장문 문자 API TEST',
                                         sjt='장문 문자 제목'
                                        )
                         )
-        receiptNum = self.messageService.sendLMS_multi(self.testCorpNum, Sender, SenderName, Subject, Contents, messages, reserveDT)
+        receiptNum = self.messageService.sendLMS_multi(self.testCorpNum, "07075103710", "Subject", "동보전송 메시지 내용", messages, reserveDT)
         print(receiptNum)
 
     def test_11__sendXMS_one(self):
-        Sender = "07075103710"
-        SenderName = "발신자명"
-        Receiver = "010111222"
-        ReceiverName = "수신자명"
-        Subject = "메시지 제목"
-        Message = "메시지 내용90Byte초과시 장문전송 메시지 내용90Byte초과시 장문전송 메시지 내용90Byte초과시 장문전송 메시지 내용90Byte초과시 장문전송"
+
         reserveDT = ''
 
         try:
-                receiptNum = self.messageService.sendXMS(self.testCorpNum, Sender, SenderName, Receiver, ReceiverName, Subject, Message, reserveDT, True)
+                receiptNum = self.messageService.sendXMS(self.testCorpNum, "07075103710", "010000000", "수신자명", "메시지 제목",
+                 "메시지 내용90Byte초과시 장문전송 메시지 내용90Byte초과시 장문전송 메시지 내용90Byte초과시 장문전송 메시지 내용90Byte초과시 장문전송", reserveDT, True)
                 print("sendXMS_one : "+ receiptNum)
         except PopbillException as PE:
             print(PE.message)
 
+
     def test_12_sendXMSnResult(self):
-        receiptNum = '016080817000000010';
+        Subject = '동보전송 제목'
+        reserveDT = ''
+        messages = []
+        messages.append(
+                        MessageReceiver(
+                                        snd='07075103710',
+                                        rcv='010000000',
+                                        rcvnm='수신자명',
+                                        msg='장문 문자 API TEST'
+                                        #sjt='장문 문자 제목'
+                                       )
+                        )
+
+        receiptNum = self.messageService.sendXMS_multi(self.testCorpNum, "07075103710", Subject, "동보전송 메시지 내용", messages, reserveDT)
+        print(receiptNum)
 
         result = self.messageService.getMessages(self.testCorpNum, receiptNum)
         print(result[0].receiveName)
-        print(result[0].senderName)
+        print(result[0].content)
 
     def test_13_reserveSendnCancel(self):
 
@@ -205,6 +203,9 @@ class MessageServiceTestCase(unittest.TestCase):
         except PopbillException as PE:
             print(PE.message)
 
+
+
+
     def test_14_getURL(self):
 
         url = self.messageService.getURL(self.testCorpNum, self.testUserID, 'BOX')
@@ -212,17 +213,12 @@ class MessageServiceTestCase(unittest.TestCase):
         print("BOX URL : " +url)
 
     def test_15_sendMMS(self):
-        Sender = "07075103710"
-        SenderName = "발신자명"
-        Receiver = "010111222"
-        ReceiverName = "수신자명"
         Subject = "동보전송 제목"
-        Message = "동보전송 메시지"
         reserveDT = ''
         filepath = 'test2.jpeg'
 
         try:
-            receiptNum = self.messageService.sendMMS(self.testCorpNum, Sender, SenderName, Receiver, ReceiverName, Subject, Message, filepath, reserveDT, True)
+            receiptNum = self.messageService.sendMMS(self.testCorpNum, "07075103710","010000000","수신자명", Subject, "동보전송 메시지 내용", filepath, reserveDT, True)
             print(receiptNum)
 
         except PopbillException as PE:
@@ -238,7 +234,6 @@ class MessageServiceTestCase(unittest.TestCase):
         messages.append(
                         MessageReceiver(
                                         snd='07075103710',
-                                        sndnm = '발신자명',
                                         rcv='010000000',
                                         rcvnm='수신자명',
                                         msg='멀티 문자 API TEST',
@@ -246,7 +241,7 @@ class MessageServiceTestCase(unittest.TestCase):
                                        )
                         )
         try:
-            receiptNum = self.messageService.sendMMS_Multi(self.testCorpNum, "07075103710", '', '', '', messages, filepath, reserveDT, True)
+            receiptNum = self.messageService.sendMMS_Multi(self.testCorpNum, "07075103710",'', '', messages, filepath, reserveDT, True)
             print(receiptNum)
 
         except PopbillException as PE:
