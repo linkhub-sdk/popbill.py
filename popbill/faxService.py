@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (frenchofkiss@gmail.com)
-# Updated : 2016-08-09
+# Updated : 2016-07-25
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase,PopbillException,File
@@ -125,7 +125,7 @@ class FaxService(PopbillBase):
         return self._httpget('/FAX/' + ReceiptNum + '/Cancel', CorpNum, UserID)
 
 
-    def sendFax(self, CorpNum, SenderNum, SenderName, ReceiverNum, ReceiverName, FilePath, ReserveDT = None, UserID = None):
+    def sendFax(self, CorpNum, SenderNum, ReceiverNum, ReceiverName, FilePath, ReserveDT = None, UserID = None, SenderName = None):
         """ 팩스 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -145,14 +145,13 @@ class FaxService(PopbillBase):
                                      receiveName = ReceiverName)
                         )
 
-        return self.sendFax_multi(CorpNum, SenderNum, SenderName, receivers, FilePath, ReserveDT, UserID)
+        return self.sendFax_multi(CorpNum, SenderNum, receivers, FilePath, ReserveDT, UserID, SenderName)
 
-    def sendFax_multi(self, CorpNum, SenderNum, SenderName, Receiver, FilePath, ReserveDT = None , UserID = None):
+    def sendFax_multi(self, CorpNum, SenderNum, Receiver, FilePath, ReserveDT = None , UserID = None, SenderName = None):
         """ 팩스 전송
             args
                 CorpNum : 팝빌회원 사업자번호
                 SenderNum : 발신자 번호 (동보전송용)
-                SenderName : 발신자명 (동보전송용)
                 Receiver : 수신자 번호(동보전송용)
                 FilePath : 발신 파일경로
                 ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
@@ -176,7 +175,7 @@ class FaxService(PopbillBase):
         if type(FilePath) is list and (len(FilePath) < 1 or len(FilePath) > 5) :
             raise PopbillException(-99999999,"파일은 1개 이상, 5개 까지 전송 가능합니다.")
 
-        req = {"snd" : SenderNum, "sndnm" : SenderName, "fCnt": 1 if type(FilePath) is str else len(FilePath) , "rcvs" : [] , "sndDT" : None}
+        req = {"snd" : SenderNum , "sndnm": SenderName, "fCnt": 1 if type(FilePath) is str else len(FilePath) , "rcvs" : [] , "sndDT" : None}
 
         if(type(Receiver) is str):
             Receiver = FaxReceiver(receiveNum=Receiver)
