@@ -99,6 +99,41 @@ class FaxServiceTestCase(unittest.TestCase):
 
         self.assertIsNotNone(receiptNum," 접수번호 확인완료")
 
+
+    def test_06_resendFaxMulti(self):
+        receiptNum = "017021614490300001"
+        senderNum = "070-4304-2991"
+        senderName = "발신자명16"
+
+        receivers = None
+
+        #for x in range(0, 5):
+        #    receivers.append(FaxReceiver(receiveNum="010999888",receiveName="수신자명칭"))
+
+        receiptNum = self.faxService.resendFax_multi(
+                self.testCorpNum,
+                receiptNum,
+                senderNum,
+                senderName,
+                receivers,
+            )
+
+        print(receiptNum)
+        self.assertIsNotNone(receiptNum,"접수번호 확인완료")
+
+    def test_07_resendFax(self):
+        receiptNum = "017021614490300001"
+        senderNum = ""
+        senderName = ""
+        receiveNum = ""
+        receiveName = ""
+
+        receiptNum = self.faxService.resendFax(self.testCorpNum, receiptNum,
+            senderNum, senderName, receiveNum, receiveName)
+
+        print(receiptNum)
+        self.assertIsNotNone(receiptNum," 접수번호 확인완료")
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(FaxServiceTestCase)
     unittest.TextTestRunner(verbosity=2).run(suite)

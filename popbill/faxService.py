@@ -6,8 +6,8 @@
 # http://www.popbill.com
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
-# Contributor : Jeong Yohan (frenchofkiss@gmail.com)
-# Updated : 2016-07-25
+# Contributor : Jeong Yohan (code@linkhub.co.kr)
+# Updated : 2017-02-15
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase,PopbillException,File
@@ -207,6 +207,74 @@ class FaxService(PopbillBase):
         result = self._httppost_files('/FAX',postData,files,CorpNum,UserID)
 
         return result.receiptNum
+
+    def resendFax(self, CorpNum, ReceiptNum, SenderNum, SenderName, ReceiverNum, ReceiverName, ReserveDT = None, UserID = None):
+        """ 팩스 단건 전송
+            args
+                CorpNum : 팝빌회원 사업자번호
+                ReceiptNum : 팩스 접수번호
+                SenderNum : 발신자 번호
+                SenderName : 발신자명
+                ReceiverNum : 수신번호
+                ReceiverName : 수신자명
+                ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
+                UserID : 팝빌회원 아이디
+            return
+                접수번호 (receiptNum)
+            raise
+                PopbillException
+        """
+        receivers = None
+
+        if ReceiverNum != "" or ReceiverName != "":
+            receivers  = []
+            receivers.append(FaxReceiver(receiveNum = ReceiverNum,
+                                         receiveName = ReceiverName)
+                            )
+        return self.resendFax_multi(CorpNum, ReceiptNum, SenderNum, SenderName, receivers, ReserveDT, UserID)
+
+    def resendFax_multi(self, CorpNum, ReceiptNum, SenderNum, SenderName, Receiver, ReserveDT = None , UserID = None):
+        """ 팩스 전송
+            args
+                CorpNum : 팝빌회원 사업자번호
+                ReceiptNum : 팩스 접수번호
+                SenderNum : 발신자 번호
+                SenderName : 발신자명
+                Receiver : 수신자정보 배열
+                ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
+                UserID : 팝빌회원 아이디
+            return
+                접수번호 (receiptNum)
+            raise
+                PopbillException
+        """
+
+        req = {}
+
+        if not ReceiptNum:
+            raise PopbillException(-99999999, "접수번호(ReceiptNum)가 입력되지 않았습니다.")
+
+        if SenderNum != "" :
+            req['snd'] = SenderNum
+
+        if SenderName != "" :
+            req['sndnm'] = SenderName
+
+        if ReserveDT != None :
+            req['sndDT'] = ReserveDT
+
+        if Receiver != None :
+            req['rcvs'] = []
+            if(type(Receiver) is str):
+                Receiver = FaxReceiver(receiveNum=Receiver)
+            if(type(Receiver) is FaxReceiver):
+                Receiver = [Receiver]
+            for r in Receiver:
+                req['rcvs'].append({"rcv" : r.receiveNum, "rcvnm" : r.receiveName})
+
+        postData = self._stringtify(req)
+        
+        return self._httppost('/FAX/' + ReceiptNum, postData, CorpNum, UserID).receiptNum
 
 
 class FaxReceiver(object):
