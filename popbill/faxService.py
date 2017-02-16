@@ -135,7 +135,7 @@ class FaxService(PopbillBase):
                 FilePath : 발신 파일경로
                 ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
                 UserID : 팝빌회원 아이디
-                SenderNum : 발신자 번호 (동보전송용)
+                SenderName : 발신자명 (동보전송용)
             return
                 접수번호 (receiptNum)
             raise
@@ -152,11 +152,12 @@ class FaxService(PopbillBase):
         """ 팩스 전송
             args
                 CorpNum : 팝빌회원 사업자번호
+                SenderNum : 발신자 번호 (동보전송용)
                 Receiver : 수신자 번호(동보전송용)
                 FilePath : 발신 파일경로
                 ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
                 UserID : 팝빌회원 아이디
-                SenderNum : 발신자 번호 (동보전송용)
+                SenderName : 발신자명 (동보전송용)
             return
                 접수번호 (receiptNum)
             raise
@@ -273,7 +274,7 @@ class FaxService(PopbillBase):
                 req['rcvs'].append({"rcv" : r.receiveNum, "rcvnm" : r.receiveName})
 
         postData = self._stringtify(req)
-        
+
         return self._httppost('/FAX/' + ReceiptNum, postData, CorpNum, UserID).receiptNum
 
 
