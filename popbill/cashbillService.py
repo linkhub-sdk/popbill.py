@@ -4,9 +4,9 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Jeong Yohan (yhjeong@linkhub.co.kr)
+# Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-03-24
-# Updated : 2016-08-18
+# Updated : 2017-03-02
 # Thanks for your interest.
 
 from .base import PopbillBase,PopbillException
@@ -399,7 +399,7 @@ class CashbillService(PopbillBase):
 
         return self._httpget('/Cashbill/' + MgtKey + '/Logs', CorpNum)
 
-    def getPopUpURL(self, CorpNum, MgtKey, UserID):
+    def getPopUpURL(self, CorpNum, MgtKey, UserID = None):
         """ 현금영수증 1장의 팝빌 화면을 볼수있는 팝업 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -417,7 +417,7 @@ class CashbillService(PopbillBase):
 
         return result.url
 
-    def getPrintURL(self, CorpNum, MgtKey, UserID):
+    def getPrintURL(self, CorpNum, MgtKey, UserID = None):
         """ 공급자용 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -436,7 +436,7 @@ class CashbillService(PopbillBase):
         return result.url
 
 
-    def getEPrintURL(self, CorpNum, MgtKey, UserID):
+    def getEPrintURL(self, CorpNum, MgtKey, UserID = None):
         """ 공급받는자용 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -455,7 +455,7 @@ class CashbillService(PopbillBase):
         return result.url
 
 
-    def getMailURL(self, CorpNum, MgtKey, UserID):
+    def getMailURL(self, CorpNum, MgtKey, UserID = None):
         """ 공급받는자용 메일 링크 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -474,7 +474,7 @@ class CashbillService(PopbillBase):
         return result.url
 
 
-    def getMassPrintURL(self, CorpNum, MgtKeyList, UserID):
+    def getMassPrintURL(self, CorpNum, MgtKeyList, UserID = None):
         """ 다량 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
