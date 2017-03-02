@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (frenchofkiss@gmail.com)
-# Updated : 2016-08-18
+# Updated : 2017-03-02
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase,PopbillException,File
@@ -674,7 +674,7 @@ class TaxinvoiceService(PopbillBase):
 
         return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "/Files/" + FileID ,postData,CorpNum,UserID,'DELETE')
 
-    def getPopUpURL(self,CorpNum,MgtKeyType,MgtKey, UserID):
+    def getPopUpURL(self,CorpNum,MgtKeyType,MgtKey, UserID =  None):
         """ 세금계산서 1장의 팝빌 화면을 볼수 있는 PopUp URL 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -695,7 +695,7 @@ class TaxinvoiceService(PopbillBase):
 
         return result.url
 
-    def getPrintURL(self,CorpNum,MgtKeyType,MgtKey, UserID):
+    def getPrintURL(self,CorpNum,MgtKeyType,MgtKey, UserID = None):
         """ 공급자용 인쇄 URL 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -716,7 +716,7 @@ class TaxinvoiceService(PopbillBase):
 
         return result.url
 
-    def getEPrintURL(self,CorpNum,MgtKeyType,MgtKey, UserID):
+    def getEPrintURL(self,CorpNum,MgtKeyType,MgtKey, UserID = None):
         """ 공급받는자용 인쇄 URL 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -737,7 +737,7 @@ class TaxinvoiceService(PopbillBase):
 
         return result.url
 
-    def getMailURL(self,CorpNum,MgtKeyType,MgtKey, UserID):
+    def getMailURL(self,CorpNum,MgtKeyType,MgtKey, UserID = None):
         """ 공급받는자용 메일 링크 URL 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -776,7 +776,7 @@ class TaxinvoiceService(PopbillBase):
 
         return self._httppost('/Taxinvoice/' + MgtKeyType ,postData,CorpNum)
 
-    def getMassPrintURL(self,CorpNum,MgtKeyType,MgtKeyList,UserID):
+    def getMassPrintURL(self,CorpNum,MgtKeyType,MgtKeyList, UserID = None):
         """ 다량 인쇄 URL 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -846,7 +846,7 @@ class TaxinvoiceService(PopbillBase):
 
         return self._httpget(uri, CorpNum,UserID)
 
-    def attachStatement (self,CorpNum,MgtKeyType,MgtKey,ItemCode,StmtMgtKey,UserID=None):
+    def attachStatement (self,CorpNum,MgtKeyType,MgtKey,ItemCode,StmtMgtKey, UserID = None):
         """ 전자명세서 첨부
             args
                 CorpNum : 팝빌회원 사업자번호
