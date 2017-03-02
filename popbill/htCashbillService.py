@@ -135,7 +135,7 @@ class HTCashbillService(PopbillBase):
 
         return self._httpget(uri, CorpNum, UserID)
 
-    def getFlatRatePopUpURL(self, CorpNum, UserID):
+    def getFlatRatePopUpURL(self, CorpNum, UserID = None):
         """ 정액제 서비스 신청 URL
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -147,7 +147,7 @@ class HTCashbillService(PopbillBase):
         """
         return self._httpget('/HomeTax/Cashbill?TG=CHRG', CorpNum, UserID).url
 
-    def getCertificatePopUpURL(self, CorpNum, UserID):
+    def getCertificatePopUpURL(self, CorpNum, UserID = None):
         """ 홈택스 공인인증서 등록 URL
             args
                 CorpNum : 팝빌회원 사업자번호
