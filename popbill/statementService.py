@@ -4,9 +4,9 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Jeong Yohan (yhjeong@linkhub.co.kr)
+# Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-03-20
-# Updated : 2016-08-18
+# Updated : 2017-03-02
 # Thanks for your interest.
 from .base import PopbillBase,PopbillException,File
 
@@ -553,7 +553,7 @@ class StatementService(PopbillBase):
         return self._httppost('/Statement/' + str(ItemCode) + '/' + MgtKey + '/Files/' + FileID, postData, CorpNum, UserID, 'DELETE')
 
 
-    def getPopUpURL(self, CorpNum, ItemCode, MgtKey, UserID):
+    def getPopUpURL(self, CorpNum, ItemCode, MgtKey, UserID = None):
         """ 전자명세서 1장의 팝빌 화면을 볼수있는 PopUp URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -576,7 +576,7 @@ class StatementService(PopbillBase):
 
         return result.url
 
-    def getPrintURL(self, CorpNum, ItemCode, MgtKey, UserID):
+    def getPrintURL(self, CorpNum, ItemCode, MgtKey, UserID = None):
         """ 공급자용 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -600,7 +600,7 @@ class StatementService(PopbillBase):
         return result.url
 
 
-    def getEPrintURL(self, CorpNum, ItemCode, MgtKey, UserID):
+    def getEPrintURL(self, CorpNum, ItemCode, MgtKey, UserID = None):
         """ 공급받는자용 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -624,7 +624,7 @@ class StatementService(PopbillBase):
         return result.url
 
 
-    def getMailURL(self, CorpNum, ItemCode, MgtKey, UserID):
+    def getMailURL(self, CorpNum, ItemCode, MgtKey, UserID = None):
         """ 공급받는자용 메일 링크 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -649,7 +649,7 @@ class StatementService(PopbillBase):
         return result.url
 
 
-    def getMassPrintURL(self, CorpNum, ItemCode, MgtKeyList, UserID):
+    def getMassPrintURL(self, CorpNum, ItemCode, MgtKeyList, UserID = None):
         """ 다량 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
