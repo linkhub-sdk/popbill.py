@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhub.co.kr)
-# Updated : 2017-02-15
+# Updated : 2017-05-29
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase,PopbillException,File
@@ -204,7 +204,6 @@ class FaxService(PopbillBase):
                               fileName=f.name,
                               fileData=f.read())
                             )
-
         result = self._httppost_files('/FAX',postData,files,CorpNum,UserID)
 
         return result.receiptNum
@@ -277,6 +276,17 @@ class FaxService(PopbillBase):
 
         return self._httppost('/FAX/' + ReceiptNum, postData, CorpNum, UserID).receiptNum
 
+    def getSenderNumberList(self, CorpNum, UserID = None):
+        """ 팩스 발신번호 목록 확인
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. list of SenderNumber
+            raise
+                PopbillException
+        """
+        return self._httpget('/FAX/SenderNumber', CorpNum, UserID)
 
 class FaxReceiver(object):
     def __init__(self,**kwargs):

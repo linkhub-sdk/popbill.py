@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : John Yohan (yhjeong@linkhub.co.kr)
 # Written : 2015-03-20
-# Updated : 2016-08-23
+# Updated : 2017-05-29
 # Thanks for your interest.
 from .base import PopbillBase,PopbillException,File
 
@@ -404,6 +404,18 @@ class MessageService(PopbillBase):
         result = self._httpget('/Message/?TG=' + TOGO, CorpNum, UserID)
 
         return result.url
+
+    def getSenderNumberList(self, CorpNum, UserID = None):
+        """ 문자 발신번호 목록 확인
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. list of SenderNumber
+            raise
+                PopbillException
+        """
+        return self._httpget('/Message/SenderNumber', CorpNum, UserID)
 
 class MessageReceiver(object):
     def __init__(self,**kwargs):

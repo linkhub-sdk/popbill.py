@@ -94,8 +94,7 @@ class FaxServiceTestCase(unittest.TestCase):
 
 
     def test_05_sendFax(self):
-
-        receiptNum = self.faxService.sendFax(self.testCorpNum, '07075103710', '070123','수신자명', 'test2.jpeg')
+        receiptNum = self.faxService.sendFax(self.testCorpNum, '07043042992', '070111222','수신자명', 'test2.jpeg')
 
         self.assertIsNotNone(receiptNum," 접수번호 확인완료")
 
@@ -133,6 +132,13 @@ class FaxServiceTestCase(unittest.TestCase):
 
         print(receiptNum)
         self.assertIsNotNone(receiptNum," 접수번호 확인완료")
+
+    def test_getSenderNumberList(self):
+        numberList = self.faxService.getSenderNumberList(self.testCorpNum, self.testUserID)
+        for senderObj in numberList:
+            print(senderObj.number)
+            print(senderObj.representYN)
+            print(senderObj.state)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(FaxServiceTestCase)

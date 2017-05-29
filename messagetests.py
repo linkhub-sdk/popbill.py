@@ -208,7 +208,7 @@ class MessageServiceTestCase(unittest.TestCase):
 
     def test_14_getURL(self):
 
-        url = self.messageService.getURL(self.testCorpNum, self.testUserID, 'BOX')
+        url = self.messageService.getURL(self.testCorpNum, self.testUserID, 'SENDER')
         self.assertEqual(url[:5], "https","https로 시작")
         print("BOX URL : " +url)
 
@@ -246,6 +246,13 @@ class MessageServiceTestCase(unittest.TestCase):
 
         except PopbillException as PE:
             print(PE.message)
+
+    def test_getSenderNumberList(self):
+        numberList = self.messageService.getSenderNumberList(self.testCorpNum, self.testUserID)
+        for senderObj in numberList:
+            print(senderObj.number)
+            print(senderObj.representYN)
+            print(senderObj.state)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(MessageServiceTestCase)
