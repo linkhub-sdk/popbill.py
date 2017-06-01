@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhub.co.kr)
-# Updated : 2017-05-29
+# Updated : 2017-06-01
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase,PopbillException,File
@@ -125,7 +125,7 @@ class FaxService(PopbillBase):
         return self._httpget('/FAX/' + ReceiptNum + '/Cancel', CorpNum, UserID)
 
 
-    def sendFax(self, CorpNum, SenderNum, ReceiverNum, ReceiverName, FilePath, ReserveDT = None, UserID = None, SenderName = None):
+    def sendFax(self, CorpNum, SenderNum, ReceiverNum, ReceiverName, FilePath, ReserveDT = None, UserID = None, SenderName = None, adsYN = False):
         """ 팩스 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -146,9 +146,9 @@ class FaxService(PopbillBase):
                                      receiveName = ReceiverName)
                         )
 
-        return self.sendFax_multi(CorpNum, SenderNum, receivers, FilePath, ReserveDT, UserID, SenderName)
+        return self.sendFax_multi(CorpNum, SenderNum, receivers, FilePath, ReserveDT, UserID, SenderName, adsYN)
 
-    def sendFax_multi(self, CorpNum, SenderNum, Receiver, FilePath, ReserveDT = None , UserID = None, SenderName = None):
+    def sendFax_multi(self, CorpNum, SenderNum, Receiver, FilePath, ReserveDT = None , UserID = None, SenderName = None, adsYN = False):
         """ 팩스 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -184,6 +184,9 @@ class FaxService(PopbillBase):
 
         if(type(Receiver) is FaxReceiver):
             Receiver = [Receiver]
+
+        if adsYN :
+            req['adsYN'] = True
 
         for r in Receiver:
             req['rcvs'].append({"rcv" : r.receiveNum, "rcvnm" : r.receiveName})

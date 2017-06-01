@@ -48,20 +48,24 @@ class FaxServiceTestCase(unittest.TestCase):
     def test_02_getUnitCost(self):
         unitCost = self.faxService.getUnitCost(self.testCorpNum)
         self.assertGreaterEqual(unitCost,0,"단가는 0 이상.")
-
+       def sendFax_multi(self, CorpNum, SenderNum, Receiver, FilePath, ReserveDT = None , UserID = None, SenderName = None, adsYN = False):
     def test_03_sendFaxMulti(self):
         receivers = []
 
         filepath = ["test.jpeg", "test2.jpeg"]
 
         for x in range(0, 5):
-            receivers.append(FaxReceiver(receiveNum="00011112222",receiveName="수신자명칭"))
+            receivers.append(FaxReceiver(receiveNum="070-4304-2991",receiveName="수신자명칭"))
 
         receiptNum = self.faxService.sendFax_multi(
                                                 self.testCorpNum,
-                                                "070-7510-3710",
+                                                "070-4304-2992",
                                                 receivers,
-                                                filepath
+                                                filepath,
+                                                None,
+                                                None,
+                                                None,
+                                                True,
                                             )
         self.assertIsNotNone(receiptNum,"접수번호 확인완료")
 
@@ -94,7 +98,9 @@ class FaxServiceTestCase(unittest.TestCase):
 
 
     def test_05_sendFax(self):
-        receiptNum = self.faxService.sendFax(self.testCorpNum, '07043042992', '070111222','수신자명', 'test2.jpeg')
+        receiptNum = self.faxService.sendFax(self.testCorpNum, '07043042992', '07043042991','수신자명', 'test2.jpeg', None, None, None, True)
+
+        print(receiptNum)
 
         self.assertIsNotNone(receiptNum," 접수번호 확인완료")
 
