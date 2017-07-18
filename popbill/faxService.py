@@ -125,7 +125,7 @@ class FaxService(PopbillBase):
         return self._httpget('/FAX/' + ReceiptNum + '/Cancel', CorpNum, UserID)
 
 
-    def sendFax(self, CorpNum, SenderNum, ReceiverNum, ReceiverName, FilePath, ReserveDT = None, UserID = None, SenderName = None, adsYN = False):
+    def sendFax(self, CorpNum, SenderNum, ReceiverNum, ReceiverName, FilePath, ReserveDT = None, UserID = None, SenderName = None, adsYN = False, title = None):
         """ 팩스 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -136,6 +136,8 @@ class FaxService(PopbillBase):
                 ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
                 UserID : 팝빌회원 아이디
                 SenderName : 발신자명 (동보전송용)
+                adsYN : 광고팩스 여부
+                title : 팩스제목
             return
                 접수번호 (receiptNum)
             raise
@@ -146,9 +148,9 @@ class FaxService(PopbillBase):
                                      receiveName = ReceiverName)
                         )
 
-        return self.sendFax_multi(CorpNum, SenderNum, receivers, FilePath, ReserveDT, UserID, SenderName, adsYN)
+        return self.sendFax_multi(CorpNum, SenderNum, receivers, FilePath, ReserveDT, UserID, SenderName, adsYN, title)
 
-    def sendFax_multi(self, CorpNum, SenderNum, Receiver, FilePath, ReserveDT = None , UserID = None, SenderName = None, adsYN = False):
+    def sendFax_multi(self, CorpNum, SenderNum, Receiver, FilePath, ReserveDT = None , UserID = None, SenderName = None, adsYN = False, title = None):
         """ 팩스 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -158,6 +160,8 @@ class FaxService(PopbillBase):
                 ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
                 UserID : 팝빌회원 아이디
                 SenderName : 발신자명 (동보전송용)
+                adsYN : 광고팩스 여부
+                title : 팩스제목
             return
                 접수번호 (receiptNum)
             raise
@@ -194,6 +198,9 @@ class FaxService(PopbillBase):
         if ReserveDT != None :
             req['sndDT'] = ReserveDT
 
+        if title != None :
+            req['title'] = title
+
         postData = self._stringtify(req)
 
         if(type(FilePath) is str):
@@ -211,7 +218,7 @@ class FaxService(PopbillBase):
 
         return result.receiptNum
 
-    def resendFax(self, CorpNum, ReceiptNum, SenderNum, SenderName, ReceiverNum, ReceiverName, ReserveDT = None, UserID = None):
+    def resendFax(self, CorpNum, ReceiptNum, SenderNum, SenderName, ReceiverNum, ReceiverName, ReserveDT = None, UserID = None, title = None):
         """ 팩스 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -222,6 +229,7 @@ class FaxService(PopbillBase):
                 ReceiverName : 수신자명
                 ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
                 UserID : 팝빌회원 아이디
+                title : 팩스제목
             return
                 접수번호 (receiptNum)
             raise
@@ -234,9 +242,9 @@ class FaxService(PopbillBase):
             receivers.append(FaxReceiver(receiveNum = ReceiverNum,
                                          receiveName = ReceiverName)
                             )
-        return self.resendFax_multi(CorpNum, ReceiptNum, SenderNum, SenderName, receivers, ReserveDT, UserID)
+        return self.resendFax_multi(CorpNum, ReceiptNum, SenderNum, SenderName, receivers, ReserveDT, UserID, title)
 
-    def resendFax_multi(self, CorpNum, ReceiptNum, SenderNum, SenderName, Receiver, ReserveDT = None , UserID = None):
+    def resendFax_multi(self, CorpNum, ReceiptNum, SenderNum, SenderName, Receiver, ReserveDT = None , UserID = None, title = None):
         """ 팩스 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -246,6 +254,7 @@ class FaxService(PopbillBase):
                 Receiver : 수신자정보 배열
                 ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
                 UserID : 팝빌회원 아이디
+                title : 팩스제목
             return
                 접수번호 (receiptNum)
             raise
@@ -265,6 +274,9 @@ class FaxService(PopbillBase):
 
         if ReserveDT != None :
             req['sndDT'] = ReserveDT
+
+        if title != None :
+            req['title'] = title
 
         if Receiver != None :
             req['rcvs'] = []

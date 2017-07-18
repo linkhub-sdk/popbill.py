@@ -48,32 +48,33 @@ class FaxServiceTestCase(unittest.TestCase):
     def test_02_getUnitCost(self):
         unitCost = self.faxService.getUnitCost(self.testCorpNum)
         self.assertGreaterEqual(unitCost,0,"단가는 0 이상.")
-       def sendFax_multi(self, CorpNum, SenderNum, Receiver, FilePath, ReserveDT = None , UserID = None, SenderName = None, adsYN = False):
+
     def test_03_sendFaxMulti(self):
         receivers = []
 
         filepath = ["test.jpeg", "test2.jpeg"]
 
         for x in range(0, 5):
-            receivers.append(FaxReceiver(receiveNum="070-4304-2991",receiveName="수신자명칭"))
+            receivers.append(FaxReceiver(receiveNum="070-111-222",receiveName="수신자명칭"))
 
         receiptNum = self.faxService.sendFax_multi(
                                                 self.testCorpNum,
-                                                "070-4304-2992",
+                                                "070-4304-2991",
                                                 receivers,
                                                 filepath,
                                                 None,
                                                 None,
                                                 None,
-                                                True,
+                                                False,
+                                                "팩스전송 제목",
                                             )
         self.assertIsNotNone(receiptNum,"접수번호 확인완료")
 
         result = self.faxService.getFaxResult(self.testCorpNum, receiptNum, self.testUserID)
 
-        print(result[0].sendState)
-        print(result[0].convState)
-        print(result[0].sendResult)
+        print(result[0].state)
+        print(result[0].result)
+        print(result[0].title)
 
     def test_04_reserveCancel(self):
 
@@ -98,7 +99,7 @@ class FaxServiceTestCase(unittest.TestCase):
 
 
     def test_05_sendFax(self):
-        receiptNum = self.faxService.sendFax(self.testCorpNum, '07043042992', '07043042991','수신자명', 'test2.jpeg', None, None, None, True)
+        receiptNum = self.faxService.sendFax(self.testCorpNum, '07043042992', '070111222','수신자명', 'test2.jpeg', None, None, None, False, "팩스 타이틀")
 
         print(receiptNum)
 
