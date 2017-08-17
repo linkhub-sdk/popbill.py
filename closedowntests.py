@@ -56,7 +56,7 @@ class ClosedownServiceTestCase(unittest.TestCase):
         self.assertEqual(url[:5], "https", "https로 시작")
 
     def test_checkCorpNum(self):
-        result = self.closedownService.checkCorpNum(self.testCorpNum, "4108621884")
+        result = self.closedownService.checkCorpNum(self.testCorpNum, "401-03-94930")
 
         # state (휴폐업상태) : None-알수없음, 0-등록되지 않은 사업자번호, 1-사업중, 2-폐업, 3-휴업
         # type (사업 유형) : None-알수없음, 1-일반과세자, 2-면세과세자, 3-간이과세자, 4-비영리법인, 국가기관
@@ -65,11 +65,12 @@ class ClosedownServiceTestCase(unittest.TestCase):
         tmp += "state : " + str(result.state)+ "\n"
         tmp += "type : " + str(result.type) + "\n"
         tmp += "stateDate(휴폐업일자) : " + str(result.stateDate) + "\n"
+        tmp += "typeDate(전환일자) : " + str(result.typeDate) + "\n"
         tmp += "checkDate(국세청 확인일자) : " + str(result.checkDate) + "\n"
 
         print(tmp)
 
-        self.assertEqual(result.corpNum, "4108621884","checkCorpNum 오류 :" + str(result.message))
+        self.assertEqual(result.corpNum, "4010394930","checkCorpNum 오류 :" + str(result.message))
 
     def test_checkCorpNums(self):
         resultList = self.closedownService.checkCorpNums(self.testCorpNum,["1234567890","4108600477","410-86-21884"])

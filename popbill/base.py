@@ -6,8 +6,8 @@
 # http://www.popbill.com
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
-# Contributor : Jeong Yohan (frenchofkiss@gmail.com)
-# Updated : 2016-07-25
+# Contributor : Jeong Yohan (code@linkhub.co.kr)
+# Updated : 2017-08-17
 # Thanks for your interest.
 from io import BytesIO
 import datetime
@@ -28,7 +28,7 @@ from linkhub import LinkhubException
 ServiceID_REAL = 'POPBILL';
 ServiceID_TEST = 'POPBILL_TEST';
 ServiceURL_REAL = 'popbill.linkhub.co.kr';
-ServiceURL_TEST = 'popbill_test.linkhub.co.kr';
+ServiceURL_TEST = 'popbill-test.linkhub.co.kr';
 APIVersion = '1.0';
 
 def __with_metaclass(meta, *bases):

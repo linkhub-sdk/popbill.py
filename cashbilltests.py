@@ -257,6 +257,27 @@ class CashbillServiceTestCase(unittest.TestCase):
         result = self.cashbillService.delete(self.testCorpNum, "20150325-01")
         self.assertEqual(result.code,1, "삭제 오류 : "+result.message)
 
+    def test_revokeRegistIssue(self):
+        mgtKey = "20170817-32"
+        orgConfirmNum = "820116333"
+        orgTradeDate = "20170711"
+
+        try:
+            result = self.cashbillService.revokeRegistIssue(self.testCorpNum,mgtKey,orgConfirmNum,orgTradeDate)
+            self.assertEqual(result.code, 1, "등록 오류 : " + result.message)
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_revokeRegister(self):
+        mgtKey = "20170817-33"
+        orgConfirmNum = "820116333"
+        orgTradeDate = "20170711"
+
+        try:
+            result = self.cashbillService.revokeRegister(self.testCorpNum,mgtKey,orgConfirmNum,orgTradeDate)
+            self.assertEqual(result.code, 1, "등록 오류 : " + result.message)
+        except PopbillException as PE:
+            print(PE.message)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(CashbillServiceTestCase)

@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-03-24
-# Updated : 2017-03-02
+# Updated : 2017-08-17
 # Thanks for your interest.
 
 from .base import PopbillBase,PopbillException
@@ -104,7 +104,6 @@ class CashbillService(PopbillBase):
             raise PopbillException(-99999999,"현금영수증 정보가 입력되지 않았습니다.")
 
         postData = ""
-        req = {}
 
         if Memo != None or Memo != '':
             cashbill.memo = Memo
@@ -132,6 +131,55 @@ class CashbillService(PopbillBase):
 
         return self._httppost('/Cashbill',postData,CorpNum,UserID)
 
+    def revokeRegistIssue(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN = False, memo = None, UserID = None):
+        """ 취소현금영수증 즉시발행
+            args
+                CorpNum : 팝빌회원 사업자번호
+                mgtKey : 현금영수증 문서관리번호
+                orgConfirmNum : 원본현금영수증 승인번호
+                orgTradeDate : 원본현금영수증 거래일자
+                smssendYN : 발행안내문자 전송여부
+                memo : 메모
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+
+        postData = self._stringtify({
+                                        "mgtKey" : mgtKey,
+                                        "orgConfirmNum" : orgConfirmNum,
+                                        "orgTradeDate" : orgTradeDate,
+                                        "smssendYN" : smssendYN,
+                                        "memo" : memo,
+                                    })
+
+        return self._httppost('/Cashbill', postData, CorpNum, UserID, "REVOKEISSUE")
+
+    def revokeRegister(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN = False, UserID = None):
+        """ 취소현금영수증 임시저장
+            args
+                CorpNum : 팝빌회원 사업자번호
+                mgtKey : 현금영수증 문서관리번호
+                orgConfirmNum : 원본현금영수증 승인번호
+                orgTradeDate : 원본현금영수증 거래일자
+                smssendYN : 발행안내문자 전송여부
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+
+        postData = self._stringtify({
+                                        "mgtKey" : mgtKey,
+                                        "orgConfirmNum" : orgConfirmNum,
+                                        "orgTradeDate" : orgTradeDate,
+                                        "smssendYN" : smssendYN,
+                                    })
+
+        return self._httppost('/Cashbill', postData, CorpNum, UserID, "REVOKE")
 
     def update(self, CorpNum, MgtKey, cashbill, UserID = None):
         """ 수정
