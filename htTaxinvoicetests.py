@@ -20,7 +20,10 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         self.htTaxinvoiceService.IsTest = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
-
+    def test_getPartnerURL(self):
+        url = self.htTaxinvoiceService.getPartnerURL(self.testCorpNum, "CHRG")
+        self.assertIsNotNone(url, "파트너 포인트 충전 URL")
+        print url
     def test_checkID(self):
         response = self.htTaxinvoiceService.checkID("testkorea")
         self.assertEqual(response.code, 1, "해당 아이디 사용중")

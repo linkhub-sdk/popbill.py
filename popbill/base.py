@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhub.co.kr)
-# Updated : 2017-08-17
+# Updated : 2017-08-29
 # Thanks for your interest.
 from io import BytesIO
 import datetime
@@ -73,6 +73,22 @@ class PopbillBase(__with_metaclass(Singleton,object)):
 
     def _addScope(self,newScope):
         self.__scopes.append(newScope)
+
+    # 파트너 포인트 충전 팝업 URL 추가 - 2017/08/29
+    def getPartnerURL(self,CorpNum,TOGO):
+        """ 팝빌 회원 잔여포인트 확인
+            args
+                CorpNum : 팝빌회원 사업자번호
+                TOGO : "CHRG"
+            return
+                URL
+            raise
+                PopbillException
+        """
+        try:
+            return linkhub.getPartnerURL(self._getToken(CorpNum), TOGO)
+        except LinkhubException as LE:
+                raise PopbillException(LE.code,LE.message)
 
     def getBalance(self,CorpNum):
         """ 팝빌 회원 잔여포인트 확인
