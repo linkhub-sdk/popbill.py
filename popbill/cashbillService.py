@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-03-24
-# Updated : 2017-08-17
+# Updated : 2017-11-13
 # Thanks for your interest.
 
 from .base import PopbillBase,PopbillException
@@ -131,7 +131,8 @@ class CashbillService(PopbillBase):
 
         return self._httppost('/Cashbill',postData,CorpNum,UserID)
 
-    def revokeRegistIssue(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN = False, memo = None, UserID = None):
+    def revokeRegistIssue(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN = False, memo = None, UserID = None,
+        isPartCancel = False, cancelType = None, supplyCost = None, tax = None, serviceFee = None, totalAmount = None):
         """ 취소현금영수증 즉시발행
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -141,6 +142,12 @@ class CashbillService(PopbillBase):
                 smssendYN : 발행안내문자 전송여부
                 memo : 메모
                 UserID : 팝빌회원 아이디
+                isPartCancel : 부분취소여부
+                cancelType : 취소사유
+                supplyCost : [취소] 공급가액
+                tax : [취소] 세액
+                serviceFee : [취소] 봉사료
+                totalAmount : [취소] 합계금액
             return
                 처리결과. consist of code and message
             raise
@@ -153,11 +160,18 @@ class CashbillService(PopbillBase):
                                         "orgTradeDate" : orgTradeDate,
                                         "smssendYN" : smssendYN,
                                         "memo" : memo,
+                                        "isPartCancel" : isPartCancel,
+                                        "cancelType" : cancelType,
+                                        "supplyCost" : supplyCost,
+                                        "tax" : tax,
+                                        "serviceFee" : serviceFee,
+                                        "totalAmount" : totalAmount,
                                     })
 
         return self._httppost('/Cashbill', postData, CorpNum, UserID, "REVOKEISSUE")
 
-    def revokeRegister(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN = False, UserID = None):
+    def revokeRegister(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN = False, UserID = None,
+        isPartCancel = False, cancelType = None, supplyCost = None, tax = None, serviceFee = None, totalAmount = None):
         """ 취소현금영수증 임시저장
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -166,6 +180,12 @@ class CashbillService(PopbillBase):
                 orgTradeDate : 원본현금영수증 거래일자
                 smssendYN : 발행안내문자 전송여부
                 UserID : 팝빌회원 아이디
+                isPartCancel : 부분취소여부
+                cancelType : 취소사유
+                supplyCost : [취소] 공급가액
+                tax : [취소] 세액
+                serviceFee : [취소] 봉사료
+                totalAmount : [취소] 합계금액
             return
                 처리결과. consist of code and message
             raise
@@ -177,6 +197,12 @@ class CashbillService(PopbillBase):
                                         "orgConfirmNum" : orgConfirmNum,
                                         "orgTradeDate" : orgTradeDate,
                                         "smssendYN" : smssendYN,
+                                        "isPartCancel" : isPartCancel,
+                                        "cancelType" : cancelType,
+                                        "supplyCost" : supplyCost,
+                                        "tax" : tax,
+                                        "serviceFee" : serviceFee,
+                                        "totalAmount" : totalAmount,
                                     })
 
         return self._httppost('/Cashbill', postData, CorpNum, UserID, "REVOKE")
