@@ -123,11 +123,12 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
     def test_search(self):
         MgtKeyType = "SELL"
         DType = "W"
-        SDate = "20160701"
-        EDate = "20160831"
+        SDate = "20171101"
+        EDate = "20171231"
         State = ["3**", "6**"]
         Type = ["N", "M"]
         TaxType = ["T", "N", "Z"]
+        IssueType = ["N","R","T"]
         LateOnly = ""
         TaxRegIDYN = ""
         TaxRegIDType = "S"
@@ -139,10 +140,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         InterOPYN = ""
 
         response = self.taxinvoiceService.search(self.testCorpNum,MgtKeyType,DType,SDate,EDate,State,Type,TaxType,
-            LateOnly,TaxRegIDYN,TaxRegIDType,TaxRegID,Page,PerPage,Order,self.testUserID,QString,InterOPYN)
+            LateOnly,TaxRegIDYN,TaxRegIDType,TaxRegID,Page,PerPage,Order,self.testUserID,QString,InterOPYN,IssueType)
 
-        for info in response.list:
-            print(info.interOPYN)
+        print response.total
 
     def test_getInfos(self):
         infos = self.taxinvoiceService.getInfos(self.testCorpNum,"SELL",["1234","1234567890"])

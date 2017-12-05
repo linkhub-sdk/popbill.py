@@ -203,8 +203,11 @@ class CashbillServiceTestCase(unittest.TestCase):
             self.assertEqual(result.mgtKey, "20150325-01","getInfo 오류 :" + str(result.message))
 
     def test_06_getDetailInfo(self):
-            result = self.cashbillService.getDetailInfo(self.testCorpNum, "20170817-32")
-            print(result.cancelType)
+            result = self.cashbillService.getDetailInfo(self.testCorpNum, "20171114-20")
+
+            print result.cancelType
+
+            self.assertEqual(result.mgtKey, "20171114-20", "getDetail오류 :" + str(result.message))
 
     def test_07_sendEmail(self):
 
@@ -257,42 +260,27 @@ class CashbillServiceTestCase(unittest.TestCase):
         self.assertEqual(result.code,1, "삭제 오류 : "+result.message)
 
     def test_revokeRegistIssue(self):
-        mgtKey = "20170817-36"
+        mgtKey = "20170817-32"
         orgConfirmNum = "820116333"
         orgTradeDate = "20170711"
-        smssendYN = False
-        memo = None
-        userID = None
-        isPartCancel = True
-        cancelType = "1"
-        supplyCost = "5000"
-        tax = "500"
-        serviceFee = "0"
-        totalAmount = "5500"
+
         try:
-            result = self.cashbillService.revokeRegistIssue(self.testCorpNum, mgtKey, orgConfirmNum,
-            orgTradeDate, smssendYN, memo, userID, isPartCancel, cancelType, supplyCost, tax, serviceFee, totalAmount)
+            result = self.cashbillService.revokeRegistIssue(self.testCorpNum,mgtKey,orgConfirmNum,orgTradeDate)
             self.assertEqual(result.code, 1, "등록 오류 : " + result.message)
         except PopbillException as PE:
             print(PE.message)
 
     def test_revokeRegister(self):
-        mgtKey = "20171113-21"
+        mgtKey = "20171113-18"
         orgConfirmNum = "820116333"
         orgTradeDate = "20170711"
         smssendYN = False
         userID = None
-        isPartCancel = True
-        cancelType = "3"
-        supplyCost = "3000"
-        tax = "300"
-        serviceFee = "0"
-        totalAmount = "3300"
 
 
         try:
             result = self.cashbillService.revokeRegister(self.testCorpNum, mgtKey, orgConfirmNum,
-            orgTradeDate, smssendYN, userID, isPartCancel, cancelType, supplyCost, tax, serviceFee, totalAmount)
+            orgTradeDate, smssendYN)
 
             self.assertEqual(result.code, 1, "등록 오류 : " + result.message)
         except PopbillException as PE:

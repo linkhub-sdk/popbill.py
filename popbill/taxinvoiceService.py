@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhub.co.kr)
-# Updated : 2017-03-28
+# Updated : 2017-12-05
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase,PopbillException,File
@@ -797,7 +797,7 @@ class TaxinvoiceService(PopbillBase):
 
         return Result.url
 
-    def search(self,CorpNum,MgtKeyType,DType,SDate,EDate,State,Type,TaxType,LateOnly,TaxRegIDYN,TaxRegIDType,TaxRegID,Page,PerPage,Order,UserID=None,QString=None,InterOPYN=None) :
+    def search(self,CorpNum,MgtKeyType,DType,SDate,EDate,State,Type,TaxType,LateOnly,TaxRegIDYN,TaxRegIDType,TaxRegID,Page,PerPage,Order,UserID=None,QString=None,InterOPYN=None,IssueType=None) :
         """ 목록 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -818,6 +818,7 @@ class TaxinvoiceService(PopbillBase):
                 UserID : 팝빌 회원아이디
                 QString : 거래처 정보, 거래처 상호 또는 사업자등록번호 기재, 미기재시 전체조회
                 InterOPYN : 연동문서 여부, 공백-전체조회, 0-일반문서 조회, 1-연동문서 조회
+                IssueType : 발행형태 배열, N-정발행, R-역발행, T-위수탁
             return
                 조회목록 Object
             raise
@@ -845,6 +846,9 @@ class TaxinvoiceService(PopbillBase):
 
         if QString is not None :
             uri += '&QString=' + QString
+
+        if IssueType is not None :
+            uri += '&IssueType=' + ','.join(IssueType)
 
 
         return self._httpget(uri, CorpNum,UserID)
