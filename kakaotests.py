@@ -63,9 +63,9 @@ class KakaoServiceTestCase(unittest.TestCase):
             print
 
     def test_sendATS(self):
-        TemplateCode = "tc-001"
+        TemplateCode = "018020000002"
         Sender = "01083490706"
-        Content = "알림톡 템플릿"
+        Content = "테스트 템플릿 입니다."
         AltContent = "알림톡 대체 문자"
         AltSendType = "A"
         SndDT = ""
@@ -80,20 +80,20 @@ class KakaoServiceTestCase(unittest.TestCase):
             print(PE.message)
 
     def test_sendATS_multi(self):
-        TemplateCode = "tc-001"
+        TemplateCode = "018020000001"
         Sender = "01083490706"
-        Content = "알림톡 템플릿"
+        Content = "[테스트] 테스트 템플릿입니다."
         AltContent = "알림톡 대체 문자"
         AltSendType = "A"
-        SndDT = ""
+        SndDT = "2018030130000"
 
         KakaoMessages = []
         for x in range(0, 2):
             KakaoMessages.append(
                 KakaoReceiver(
-                    rcv="010123456789",
+                    rcv="01083490706",
                     rcvnm="linkhub",
-                    msg="알림톡 우선순위 템플릿",
+                    msg="[테스트] 테스트 템플릿입니다.",
                     altmsg="알림톡 우선순위 대체문자"
                 )
             )
@@ -119,7 +119,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         Content = "친구톡 내용"
         AltContent = "대체문자 내용"
         AltSendType = "A"
-        SndDT = "20180228110000"
+        SndDT = "20180309110000"
         Receiver = "01083490706"
         ReceiverName = "kimhyunjin"
 
@@ -286,9 +286,10 @@ class KakaoServiceTestCase(unittest.TestCase):
             print(PE.message)
 
     def test_cancelReserve(self):
-        ReceipNum = "018022713272700001"
-        result = self.kakaoService.cancelReserve(self.testCorpNum, ReceipNum, self.testUserID)
-        print(result)
+        ReceiptNum = "018022811223400001"
+        result = self.kakaoService.cancelReserve(self.testCorpNum, ReceiptNum, self.testUserID)
+        print(result.code)
+        print(result.message)
 
     def test_getMessage(self):
         ReceipNum = "018022715042000001"
