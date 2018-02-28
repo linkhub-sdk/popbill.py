@@ -426,7 +426,7 @@ class KakaoService(PopbillBase):
         :param EDate: 종료일자, 표시형식(yyyyMMdd)
         :param State: 전송상태 배열 [1-대기, 2-성공, 3-실패, 4-취소]
         :param Item: 검색대상 [SMS-단문, LMS-장문, MMS-포토]
-        :param ReserveYN: [예약여부 0-전체조회, 1-예약전송 조회]
+        :param ReserveYN: [예약여부 1-예약전송, 0-전체조회]
         :param SenderYN: 개인조회 여부, [0-전체조회, 1-개인조회]
         :param Page: 페이지번호
         :param PerPage: 페이지당 목록개수

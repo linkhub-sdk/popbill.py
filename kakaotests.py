@@ -211,7 +211,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         Content = "플러스친구 내용"
         AltContent = "플러스친구등록이 안되어있습니다. 대체문자로 전송됩니다."
         AltSendType = "A"
-        SndDT = ""
+        SndDT = "20180301003000"
         FilePath = "FMSImage.jpg"
         ImageURL = "http://www.linkhub.co.kr"
         Receiver = "01083490706"
@@ -309,13 +309,13 @@ class KakaoServiceTestCase(unittest.TestCase):
             print(PE.message)
 
     def test_cancelReserve(self):
-        ReceiptNum = "018022811223400001"
+        ReceiptNum = "018022814545600001"
         result = self.kakaoService.cancelReserve(self.testCorpNum, ReceiptNum, self.testUserID)
         print(result.code)
         print(result.message)
 
     def test_getMessage(self):
-        ReceipNum = "018022814192000001"
+        ReceipNum = "018022814554400001"
         response = self.kakaoService.getMessages(self.testCorpNum, ReceipNum, self.testUserID)
 
         print("contentType (카카오톡 유형): %s " % response.contentType)
