@@ -27,11 +27,12 @@ class KakaoService(PopbillBase):
 
     def getURL(self, CorpNum, UserID, ToGo):
         """
-        :param CorpNum: 회원 사업자번호
-        :param UserID: 유저아이디
+        :param CorpNum: 팝빌회원 사업자번호
+        :param UserID: 팝빌회원 아이디
         :param ToGo: [PLUSFRIEND-플러스친구계정관리, SENDER-발신번호관리, TEMPLATE-알림톡템플릿관리, BOX-카카오톡전송내용]
         :return: 팝빌 URL
         """
+        print(ToGo)
         if ToGo == 'SENDER':
             result = self._httpget('/Message/?TG=' + ToGo, CorpNum, UserID)
         else:
@@ -41,8 +42,8 @@ class KakaoService(PopbillBase):
     def listPlusFriendID(self, CorpNum, UserID=None):
         """
         플러스친구 목록 확인
-        :param CorpNum: 회원 사업자번호
-        :param UserID: 유저아이디
+        :param CorpNum: 팝빌회원 사업자번호
+        :param UserID: 팝빌회원 아이디
         :return: 플러스친구 list
         """
         return self._httpget('/KakaoTalk/ListPlusFriendID', CorpNum, UserID)
@@ -50,8 +51,8 @@ class KakaoService(PopbillBase):
     def getSenderNumberList(self, CorpNum, UserID=None):
         """
         발신번호 목록 확인
-        :param CorpNum: 회원 사업자번호
-        :param UserID: 유저아이디
+        :param CorpNum: 팝빌회원 사업자번호
+        :param UserID: 팝빌회원 아이디
         :return: 발신번호목록 list
         """
         return self._httpget('/Message/SenderNumber', CorpNum, UserID)
@@ -59,8 +60,8 @@ class KakaoService(PopbillBase):
     def listATSTemplate(self, CorpNum, UserID=None):
         """
         알림톡 템플릿 목록 확인
-        :param CorpNum: 회원 사업자번호
-        :param UserID: 유저아이디
+        :param CorpNum: 팝빌회원 사업자번호
+        :param UserID: 팝빌회원 아이디
         :return: 알림톡 템플릿 list
         """
         return self._httpget('/KakaoTalk/ListATSTemplate', CorpNum, UserID)
@@ -69,7 +70,7 @@ class KakaoService(PopbillBase):
                 ReceiverName, UserID=None):
         """
         알림톡 단건 전송
-        :param CorpNum: 회원 사업자번호
+        :param CorpNum: 팝빌회원 사업자번호
         :param TemplateCode: 템플릿코드
         :param Sender: 발신번호
         :param Content: [동보] 알림톡 내용
@@ -78,7 +79,7 @@ class KakaoService(PopbillBase):
         :param SndDT: 예약일시 [작성형식 : yyyyMMddHHmmss]
         :param Receiver: 수신번호
         :param ReceiverName: 수신자명
-        :param UserID: 유저아이디
+        :param UserID: 팝빌회원 아이디
         :return: receiptNum (접수번호)
         """
         if TemplateCode is None or TemplateCode == '':
@@ -95,9 +96,6 @@ class KakaoService(PopbillBase):
             msg=Content,
             altmsg=AltContent)
         )
-
-        if KakaoMessages is None or len(KakaoMessages) < 1:
-            raise PopbillException(-99999999, "전송할 메시지가 입력되지 않았습니다.")
 
         req = {}
 
@@ -122,7 +120,7 @@ class KakaoService(PopbillBase):
                       UserID=None):
         """
         알림톡 대량 전송
-        :param CorpNum: 회원 사업자번호
+        :param CorpNum: 팝빌회원 사업자번호
         :param TemplateCode: 템플릿코드
         :param Sender: 발신번호
         :param Content: [동보] 알림톡 내용
@@ -130,7 +128,7 @@ class KakaoService(PopbillBase):
         :param AltSendType: 대체문자 유형 [공백-미전송, C-알림톡내용, A-대체문자내용]
         :param SndDT: 예약일시 [작성형식 : yyyyMMddHHmmss]
         :param KakaoMessages: 알림톡 내용 (배열)
-        :param UserID: 유저아이디
+        :param UserID: 팝빌회원 아이디
         :return: receiptNum (접수번호)
         """
         if TemplateCode is None or TemplateCode == '':
@@ -147,7 +145,7 @@ class KakaoService(PopbillBase):
         if Content is not None or Content != '':
             req['content'] = Content
         if AltContent is not None or AltContent != '':
-            req['altSendType'] = AltContent
+            req['altContent'] = AltContent
         if AltSendType is not None or AltSendType != '':
             req['altSendType'] = AltSendType
         if SndDT is not None or SndDT != '':
@@ -165,7 +163,7 @@ class KakaoService(PopbillBase):
                 ReceiverName, KakaoButtons, AdsYN=False, UserID=None):
         """
         친구톡 텍스트 단건 전송
-        :param CorpNum: 회원 사업자번호
+        :param CorpNum: 팝빌회원 사업자번호
         :param PlusFriendID: 플러스친구 아이디
         :param Sender: 발신번호
         :param Content: [동보] 친구톡 내용
@@ -176,7 +174,7 @@ class KakaoService(PopbillBase):
         :param ReceiverName: 수신자명
         :param KakaoButtons: 버튼 목록 (최대 5개)
         :param AdsYN: 광고 전송여부
-        :param UserID: 유저아이디
+        :param UserID: 팝빌회원 아이디
         :return: receiptNum (접수번호)
         """
         if PlusFriendID is None or PlusFriendID == '':
@@ -193,9 +191,6 @@ class KakaoService(PopbillBase):
             msg=Content,
             altmsg=AltContent)
         )
-
-        if KakaoMessages == '' or len(KakaoMessages) < 1:
-            raise PopbillException(-99999999, "전송 메시지가 입력되지 않았습니다.")
 
         req = {}
         if PlusFriendID is not None or PlusFriendID != '':
@@ -223,7 +218,7 @@ class KakaoService(PopbillBase):
                       KakaoMessages, KakaoButtons, AdsYN=False, UserID=None):
         """
         친구톡 텍스트 대량 전송
-        :param CorpNum: 회원 사업자번호
+        :param CorpNum: 팝빌회원 사업자번호
         :param PlusFriendID: 플러스친구 아이디
         :param Sender: 발신번호
         :param Content: [동보] 친구톡 내용
@@ -233,7 +228,7 @@ class KakaoService(PopbillBase):
         :param KakaoMessages: 친구톡 내용 (배열)
         :param KakaoButtons: 버튼 목록 (최대 5개)
         :param AdsYN: 광고 전송여부
-        :param UserID: 유저아이디
+        :param UserID: 팝빌회원 아이디
         :return: receiptNum (접수번호)
         """
         if PlusFriendID is None or PlusFriendID == '':
@@ -271,7 +266,7 @@ class KakaoService(PopbillBase):
                 Receiver, ReceiverName, KakaoButtons, AdsYN=False, UserID=None):
         """
         친구톡 이미지 단건 전송
-        :param CorpNum: 회원 사업자번호
+        :param CorpNum: 팝빌회원 사업자번호
         :param PlusFriendID: 플러스친구 아이디
         :param Sender: 발신번호
         :param Content: [동보] 친구톡 내용
@@ -284,7 +279,7 @@ class KakaoService(PopbillBase):
         :param ReceiverName: 수신자명
         :param KakaoButtons: 버튼 목록 (최대 5개)
         :param AdsYN: 광고 전송여부
-        :param UserID: 유저아이디
+        :param UserID: 팝빌회원 아이디
         :return: receiptNum (접수번호)
         """
         if PlusFriendID is None or PlusFriendID == '':
@@ -301,9 +296,6 @@ class KakaoService(PopbillBase):
             msg=Content,
             altmsg=AltContent)
         )
-
-        if KakaoMessages == '' or len(KakaoMessages) < 1:
-            raise PopbillException(-99999999, "전송 메시지가 입력되지 않았습니다.")
 
         req = {}
         if PlusFriendID is not None or PlusFriendID != '':
@@ -342,7 +334,7 @@ class KakaoService(PopbillBase):
                       KakaoMessages, KakaoButtons, AdsYN=False, UserID=None):
         """
         친구톡 이미지 대량 전송
-        :param CorpNum: 회원 사업자번호
+        :param CorpNum: 팝빌회원 사업자번호
         :param PlusFriendID: 플러스친구 아이디
         :param Sender: 발신번호
         :param Content: [동보] 친구톡 내용
@@ -354,7 +346,7 @@ class KakaoService(PopbillBase):
         :param KakaoMessages: 친구톡 내용 (배열)
         :param KakaoButtons: 버튼 목록 (최대 5개)
         :param AdsYN: 광고 전송여부
-        :param UserID: 유저아이디
+        :param UserID: 팝빌회원 아이디
         :return: receiptNum (접수번호)
         """
         if PlusFriendID is None or PlusFriendID == '':
@@ -402,9 +394,9 @@ class KakaoService(PopbillBase):
     def cancelReserve(self, CorpNum, ReceiptNum, UserID=None):
         """
         예약전송 취소
-        :param CorpNum: 회원 사업자번호
+        :param CorpNum: 팝빌회원 사업자번호
         :param ReceiptNum: 접수번호
-        :param UserID: 유저아이디
+        :param UserID: 팝빌회원 아이디
         :return: code (요청에 대한 상태 응답코드), message (요청에 대한 응답 메시지)
         """
         if ReceiptNum is None or ReceiptNum == '':
@@ -415,9 +407,9 @@ class KakaoService(PopbillBase):
     def getMessages(self, CorpNum, ReceiptNum, UserID=None):
         """
         알림톡/친구톡 전송내역 확인
-        :param CorpNum: 회원 사업자번호
+        :param CorpNum: 팝빌회원 사업자번호
         :param ReceiptNum: 접수번호
-        :param UserID: 유저아이디
+        :param UserID: 팝빌회원 아이디
         :return: 알림톡/친구톡 전송내역 및 전송상태
         """
         if ReceiptNum is None or ReceiptNum == '':
@@ -429,7 +421,7 @@ class KakaoService(PopbillBase):
         """
         카카오톡 전송내역 목록을 조회한다.
         - 버튼정보를 확인하는 경우 GetMessages (알림톡/친구톡 전송내역 확인) API 사용
-        :param CorpNum: 팝빌회원 사업자번호
+        :param CorpNum: 팝빌팝빌회원 사업자번호
         :param SDate: 시작일자, 표시형식(yyyyMMdd)
         :param EDate: 종료일자, 표시형식(yyyyMMdd)
         :param State: 전송상태 배열 [1-대기, 2-성공, 3-실패, 4-취소]
@@ -458,7 +450,7 @@ class KakaoService(PopbillBase):
     def getUnitCost(self, CorpNum, MsgType, UserID=None):
         """
         전송단가 확인
-        :param CorpNum: 회원 사업자번호
+        :param CorpNum: 팝빌회원 사업자번호
         :param MsgType: 카카오톡 유형
         :param UserID: 팝빌 회원아이디
         :return: unitCost
@@ -472,7 +464,7 @@ class KakaoService(PopbillBase):
     def getChargeInfo(self, CorpNum, MsgType, UserID=None):
         """
         서비스 과금정보를 확인한다.
-        :param CorpNum: 회원 사업자번호
+        :param CorpNum: 팝빌회원 사업자번호
         :param MsgType: 카카오톡 유형
         :param UserID: 팝빌 회원아이디
         :return: unitCost, chargeMethod, rateSystem

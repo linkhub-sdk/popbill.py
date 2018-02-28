@@ -25,8 +25,20 @@ class KakaoServiceTestCase(unittest.TestCase):
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
 
-    def test_getUR_Kakao(self):
+    def test_getUR_sender(self):
         url = self.kakaoService.getURL(self.testCorpNum, self.testUserID, "SENDER")
+        print(url)
+
+    def test_getUR_plusfriend(self):
+        url = self.kakaoService.getURL(self.testCorpNum, self.testUserID, "PLUSFRIEND")
+        print(url)
+
+    def test_getUR_template(self):
+        url = self.kakaoService.getURL(self.testCorpNum, self.testUserID, "TEMPLATE")
+        print(url)
+
+    def test_getUR_box(self):
+        url = self.kakaoService.getURL(self.testCorpNum, self.testUserID, "BOX")
         print(url)
 
     def test_listPlusFriendID(self):
@@ -67,9 +79,9 @@ class KakaoServiceTestCase(unittest.TestCase):
         Sender = "01083490706"
         Content = "테스트 템플릿 입니다."
         AltContent = "알림톡 대체 문자"
-        AltSendType = "A"
-        SndDT = ""
-        Receiver = "01083490706"
+        AltSendType = "C"
+        SndDT = "20180301111230"
+        Receiver = "01012341234"
         ReceiverName = "kimhyunjin"
 
         try:
@@ -84,8 +96,8 @@ class KakaoServiceTestCase(unittest.TestCase):
         Sender = "01083490706"
         Content = "[테스트] 테스트 템플릿입니다."
         AltContent = "알림톡 대체 문자"
-        AltSendType = "A"
-        SndDT = "2018030130000"
+        AltSendType = ""
+        SndDT = ""
 
         KakaoMessages = []
         for x in range(0, 2):
@@ -119,12 +131,12 @@ class KakaoServiceTestCase(unittest.TestCase):
         Content = "친구톡 내용"
         AltContent = "대체문자 내용"
         AltSendType = "A"
-        SndDT = "20180309110000"
+        SndDT = ""
         Receiver = "01083490706"
         ReceiverName = "kimhyunjin"
 
         KakaoButtons = []
-        for x in range(0, 5):
+        for x in range(0, 1):
             KakaoButtons.append(
                 KakaoButton(
                     n="팝빌 바로가기",
@@ -133,6 +145,15 @@ class KakaoServiceTestCase(unittest.TestCase):
                     u2="http://www.popbill.com"
                 )
             )
+
+        KakaoButtons.append(
+            KakaoButton(
+                n="앱링크",
+                t="AL",
+                u1="http://www.popbill.com",
+                u2="http://www.popbill.com"
+            )
+        )
 
         AdsYN = False
 
@@ -163,30 +184,12 @@ class KakaoServiceTestCase(unittest.TestCase):
                 )
             )
 
-        for x in range(0, 2):
-            KakaoMessages.append(
-                KakaoReceiver(
-                    rcv="01083490706",
-                    rcvnm="kimhyunjin",
-                )
-            )
-
         KakaoButtons = []
-        for x in range(0, 2):
+        for x in range(0, 1):
             KakaoButtons.append(
                 KakaoButton(
                     n="팝빌 바로가기",
-                    t="WL",
-                    u1="http://www.popbill.com",
-                    u2="http://www.popbill.com"
-                )
-            )
-
-        for x in range(0, 2):
-            KakaoButtons.append(
-                KakaoButton(
-                    n="봇키워드",
-                    t="BK",
+                    t="MD",
                     u1="http://www.popbill.com",
                     u2="http://www.popbill.com"
                 )
@@ -205,8 +208,8 @@ class KakaoServiceTestCase(unittest.TestCase):
     def test_sendFMS(self):
         PlusFriendID = "@팝빌"
         Sender = "01083490706"
-        Content = "친구톡 내용"
-        AltContent = "대체문자 내용"
+        Content = "플러스친구 내용"
+        AltContent = "플러스친구등록이 안되어있습니다. 대체문자로 전송됩니다."
         AltSendType = "A"
         SndDT = ""
         FilePath = "FMSImage.jpg"
@@ -215,15 +218,35 @@ class KakaoServiceTestCase(unittest.TestCase):
         ReceiverName = None
 
         KakaoButtons = []
-        for x in range(0, 5):
-            KakaoButtons.append(
-                KakaoButton(
-                    n="팝빌 바로가기",
-                    t="WL",
-                    u1="http://www.popbill.com",
-                    u2="http://www.popbill.com"
-                )
+
+        KakaoButtons.append(
+            KakaoButton(
+                n="팝빌 바로가기",
+                t="WL",
+                u1="http://www.popbill.com",
+                u2="http://www.popbill.com"
             )
+        )
+        KakaoButtons.append(
+            KakaoButton(
+                n="링크허브 바로가기",
+                t="WL",
+                u1="http://www.linkhub.co.kr",
+                u2="http://www.linkhub.co.kr"
+            )
+        )
+        KakaoButtons.append(
+            KakaoButton(
+                n="메시지전달",
+                t="MD",
+            )
+        )
+        KakaoButtons.append(
+            KakaoButton(
+                n="봇키워드",
+                t="BK",
+            )
+        )
 
         AdsYN = False
 
@@ -292,7 +315,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         print(result.message)
 
     def test_getMessage(self):
-        ReceipNum = "018022715042000001"
+        ReceipNum = "018022814192000001"
         response = self.kakaoService.getMessages(self.testCorpNum, ReceipNum, self.testUserID)
 
         print("contentType (카카오톡 유형): %s " % response.contentType)
@@ -300,7 +323,9 @@ class KakaoServiceTestCase(unittest.TestCase):
         print("plusFriendID (플러스친구 아이디): %s " % response.plusFriendID)
         print("sendNum (발신번호): %s " % response.sendNum)
         print("altContent ([동보] 대체문자 내용): %s " % response.altContent)
-        print("altSendType (대체문자 유형): %s " % response.altSendType)
+        print("altSendType (대체문자 유형): %s " % response.sndDT)
+        print("reserveDT (예약일시): %s " % response.reserveDT)
+        print("adsYN (광고여부): %s " % response.adsYN)
         print("successCnt (성공건수): %s " % response.successCnt)
         print("failCnt (실패건수): %s " % response.failCnt)
         print("altCnt (대체문자 건수): %s " % response.altCnt)
@@ -325,8 +350,8 @@ class KakaoServiceTestCase(unittest.TestCase):
             print
 
     def test_search(self):
-        SDate = "20180227"
-        EDate = "20180227"
+        SDate = "20180228"
+        EDate = "20180228"
         State = ['1', '2', '3', '4', '5']
         Item = ['ATS', 'FTS', 'FMS']
         ReserveYN = '1'
