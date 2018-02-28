@@ -32,7 +32,6 @@ class KakaoService(PopbillBase):
         :param ToGo: [PLUSFRIEND-플러스친구계정관리, SENDER-발신번호관리, TEMPLATE-알림톡템플릿관리, BOX-카카오톡전송내용]
         :return: 팝빌 URL
         """
-        print(ToGo)
         if ToGo == 'SENDER':
             result = self._httpget('/Message/?TG=' + ToGo, CorpNum, UserID)
         else:

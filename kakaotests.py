@@ -315,7 +315,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         print(result.message)
 
     def test_getMessage(self):
-        ReceipNum = "018022814554400001"
+        ReceipNum = "018022815501800001"
         response = self.kakaoService.getMessages(self.testCorpNum, ReceipNum, self.testUserID)
 
         print("contentType (카카오톡 유형): %s " % response.contentType)
