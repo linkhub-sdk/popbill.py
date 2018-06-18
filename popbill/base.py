@@ -289,11 +289,16 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         else:
             return Utils.json2obj(responseString)
 
-    def _httppost(self,url,postData, CorpNum = None,UserID = None,ActionOverride = None ):
+    def _httppost(self,url,postData, CorpNum = None,UserID = None,ActionOverride = None, contentsType = None):
 
         conn = self._getConn();
 
-        headers = {"x-pb-version" : APIVersion, "Content-Type" : "Application/json"}
+        headers = {"x-pb-version" : APIVersion}
+
+        if contentsType != None:
+            headers["Content-Type"] = contentsType
+        else:
+            headers["Content-Type"] = "application/json; charset=utf8"
 
         if CorpNum != None:
             headers["Authorization"] = "Bearer " + self._getToken(CorpNum).session_token

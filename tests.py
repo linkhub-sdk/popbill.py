@@ -33,7 +33,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
 
     def test_1_registIssue(self):
 
-        taxinvoice = Taxinvoice(writeDate = "20160725", #작성일자
+        taxinvoice = Taxinvoice(writeDate = "20180618", #작성일자
                                 chargeDirection = "정과금",
                                 issueType = "정발행",
                                 purposeType = "영수",
@@ -142,7 +142,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         response = self.taxinvoiceService.search(self.testCorpNum,MgtKeyType,DType,SDate,EDate,State,Type,TaxType,
             LateOnly,TaxRegIDYN,TaxRegIDType,TaxRegID,Page,PerPage,Order,self.testUserID,QString,InterOPYN,IssueType)
 
-        print response.total
+        print (response.total)
 
     def test_getInfos(self):
         infos = self.taxinvoiceService.getInfos(self.testCorpNum,"SELL",["1234","1234567890"])
@@ -448,6 +448,12 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         logs = self.taxinvoiceService.getLogs(self.testCorpNum,"SELL","1234")
         print (logs[1].procMemo)
         self.assertGreater(len(logs),0,"로그 갯수 확인")
+
+
+    def test_assignMgtKey(self):
+        response = self.taxinvoiceService.assignMgtKey(self.testCorpNum, "SELL", "018061818014500001", "20180618180108", self.testUserID)
+        print(response.code)
+        print(response.message)
 
 
 if __name__ == '__main__':
