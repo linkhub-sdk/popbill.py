@@ -66,27 +66,7 @@ class KakaoService(PopbillBase):
         return self._httpget('/KakaoTalk/ListATSTemplate', CorpNum, UserID)
 
     def sendATS(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, Receiver,
-                ReceiverName, UserID=None):
-        """
-        알림톡 단건 전송
-        :param CorpNum: 팝빌회원 사업자번호
-        :param TemplateCode: 템플릿코드
-        :param Sender: 발신번호
-        :param Content: [동보] 알림톡 내용
-        :param AltContent: [동보] 대체문자 내용
-        :param AltSendType: 대체문자 유형 [공백-미전송, C-알림톡내용, A-대체문자내용]
-        :param SndDT: 예약일시 [작성형식 : yyyyMMddHHmmss]
-        :param Receiver: 수신번호
-        :param ReceiverName: 수신자명
-        :param UserID: 팝빌회원 아이디
-        :return: receiptNum (접수번호)
-        """
-        if TemplateCode is None or TemplateCode == '':
-            raise PopbillException(-99999999, "알림톡 템플릿코드가 입력되지 않았습니다.")
-        if Sender is None or Sender == '':
-            raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
-        if Receiver is None or Receiver == '':
-            raise PopbillException(-99999999, "수신번호가 입력되지 않았습니다.")
+                ReceiverName, UserID=None, RequestNum=None):
 
         KakaoMessages = []
         KakaoMessages.append(KakaoReceiver(
@@ -95,41 +75,30 @@ class KakaoService(PopbillBase):
             msg=Content,
             altmsg=AltContent)
         )
+        return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
+                                 RequestNum)
 
-        req = {}
+    def sendATS_multi(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages, UserID=None,
+                      RequestNum=None):
+        return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
+                                 RequestNum)
 
-        if TemplateCode is not None or TemplateCode != '':
-            req['templateCode'] = TemplateCode
-        if Sender is not None or Sender != '':
-            req['snd'] = Sender
-        if AltSendType is not None or AltSendType != '':
-            req['altSendType'] = AltSendType
-        if SndDT is not None or SndDT != '':
-            req['sndDT'] = SndDT
-        if KakaoMessages is not None or KakaoMessages != '':
-            req['msgs'] = KakaoMessages
-
-        postData = self._stringtify(req)
-
-        result = self._httppost('/ATS', postData, CorpNum, UserID)
-
-        return result.receiptNum
-
-    def sendATS_multi(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                      UserID=None):
+    def sendATS_same(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
+                     UserID=None, RequestNum=None):
         """
-        알림톡 대량 전송
-        :param CorpNum: 팝빌회원 사업자번호
-        :param TemplateCode: 템플릿코드
-        :param Sender: 발신번호
-        :param Content: [동보] 알림톡 내용
-        :param AltContent: [동보] 대체문자 내용
-        :param AltSendType: 대체문자 유형 [공백-미전송, C-알림톡내용, A-대체문자내용]
-        :param SndDT: 예약일시 [작성형식 : yyyyMMddHHmmss]
-        :param KakaoMessages: 알림톡 내용 (배열)
-        :param UserID: 팝빌회원 아이디
-        :return: receiptNum (접수번호)
-        """
+       알림톡 대량 전송
+       :param CorpNum: 팝빌회원 사업자번호
+       :param TemplateCode: 템플릿코드
+       :param Sender: 발신번호
+       :param Content: [동보] 알림톡 내용
+       :param AltContent: [동보] 대체문자 내용
+       :param AltSendType: 대체문자 유형 [공백-미전송, C-알림톡내용, A-대체문자내용]
+       :param SndDT: 예약일시 [작성형식 : yyyyMMddHHmmss]
+       :param KakaoMessages: 알림톡 내용 (배열)
+       :param UserID: 팝빌회원 아이디
+       :param RequestNum : 요청번호
+       :return: receiptNum (접수번호)
+       """
         if TemplateCode is None or TemplateCode == '':
             raise PopbillException(-99999999, "알림톡 템플릿코드가 입력되지 않았습니다.")
         if Sender is None or Sender == '':
@@ -151,6 +120,8 @@ class KakaoService(PopbillBase):
             req['sndDT'] = SndDT
         if KakaoMessages is not None or KakaoMessages != '':
             req['msgs'] = KakaoMessages
+        if RequestNum is not None or RequestNum != '':
+            req['requestnum'] = RequestNum
 
         postData = self._stringtify(req)
 
@@ -159,30 +130,7 @@ class KakaoService(PopbillBase):
         return result.receiptNum
 
     def sendFTS(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, Receiver,
-                ReceiverName, KakaoButtons, AdsYN=False, UserID=None):
-        """
-        친구톡 텍스트 단건 전송
-        :param CorpNum: 팝빌회원 사업자번호
-        :param PlusFriendID: 플러스친구 아이디
-        :param Sender: 발신번호
-        :param Content: [동보] 친구톡 내용
-        :param AltContent: [동보] 대체문자 내용
-        :param AltSendType: 대체문자 유형 [공백-미전송, C-알림톡내용, A-대체문자내용]
-        :param SndDT: 예약일시 [작성형식 : yyyyMMddHHmmss]
-        :param Receiver: 수신번호
-        :param ReceiverName: 수신자명
-        :param KakaoButtons: 버튼 목록 (최대 5개)
-        :param AdsYN: 광고 전송여부
-        :param UserID: 팝빌회원 아이디
-        :return: receiptNum (접수번호)
-        """
-        if PlusFriendID is None or PlusFriendID == '':
-            raise PopbillException(-99999999, "플러스친구 아이디가 입력되지 않았습니다.")
-        if Sender is None or Sender == '':
-            raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
-        if Receiver is None or Receiver == '':
-            raise PopbillException(-99999999, "수신번호가 입력되지 않았습니다.")
-
+                ReceiverName, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
         KakaoMessages = []
         KakaoMessages.append(KakaoReceiver(
             rcv=Receiver,
@@ -191,30 +139,16 @@ class KakaoService(PopbillBase):
             altmsg=AltContent)
         )
 
-        req = {}
-        if PlusFriendID is not None or PlusFriendID != '':
-            req['plusFriendID'] = PlusFriendID
-        if Sender is not None or Sender != '':
-            req['snd'] = Sender
-        if AltSendType is not None or AltSendType != '':
-            req['altSendType'] = AltSendType
-        if SndDT is not None or SndDT != '':
-            req['sndDT'] = SndDT
-        if KakaoMessages is not None or KakaoMessages != '':
-            req['msgs'] = KakaoMessages
-        if KakaoButtons:
-            req['btns'] = KakaoButtons
-        if AdsYN:
-            req['adsYN'] = True
-
-        postData = self._stringtify(req)
-
-        result = self._httppost('/FTS', postData, CorpNum, UserID)
-
-        return result.receiptNum
+        return self.sendFTS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, KakaoMessages, KakaoButtons,
+                                 AdsYN, UserID, RequestNum)
 
     def sendFTS_multi(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT,
-                      KakaoMessages, KakaoButtons, AdsYN=False, UserID=None):
+                      KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
+        return self.sendFTS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, KakaoMessages, KakaoButtons,
+                                 AdsYN, UserID, RequestNum)
+
+    def sendFTS_same(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT,
+                     KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
         """
         친구톡 텍스트 대량 전송
         :param CorpNum: 팝빌회원 사업자번호
@@ -228,6 +162,7 @@ class KakaoService(PopbillBase):
         :param KakaoButtons: 버튼 목록 (최대 5개)
         :param AdsYN: 광고 전송여부
         :param UserID: 팝빌회원 아이디
+        :param RequestNum : 요청번호
         :return: receiptNum (접수번호)
         """
         if PlusFriendID is None or PlusFriendID == '':
@@ -254,6 +189,8 @@ class KakaoService(PopbillBase):
             req['btns'] = KakaoButtons
         if AdsYN:
             req['adsYN'] = True
+        if RequestNum is not None or RequestNum != '':
+            req['requestNum'] = RequestNum
 
         postData = self._stringtify(req)
 
@@ -262,31 +199,7 @@ class KakaoService(PopbillBase):
         return result.receiptNum
 
     def sendFMS(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, FilePath, ImageURL,
-                Receiver, ReceiverName, KakaoButtons, AdsYN=False, UserID=None):
-        """
-        친구톡 이미지 단건 전송
-        :param CorpNum: 팝빌회원 사업자번호
-        :param PlusFriendID: 플러스친구 아이디
-        :param Sender: 발신번호
-        :param Content: [동보] 친구톡 내용
-        :param AltContent: [동보] 대체문자 내용
-        :param AltSendType: 대체문자 유형 [공백-미전송, C-알림톡내용, A-대체문자내용]
-        :param SndDT: 예약일시 [작성형식 : yyyyMMddHHmmss]
-        :param FilePath: 파일경로
-        :param ImageURL: 이미지 URL
-        :param Receiver: 수신번호
-        :param ReceiverName: 수신자명
-        :param KakaoButtons: 버튼 목록 (최대 5개)
-        :param AdsYN: 광고 전송여부
-        :param UserID: 팝빌회원 아이디
-        :return: receiptNum (접수번호)
-        """
-        if PlusFriendID is None or PlusFriendID == '':
-            raise PopbillException(-99999999, "플러스친구 아이디가 입력되지 않았습니다.")
-        if Sender is None or Sender == '':
-            raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
-        if Receiver is None or Receiver == '':
-            raise PopbillException(-99999999, "수신번호가 입력되지 않았습니다.")
+                Receiver, ReceiverName, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
 
         KakaoMessages = []
         KakaoMessages.append(KakaoReceiver(
@@ -296,41 +209,16 @@ class KakaoService(PopbillBase):
             altmsg=AltContent)
         )
 
-        req = {}
-        if PlusFriendID is not None or PlusFriendID != '':
-            req['plusFriendID'] = PlusFriendID
-        if Sender is not None or Sender != '':
-            req['snd'] = Sender
-        if AltSendType is not None or AltSendType != '':
-            req['altSendType'] = AltSendType
-        if SndDT is not None or SndDT != '':
-            req['sndDT'] = SndDT
-        if KakaoMessages is not None or KakaoMessages != '':
-            req['msgs'] = KakaoMessages
-        if ImageURL is not None or ImageURL != '':
-            req['imageURL'] = ImageURL
-        if KakaoButtons:
-            req['btns'] = KakaoButtons
-        if AdsYN:
-            req['adsYN'] = True
-
-        postData = self._stringtify(req)
-
-        files = []
-        try:
-            with open(FilePath, "rb") as F:
-                files = [File(fieldName='file',
-                              fileName=F.name,
-                              fileData=F.read())]
-        except IOError:
-            raise PopbillException(-99999999, "해당경로에 파일이 없거나 읽을 수 없습니다.")
-
-        result = self._httppost_files('/FMS', postData, files, CorpNum, UserID)
-
-        return result.receiptNum
+        return self.sendFMS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, FilePath, ImageURL,
+                                 KakaoMessages, KakaoButtons, AdsYN, UserID, RequestNum)
 
     def sendFMS_multi(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, FilePath, ImageURL,
-                      KakaoMessages, KakaoButtons, AdsYN=False, UserID=None):
+                      KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
+        return self.sendFMS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, FilePath, ImageURL,
+                                 KakaoMessages, KakaoButtons, AdsYN, UserID, RequestNum)
+
+    def sendFMS_same(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, FilePath, ImageURL,
+                     KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
         """
         친구톡 이미지 대량 전송
         :param CorpNum: 팝빌회원 사업자번호
@@ -346,6 +234,7 @@ class KakaoService(PopbillBase):
         :param KakaoButtons: 버튼 목록 (최대 5개)
         :param AdsYN: 광고 전송여부
         :param UserID: 팝빌회원 아이디
+        :param RequestNum : 요청번호
         :return: receiptNum (접수번호)
         """
         if PlusFriendID is None or PlusFriendID == '':
@@ -374,6 +263,8 @@ class KakaoService(PopbillBase):
             req['btns'] = KakaoButtons
         if AdsYN:
             req['adsYN'] = True
+        if RequestNum is not None or RequestNum != '':
+            req['requestNum'] = RequestNum
 
         postData = self._stringtify(req)
 
@@ -414,7 +305,7 @@ class KakaoService(PopbillBase):
         if RequestNum is None or RequestNum == '':
             raise PopbillException(-99999999, "요청번호 입력되지 않았습니다")
 
-        return self._httpget('/KakaoTalk/Cancel/'+RequestNum, CorpNum, UserID)
+        return self._httpget('/KakaoTalk/Cancel/' + RequestNum, CorpNum, UserID)
 
     def getMessages(self, CorpNum, ReceiptNum, UserID=None):
         """

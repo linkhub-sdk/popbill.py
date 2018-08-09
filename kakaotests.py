@@ -75,8 +75,8 @@ class KakaoServiceTestCase(unittest.TestCase):
             print
 
     def test_sendATS(self):
-        TemplateCode = "018020000002"
-        Sender = "01083490706"
+        TemplateCode = "018060000159"
+        Sender = "07043042992"
         Content = "테스트 템플릿 입니다."
         AltContent = "알림톡 대체 문자"
         AltSendType = "C"
@@ -86,14 +86,15 @@ class KakaoServiceTestCase(unittest.TestCase):
 
         try:
             receiptNum = self.kakaoService.sendATS(self.testCorpNum, TemplateCode, Sender, Content, AltContent,
-                                                   AltSendType, SndDT, Receiver, ReceiverName, self.testUserID)
+                                                   AltSendType, SndDT, Receiver, ReceiverName, self.testUserID,
+                                                   "20180809145156")
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
 
     def test_sendATS_multi(self):
-        TemplateCode = "018020000001"
-        Sender = "01083490706"
+        TemplateCode = "018060000159"
+        Sender = "07043042992"
         Content = "[테스트] 테스트 템플릿입니다."
         AltContent = "알림톡 대체 문자"
         AltSendType = ""
@@ -103,7 +104,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         for x in range(0, 2):
             KakaoMessages.append(
                 KakaoReceiver(
-                    rcv="01083490706",
+                    rcv="07043042992",
                     rcvnm="linkhub",
                     msg="[테스트] 테스트 템플릿입니다.",
                     altmsg="알림톡 우선순위 대체문자"
@@ -119,20 +120,21 @@ class KakaoServiceTestCase(unittest.TestCase):
             )
 
         try:
-            receiptNum = self.kakaoService.sendATS_multi(self.testCorpNum, TemplateCode, Sender, Content, AltContent,
-                                                         AltSendType, SndDT, KakaoMessages, self.testUserID)
+            receiptNum = self.kakaoService.sendATS_multi(self.testCorpNum, TemplateCode, Sender, "", "",
+                                                         AltSendType, SndDT, KakaoMessages, self.testUserID,
+                                                         "20180809150123")
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
 
     def test_sendFTS(self):
         PlusFriendID = "@팝빌"
-        Sender = "01083490706"
+        Sender = "07043042992"
         Content = "친구톡 내용"
         AltContent = "대체문자 내용"
         AltSendType = "A"
         SndDT = ""
-        Receiver = "01083490706"
+        Receiver = "07043042992"
         ReceiverName = "kimhyunjin"
 
         KakaoButtons = []
@@ -160,14 +162,14 @@ class KakaoServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.kakaoService.sendFTS(self.testCorpNum, PlusFriendID, Sender, Content, AltContent,
                                                    AltSendType, SndDT, Receiver, ReceiverName, KakaoButtons, AdsYN,
-                                                   self.testUserID)
+                                                   self.testUserID, "20180809150235")
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
 
     def test_sendFTS_multi(self):
         PlusFriendID = "@팝빌"
-        Sender = "01083490706"
+        Sender = "07043042992"
         Content = "친구톡 내용"
         AltContent = "대체문자 내용"
         AltSendType = "A"
@@ -177,7 +179,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         for x in range(0, 2):
             KakaoMessages.append(
                 KakaoReceiver(
-                    rcv="01083490706",
+                    rcv="07043042992",
                     rcvnm="kimhyunjin",
                     msg="친구톡 우선순위 내용",
                     altmsg="대체문자 우선순위 내용"
@@ -198,23 +200,23 @@ class KakaoServiceTestCase(unittest.TestCase):
         AdsYN = False
 
         try:
-            receiptNum = self.kakaoService.sendFTS_multi(self.testCorpNum, PlusFriendID, Sender, Content, AltContent,
-                                                         AltSendType, SndDT, KakaoMessages, KakaoButtons, AdsYN,
-                                                         self.testUserID)
+            receiptNum = self.kakaoService.sendFTS_same(self.testCorpNum, PlusFriendID, Sender, "", "",
+                                                        AltSendType, SndDT, KakaoMessages, KakaoButtons, AdsYN,
+                                                        self.testUserID, "20180809150622")
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
 
     def test_sendFMS(self):
         PlusFriendID = "@팝빌"
-        Sender = "01083490706"
+        Sender = "07043042992"
         Content = "플러스친구 내용"
         AltContent = "플러스친구등록이 안되어있습니다. 대체문자로 전송됩니다."
         AltSendType = "A"
         SndDT = "20180301003000"
         FilePath = "FMSImage.jpg"
         ImageURL = "http://www.linkhub.co.kr"
-        Receiver = "01083490706"
+        Receiver = "07043042992"
         ReceiverName = None
 
         KakaoButtons = []
@@ -253,18 +255,18 @@ class KakaoServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.kakaoService.sendFMS(self.testCorpNum, PlusFriendID, Sender, Content, AltContent,
                                                    AltSendType, SndDT, FilePath, ImageURL, Receiver, ReceiverName,
-                                                   KakaoButtons, AdsYN, self.testUserID)
+                                                   KakaoButtons, AdsYN, self.testUserID, "20180809150651")
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
 
     def test_sendFMS_multi(self):
         PlusFriendID = "@팝빌"
-        Sender = "01083490706"
+        Sender = "07043042992"
         Content = "친구톡 내용"
         AltContent = "대체문자 내용"
         AltSendType = "A"
-        SndDT = ""
+        SndDT = "20180810151226"
         FilePath = "FMSImage.jpg"
         ImageURL = "http://www.linkhub.co.kr"
 
@@ -272,7 +274,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         for x in range(0, 2):
             KakaoMessages.append(
                 KakaoReceiver(
-                    rcv="01083490706",
+                    rcv="07043042992",
                     rcvnm="kimhyunjin",
                     msg="친구톡 우선순위 내용",
                     altmsg="대체문자 우선순위 내용"
@@ -282,7 +284,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         for x in range(0, 2):
             KakaoMessages.append(
                 KakaoReceiver(
-                    rcv="01083490706",
+                    rcv="07043042992",
                     rcvnm="kimhyunjin",
                 )
             )
@@ -303,7 +305,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.kakaoService.sendFMS_multi(self.testCorpNum, PlusFriendID, Sender, Content, AltContent,
                                                          AltSendType, SndDT, FilePath, ImageURL, KakaoMessages,
-                                                         KakaoButtons, AdsYN, self.testUserID)
+                                                         KakaoButtons, AdsYN, self.testUserID, "20180809151234")
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -314,9 +316,50 @@ class KakaoServiceTestCase(unittest.TestCase):
         print(result.code)
         print(result.message)
 
+    def test_cancelReserveRN(self):
+        RequestNum = "20180809151234"
+        result = self.kakaoService.cancelReserveRN(self.testCorpNum, RequestNum, self.testUserID)
+        print(result.code)
+        print(result.message)
+
     def test_getMessage(self):
         ReceipNum = "018022815501800001"
         response = self.kakaoService.getMessages(self.testCorpNum, ReceipNum, self.testUserID)
+
+        print("contentType (카카오톡 유형): %s " % response.contentType)
+        print("templateCode (템플릿코드): %s " % response.templateCode)
+        print("plusFriendID (플러스친구 아이디): %s " % response.plusFriendID)
+        print("sendNum (발신번호): %s " % response.sendNum)
+        print("altContent ([동보] 대체문자 내용): %s " % response.altContent)
+        print("altSendType (대체문자 유형): %s " % response.sndDT)
+        print("reserveDT (예약일시): %s " % response.reserveDT)
+        print("adsYN (광고여부): %s " % response.adsYN)
+        print("successCnt (성공건수): %s " % response.successCnt)
+        print("failCnt (실패건수): %s " % response.failCnt)
+        print("altCnt (대체문자 건수): %s " % response.altCnt)
+        print("cancelCnt (취소건수): %s " % response.cancelCnt)
+        print("adsYN (광고전송 여부): %s " % response.adsYN)
+        print
+
+        i = 1
+        for info in response.msgs:
+            print("====== 전송결과 정보 배열 [%d] ======" % i)
+            for key, value in info.__dict__.items():
+                print("%s : %s" % (key, value))
+            i += 1
+            print
+
+        i = 1
+        for info in response.btns:
+            print("====== 버튼 목록 [%d] ======" % i)
+            for key, value in info.__dict__.items():
+                print("%s : %s" % (key, value))
+            i += 1
+            print
+
+    def test_getMessageRN(self):
+        RequestNum = "20180809151234"
+        response = self.kakaoService.getMessagesRN(self.testCorpNum, RequestNum, self.testUserID)
 
         print("contentType (카카오톡 유형): %s " % response.contentType)
         print("templateCode (템플릿코드): %s " % response.templateCode)
