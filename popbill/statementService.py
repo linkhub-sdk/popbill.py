@@ -717,6 +717,35 @@ class StatementService(PopbillBase):
 
         return self._httppost(uri, postData, CorpNum, UserID)
 
+    def listEmailConfig(self, CorpNum, UserID=None):
+        """ 알림메일 전송목록 조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+               전자명세서 관련 메일전송 항목에 대한 전송여부 목록
+            raise
+                PopbillException
+        """
+        return self._httpget('/Statement/EmailSendConfig', CorpNum, UserID)
+
+    def updateEmailConfig(self, Corpnum, EmailType, SendYN, UserID=None):
+        """ 알림메일 전송설정 수정
+            args
+                CorpNum : 팝빌회원 사업자번호
+                EmailType: 메일전송유형
+                SendYN: 전송여부 (True-전송, False-미전송)
+                UserID : 팝빌회원 아이디
+            return
+               처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        if EmailType == None:
+            raise PopbillException(-99999999, "메일전송 타입이 입력되지 않았습니다.")
+
+        uri = "/Statement/EmailSendConfig?EmailType=" + EmailType + "&SendYN=" + str(SendYN)
+        return self._httppost(uri, "", Corpnum, UserID)
 
 class Statement(object):
     def __init__(self,**kwargs):

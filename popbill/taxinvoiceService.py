@@ -10,24 +10,24 @@
 # Updated : 2017-12-05
 # Thanks for your interest.
 from datetime import datetime
-from .base import PopbillBase,PopbillException,File
+from .base import PopbillBase, PopbillException, File
 
 
 class TaxinvoiceService(PopbillBase):
     """ 팝빌 세금계산서 API Service Implementation."""
 
-    __MgtKeyTypes = ["SELL","BUY","TRUSTEE"]
+    __MgtKeyTypes = ["SELL", "BUY", "TRUSTEE"]
 
-    def __init__(self,LinkID,SecretKey):
+    def __init__(self, LinkID, SecretKey):
         """ 생성자.
             args
                 LinkID : 링크허브에서 발급받은 LinkID
                 SecretKey : 링크허브에서 발급받은 SecretKey
         """
-        super(self.__class__,self).__init__(LinkID,SecretKey)
+        super(self.__class__, self).__init__(LinkID, SecretKey)
         self._addScope("110")
 
-    def getChargeInfo(self, CorpNum, UserID = None):
+    def getChargeInfo(self, CorpNum, UserID=None):
         """ 과금정보 확인
             args
                 CorpNum : 회원 사업자번호
@@ -39,7 +39,7 @@ class TaxinvoiceService(PopbillBase):
         """
         return self._httpget('/Taxinvoice/ChargeInfo', CorpNum, UserID)
 
-    def getURL(self,CorpNum, UserID , ToGo):
+    def getURL(self, CorpNum, UserID, ToGo):
         """ 팝빌 세금계산서 관련 URL을 확인.
             args
                 CorpNum : 회원 사업자번호
@@ -50,10 +50,10 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        result = self._httpget('/Taxinvoice/?TG=' + ToGo , CorpNum,UserID)
+        result = self._httpget('/Taxinvoice/?TG=' + ToGo, CorpNum, UserID)
         return result.url
 
-    def getUnitCost(self,CorpNum):
+    def getUnitCost(self, CorpNum):
         """ 세금계산서 발행 단가 확인.
             args
                 CorpNum : 확인할 회원 사업자번호
@@ -62,10 +62,10 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        result = self._httpget('/Taxinvoice?cfg=UNITCOST' , CorpNum)
+        result = self._httpget('/Taxinvoice?cfg=UNITCOST', CorpNum)
         return float(result.unitCost)
 
-    def getCertificateExpireDate(self,CorpNum):
+    def getCertificateExpireDate(self, CorpNum):
         """ 공인인증서 만료일 확인, 등록여부 확인용도로 활용가능
             args
                 CorpNum : 확인할 회원 사업자번호
@@ -74,10 +74,10 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        result = self._httpget('/Taxinvoice?cfg=CERT' , CorpNum)
-        return datetime.strptime( result.certificateExpiration,'%Y%m%d%H%M%S')
+        result = self._httpget('/Taxinvoice?cfg=CERT', CorpNum)
+        return datetime.strptime(result.certificateExpiration, '%Y%m%d%H%M%S')
 
-    def getEmailPublicKeys(self,CorpNum):
+    def getEmailPublicKeys(self, CorpNum):
         """ 국세청 대량사업자 이메일 목록 확인. 이메일 유통기능 사용시에 활용.
             args
                 CorpNum : 확인할 회원 사업자번호
@@ -86,9 +86,9 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        return self._httpget('/Taxinvoice/EmailPublicKeys' , CorpNum)
+        return self._httpget('/Taxinvoice/EmailPublicKeys', CorpNum)
 
-    def checkMgtKeyInUse(self,CorpNum,MgtKeyType,MgtKey):
+    def checkMgtKeyInUse(self, CorpNum, MgtKeyType, MgtKey):
         """ 파트너 관리번호 사용중 여부 확인.
             args
                 CorpNum : 회원 사업자 번호
@@ -99,20 +99,20 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         try:
-            result = self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,CorpNum)
+            result = self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, CorpNum)
             return result.itemKey != None and result.itemKey != ""
         except PopbillException as PE:
             if PE.code == -11000005:
                 return False
             raise PE
 
-    def register(self,CorpNum,taxinvoice,writeSpecification = False,UserID = None):
+    def register(self, CorpNum, taxinvoice, writeSpecification=False, UserID=None):
         """ 임시저장
             args
                 CorpNum : 회원 사업자 번호
@@ -124,16 +124,17 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if taxinvoice == None :
-            raise PopbillException(-99999999,"등록할 세금계산서 정보가 입력되지 않았습니다.")
-        if writeSpecification :
+        if taxinvoice == None:
+            raise PopbillException(-99999999, "등록할 세금계산서 정보가 입력되지 않았습니다.")
+        if writeSpecification:
             taxinvoice.writeSpecification = True
 
         postData = self._stringtify(taxinvoice)
 
-        return self._httppost('/Taxinvoice',postData,CorpNum,UserID)
+        return self._httppost('/Taxinvoice', postData, CorpNum, UserID)
 
-    def registIssue(self, CorpNum, taxinvoice, writeSpecification = False, forceIssue = False, dealInvoiceMgtKey = None, memo = None, emailSubject = None, UserID = None) :
+    def registIssue(self, CorpNum, taxinvoice, writeSpecification=False, forceIssue=False, dealInvoiceMgtKey=None,
+                    memo=None, emailSubject=None, UserID=None):
         """ 문서 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -149,10 +150,10 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if writeSpecification :
+        if writeSpecification:
             taxinvoice.writeSpecification = True
 
-        if forceIssue :
+        if forceIssue:
             taxinvoice.forceIssue = True
 
         if dealInvoiceMgtKey != None and dealInvoiceMgtKey != '':
@@ -166,10 +167,9 @@ class TaxinvoiceService(PopbillBase):
 
         postData = self._stringtify(taxinvoice)
 
-        return self._httppost('/Taxinvoice', postData,CorpNum,UserID,"ISSUE")
+        return self._httppost('/Taxinvoice', postData, CorpNum, UserID, "ISSUE")
 
-
-    def update(self,CorpNum,MgtKeyType,MgtKey,taxinvoice, writeSpecification = False, UserID = None ):
+    def update(self, CorpNum, MgtKeyType, MgtKey, taxinvoice, writeSpecification=False, UserID=None):
         """ 수정
             args
                 CorpNum : 회원 사업자 번호
@@ -183,20 +183,20 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-        if taxinvoice == None :
-            raise PopbillException(-99999999,"수정할 세금계산서 정보가 입력되지 않았습니다.")
-        if writeSpecification :
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+        if taxinvoice == None:
+            raise PopbillException(-99999999, "수정할 세금계산서 정보가 입력되지 않았습니다.")
+        if writeSpecification:
             taxinvoice.writeSpecification = True
 
         postData = self._stringtify(taxinvoice)
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + '/' + MgtKey,postData,CorpNum,UserID,'PATCH')
+        return self._httppost('/Taxinvoice/' + MgtKeyType + '/' + MgtKey, postData, CorpNum, UserID, 'PATCH')
 
-    def getInfo(self,CorpNum,MgtKeyType,MgtKey):
+    def getInfo(self, CorpNum, MgtKeyType, MgtKey):
         """ 상태정보 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -207,14 +207,14 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        return self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey,CorpNum)
+        return self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey, CorpNum)
 
-    def getDetailInfo(self,CorpNum,MgtKeyType,MgtKey):
+    def getDetailInfo(self, CorpNum, MgtKeyType, MgtKey):
         """ 상세정보 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -225,14 +225,14 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        return self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "?Detail",CorpNum)
+        return self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "?Detail", CorpNum)
 
-    def delete(self,CorpNum,MgtKeyType,MgtKey,UserID = None):
+    def delete(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
         """ 삭제
             args
                 CorpNum : 회원 사업자 번호
@@ -244,14 +244,14 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,'',CorpNum,UserID,"DELETE")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, '', CorpNum, UserID, "DELETE")
 
-    def send(self,CorpNum,MgtKeyType,MgtKey,Memo = None, EmailSubject = None, UserID = None):
+    def send(self, CorpNum, MgtKeyType, MgtKey, Memo=None, EmailSubject=None, UserID=None):
         """ 승인요청
             args
                 CorpNum : 회원 사업자 번호
@@ -264,10 +264,10 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         req = {}
 
@@ -278,9 +278,9 @@ class TaxinvoiceService(PopbillBase):
 
         postData = self._stringtify(req)
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"SEND")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "SEND")
 
-    def cancelSend(self,CorpNum,MgtKeyType,MgtKey,Memo = None, UserID = None):
+    def cancelSend(self, CorpNum, MgtKeyType, MgtKey, Memo=None, UserID=None):
         """ 승인요청 취소
             args
                 CorpNum : 회원 사업자 번호
@@ -293,19 +293,19 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         if Memo != None and Memo != '':
-            postData = self._stringtify({"memo" : Memo})
-        else :
+            postData = self._stringtify({"memo": Memo})
+        else:
             postData = ''
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"CANCELSEND")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "CANCELSEND")
 
-    def accept(self,CorpNum,MgtKeyType,MgtKey,Memo = None, UserID = None):
+    def accept(self, CorpNum, MgtKeyType, MgtKey, Memo=None, UserID=None):
         """ 승인요청 승인
             args
                 CorpNum : 회원 사업자 번호
@@ -318,19 +318,19 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         if Memo != None and Memo != '':
-            postData = self._stringtify({"memo" : Memo})
-        else :
+            postData = self._stringtify({"memo": Memo})
+        else:
             postData = ''
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"ACCEPT")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "ACCEPT")
 
-    def deny(self,CorpNum,MgtKeyType,MgtKey,Memo = None, UserID = None):
+    def deny(self, CorpNum, MgtKeyType, MgtKey, Memo=None, UserID=None):
         """ 승인요청 거부
             args
                 CorpNum : 회원 사업자 번호
@@ -343,19 +343,19 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         if Memo != None and Memo != '':
-            postData = self._stringtify({"memo" : Memo})
-        else :
+            postData = self._stringtify({"memo": Memo})
+        else:
             postData = ''
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"DENY")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "DENY")
 
-    def issue(self,CorpNum,MgtKeyType,MgtKey,Memo = None , EmailSubject = None , ForceIssue = False , UserID = None):
+    def issue(self, CorpNum, MgtKeyType, MgtKey, Memo=None, EmailSubject=None, ForceIssue=False, UserID=None):
         """ 발행
             args
                 CorpNum : 회원 사업자 번호
@@ -370,12 +370,12 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        req = {"forceIssue" : ForceIssue}
+        req = {"forceIssue": ForceIssue}
 
         if Memo != None and Memo != '':
             req["memo"] = Memo
@@ -385,9 +385,9 @@ class TaxinvoiceService(PopbillBase):
 
         postData = self._stringtify(req)
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"ISSUE")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "ISSUE")
 
-    def cancelIssue(self,CorpNum,MgtKeyType,MgtKey,Memo = None, UserID = None):
+    def cancelIssue(self, CorpNum, MgtKeyType, MgtKey, Memo=None, UserID=None):
         """ 발행취소
             args
                 CorpNum : 회원 사업자 번호
@@ -400,19 +400,19 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         if Memo != None and Memo != '':
-            postData = self._stringtify({"memo" : Memo})
-        else :
+            postData = self._stringtify({"memo": Memo})
+        else:
             postData = ''
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"CANCELISSUE")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "CANCELISSUE")
 
-    def request(self,CorpNum,MgtKeyType,MgtKey,Memo = None, UserID = None):
+    def request(self, CorpNum, MgtKeyType, MgtKey, Memo=None, UserID=None):
         """ 역)발행요청
             args
                 CorpNum : 회원 사업자 번호
@@ -425,19 +425,19 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         if Memo != None and Memo != '':
-            postData = self._stringtify({"memo" : Memo})
-        else :
+            postData = self._stringtify({"memo": Memo})
+        else:
             postData = ''
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"REQUEST")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "REQUEST")
 
-    def refuse(self,CorpNum,MgtKeyType,MgtKey,Memo = None, UserID = None):
+    def refuse(self, CorpNum, MgtKeyType, MgtKey, Memo=None, UserID=None):
         """ 역)발행요청 거부
             args
                 CorpNum : 회원 사업자 번호
@@ -450,19 +450,19 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         if Memo != None and Memo != '':
-            postData = self._stringtify({"memo" : Memo})
-        else :
+            postData = self._stringtify({"memo": Memo})
+        else:
             postData = ''
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"REFUSE")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "REFUSE")
 
-    def cancelRequest(self,CorpNum,MgtKeyType,MgtKey,Memo = None, UserID = None):
+    def cancelRequest(self, CorpNum, MgtKeyType, MgtKey, Memo=None, UserID=None):
         """ 역)발행요청 취소
             args
                 CorpNum : 회원 사업자 번호
@@ -475,19 +475,19 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         if Memo != None and Memo != '':
-            postData = self._stringtify({"memo" : Memo})
-        else :
+            postData = self._stringtify({"memo": Memo})
+        else:
             postData = ''
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"CANCELREQUEST")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "CANCELREQUEST")
 
-    def sendToNTS(self,CorpNum,MgtKeyType,MgtKey, UserID = None):
+    def sendToNTS(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
         """ 국세청 즉시전송
             args
                 CorpNum : 회원 사업자 번호
@@ -499,16 +499,16 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         postData = ''
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"NTS")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "NTS")
 
-    def sendEmail(self,CorpNum,MgtKeyType,MgtKey, ReceiverEmail , UserID = None):
+    def sendEmail(self, CorpNum, MgtKeyType, MgtKey, ReceiverEmail, UserID=None):
         """ 이메일 재전송
             args
                 CorpNum : 회원 사업자 번호
@@ -521,16 +521,16 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        postData = self._stringtify({"receiver" : ReceiverEmail})
+        postData = self._stringtify({"receiver": ReceiverEmail})
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"EMAIL")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "EMAIL")
 
-    def sendSMS(self,CorpNum,MgtKeyType,MgtKey, Sender,Receiver,Contents, UserID = None):
+    def sendSMS(self, CorpNum, MgtKeyType, MgtKey, Sender, Receiver, Contents, UserID=None):
         """ 세금계산서관련 문자 전송
             args
                 CorpNum : 회원 사업자 번호
@@ -545,20 +545,20 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         postData = self._stringtify({
-                                    "sender" : Sender,
-                                    "receiver" : Receiver,
-                                    "contents" : Contents
-                                    })
+            "sender": Sender,
+            "receiver": Receiver,
+            "contents": Contents
+        })
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"SMS")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "SMS")
 
-    def sendFax(self,CorpNum,MgtKeyType,MgtKey, Sender,Receiver, UserID = None):
+    def sendFax(self, CorpNum, MgtKeyType, MgtKey, Sender, Receiver, UserID=None):
         """ 세금계산서 팩스 전송
             args
                 CorpNum : 회원 사업자 번호
@@ -572,19 +572,19 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         postData = self._stringtify({
-                                    "sender" : Sender,
-                                    "receiver" : Receiver
-                                    })
+            "sender": Sender,
+            "receiver": Receiver
+        })
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey,postData,CorpNum,UserID,"FAX")
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "FAX")
 
-    def getLogs(self,CorpNum,MgtKeyType,MgtKey):
+    def getLogs(self, CorpNum, MgtKeyType, MgtKey):
         """ 세금계산서 문서이력 목록 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -595,14 +595,14 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        return self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "/Logs",CorpNum)
+        return self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "/Logs", CorpNum)
 
-    def attachFile(self,CorpNum,MgtKeyType,MgtKey,FilePath,UserID = None):
+    def attachFile(self, CorpNum, MgtKeyType, MgtKey, FilePath, UserID=None):
         """ 파일 첨부
             args
                 CorpNum : 회원 사업자 번호
@@ -615,25 +615,25 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-        if FilePath == None or FilePath == "" :
-            raise PopbillException(-99999999,"파일 경로가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+        if FilePath == None or FilePath == "":
+            raise PopbillException(-99999999, "파일 경로가 입력되지 않았습니다.")
 
         files = []
         try:
-            with open(FilePath,"rb") as F:
+            with open(FilePath, "rb") as F:
                 files = [File(fieldName='Filedata',
                               fileName=F.name,
                               fileData=F.read())]
-        except IOError :
-            raise PopbillException(-99999999,"해당경로에 파일이 없거나 읽을 수 없습니다.")
+        except IOError:
+            raise PopbillException(-99999999, "해당경로에 파일이 없거나 읽을 수 없습니다.")
 
-        return self._httppost_files('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + '/Files',None,files,CorpNum,UserID)
+        return self._httppost_files('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + '/Files', None, files, CorpNum, UserID)
 
-    def getFiles(self,CorpNum,MgtKeyType,MgtKey):
+    def getFiles(self, CorpNum, MgtKeyType, MgtKey):
         """ 첨부파일 목록 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -644,14 +644,14 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        return self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "/Files",CorpNum)
+        return self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "/Files", CorpNum)
 
-    def deleteFile(self,CorpNum,MgtKeyType,MgtKey,FileID , UserID = None):
+    def deleteFile(self, CorpNum, MgtKeyType, MgtKey, FileID, UserID=None):
         """ 첨부파일 삭제
             args
                 CorpNum : 회원 사업자 번호
@@ -663,18 +663,19 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-        if FileID == None or FileID == "" :
-            raise PopbillException(-99999999,"파일아이디가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+        if FileID == None or FileID == "":
+            raise PopbillException(-99999999, "파일아이디가 입력되지 않았습니다.")
 
         postData = ''
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "/Files/" + FileID ,postData,CorpNum,UserID,'DELETE')
+        return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "/Files/" + FileID, postData, CorpNum,
+                              UserID, 'DELETE')
 
-    def getPopUpURL(self,CorpNum,MgtKeyType,MgtKey, UserID =  None):
+    def getPopUpURL(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
         """ 세금계산서 1장의 팝빌 화면을 볼수 있는 PopUp URL 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -686,16 +687,16 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=POPUP',CorpNum,UserID)
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=POPUP', CorpNum, UserID)
 
         return result.url
 
-    def getPrintURL(self,CorpNum,MgtKeyType,MgtKey, UserID = None):
+    def getPrintURL(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
         """ 공급자용 인쇄 URL 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -707,16 +708,16 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=PRINT',CorpNum,UserID)
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=PRINT', CorpNum, UserID)
 
         return result.url
 
-    def getEPrintURL(self,CorpNum,MgtKeyType,MgtKey, UserID = None):
+    def getEPrintURL(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
         """ 공급받는자용 인쇄 URL 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -728,16 +729,16 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=EPRINT',CorpNum,UserID)
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=EPRINT', CorpNum, UserID)
 
         return result.url
 
-    def getMailURL(self,CorpNum,MgtKeyType,MgtKey, UserID = None):
+    def getMailURL(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
         """ 공급받는자용 메일 링크 URL 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -749,16 +750,16 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKeyType not in self.__MgtKeyTypes :
-            raise PopbillException(-99999999,"관리번호 형태가 올바르지 않습니다.")
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=MAIL',CorpNum,UserID)
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=MAIL', CorpNum, UserID)
 
         return result.url
 
-    def getInfos(self,CorpNum,MgtKeyType,MgtKeyList):
+    def getInfos(self, CorpNum, MgtKeyType, MgtKeyList):
         """ 상태정보 다량 확인, 최대 1000건
             args
                 CorpNum : 회원 사업자 번호
@@ -770,13 +771,13 @@ class TaxinvoiceService(PopbillBase):
                 PopbillException
         """
         if MgtKeyList == None or len(MgtKeyList) < 1:
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         postData = self._stringtify(MgtKeyList)
 
-        return self._httppost('/Taxinvoice/' + MgtKeyType ,postData,CorpNum)
+        return self._httppost('/Taxinvoice/' + MgtKeyType, postData, CorpNum)
 
-    def getMassPrintURL(self,CorpNum,MgtKeyType,MgtKeyList, UserID = None):
+    def getMassPrintURL(self, CorpNum, MgtKeyType, MgtKeyList, UserID=None):
         """ 다량 인쇄 URL 확인
             args
                 CorpNum : 회원 사업자 번호
@@ -789,15 +790,16 @@ class TaxinvoiceService(PopbillBase):
                 PopbillException
         """
         if MgtKeyList == None or len(MgtKeyList) < 1:
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         postData = self._stringtify(MgtKeyList)
 
-        Result = self._httppost('/Taxinvoice/' + MgtKeyType + "?Print" ,postData,CorpNum,UserID)
+        Result = self._httppost('/Taxinvoice/' + MgtKeyType + "?Print", postData, CorpNum, UserID)
 
         return Result.url
 
-    def search(self,CorpNum,MgtKeyType,DType,SDate,EDate,State,Type,TaxType,LateOnly,TaxRegIDYN,TaxRegIDType,TaxRegID,Page,PerPage,Order,UserID=None,QString=None,InterOPYN=None,IssueType=None) :
+    def search(self, CorpNum, MgtKeyType, DType, SDate, EDate, State, Type, TaxType, LateOnly, TaxRegIDYN, TaxRegIDType,
+               TaxRegID, Page, PerPage, Order, UserID=None, QString=None, InterOPYN=None, IssueType=None):
         """ 목록 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -839,21 +841,20 @@ class TaxinvoiceService(PopbillBase):
         uri += '&Order=' + Order
         uri += '&InterOPYN=' + InterOPYN
 
-        if LateOnly != '' :
+        if LateOnly != '':
             uri += '&LateOnly=' + LateOnly
-        if TaxRegIDYN != '' :
+        if TaxRegIDYN != '':
             uri += '&TaxRegIDType=' + TaxRegIDType
 
-        if QString is not None :
+        if QString is not None:
             uri += '&QString=' + QString
 
-        if IssueType is not None :
+        if IssueType is not None:
             uri += '&IssueType=' + ','.join(IssueType)
 
+        return self._httpget(uri, CorpNum, UserID)
 
-        return self._httpget(uri, CorpNum,UserID)
-
-    def attachStatement (self,CorpNum,MgtKeyType,MgtKey,ItemCode,StmtMgtKey, UserID = None):
+    def attachStatement(self, CorpNum, MgtKeyType, MgtKey, ItemCode, StmtMgtKey, UserID=None):
         """ 전자명세서 첨부
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -870,11 +871,11 @@ class TaxinvoiceService(PopbillBase):
 
         uri = '/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '/AttachStmt'
 
-        postData = self._stringtify({"ItemCode" : ItemCode, "MgtKey" : StmtMgtKey})
+        postData = self._stringtify({"ItemCode": ItemCode, "MgtKey": StmtMgtKey})
 
         return self._httppost(uri, postData, CorpNum, UserID)
 
-    def detachStatement (self,CorpNum,MgtKeyType,MgtKey,ItemCode,StmtMgtKey,UserID=None):
+    def detachStatement(self, CorpNum, MgtKeyType, MgtKey, ItemCode, StmtMgtKey, UserID=None):
         """ 전자명세서 첨부해제
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -914,20 +915,51 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        postDate = "MgtKey="+MgtKey
-        return self._httppost('/Taxinvoice/'+ItemKey+'/'+MgtKeyType, postDate, CorpNum, UserID, "", "application/x-www-form-urlencoded; charset=utf-8")
+        postDate = "MgtKey=" + MgtKey
+        return self._httppost('/Taxinvoice/' + ItemKey + '/' + MgtKeyType, postDate, CorpNum, UserID, "",
+                              "application/x-www-form-urlencoded; charset=utf-8")
+
+    def listEmailConfig(self, CorpNum, UserID=None):
+        """ 알림메일 전송목록 조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+               전자세금계산서 관련 메일전송 항목에 대한 전송여부 목록
+            raise
+                PopbillException
+        """
+        return self._httpget('/Taxinvoice/EmailSendConfig', CorpNum, UserID)
+
+    def updateEmailConfig(self, Corpnum, EmailType, SendYN, UserID=None):
+        """ 알림메일 전송설정 수정
+            args
+                CorpNum : 팝빌회원 사업자번호
+                EmailType: 메일전송유형
+                SendYN: 전송여부 (True-전송, False-미전송)
+                UserID : 팝빌회원 아이디
+            return
+               처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        if EmailType == None:
+            raise PopbillException(-99999999, "메일전송 타입이 입력되지 않았습니다.")
+
+        uri = "/Taxinvoice/EmailSendConfig?EmailType=" + EmailType + "&SendYN=" + str(SendYN)
+        return self._httppost(uri, "", Corpnum, UserID)
 
 
 class Taxinvoice(object):
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         self.__dict__ = kwargs
 
 
 class TaxinvoiceDetail(object):
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         self.__dict__ = kwargs
 
 
 class Contact(object):
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         self.__dict__ = kwargs

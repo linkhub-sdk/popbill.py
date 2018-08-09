@@ -9,22 +9,23 @@
 # Updated : 2017-11-13
 # Thanks for your interest.
 
-from .base import PopbillBase,PopbillException
+from .base import PopbillBase, PopbillException
+
 
 class CashbillService(PopbillBase):
     """ 팝빌 현금영수증 API Service Implementation. """
 
-    def __init__(self,LinkID,SecretKey):
+    def __init__(self, LinkID, SecretKey):
         """생성자
             args
                 LinkID : 링크허브에서 발급받은 링크아이디(LinkID)
                 SecretKeye 링크허브에서 발급받은 비밀키(SecretKey)
         """
 
-        super(self.__class__,self).__init__(LinkID,SecretKey)
+        super(self.__class__, self).__init__(LinkID, SecretKey)
         self._addScope("140")
 
-    def getChargeInfo(self, CorpNum, UserID = None):
+    def getChargeInfo(self, CorpNum, UserID=None):
         """ 과금정보 확인
             args
                 CorpNum : 회원 사업자번호
@@ -76,8 +77,8 @@ class CashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         try:
             result = self._httpget('/Cashbill/' + MgtKey, CorpNum)
@@ -89,7 +90,7 @@ class CashbillService(PopbillBase):
                 return False
             raise PE
 
-    def registIssue(self, CorpNum, cashbill, Memo, UserID = None):
+    def registIssue(self, CorpNum, cashbill, Memo, UserID=None):
         """ 현금영수증 즉시발행
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -101,7 +102,7 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
         if cashbill == None:
-            raise PopbillException(-99999999,"현금영수증 정보가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "현금영수증 정보가 입력되지 않았습니다.")
 
         postData = ""
 
@@ -112,8 +113,7 @@ class CashbillService(PopbillBase):
 
         return self._httppost('/Cashbill', postData, CorpNum, UserID, "ISSUE")
 
-
-    def register(self, CorpNum, cashbill, UserID = None):
+    def register(self, CorpNum, cashbill, UserID=None):
         """ 현금영수증 등록
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -125,14 +125,15 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
         if cashbill == None:
-            raise PopbillException(-99999999,"현금영수증 정보가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "현금영수증 정보가 입력되지 않았습니다.")
 
         postData = self._stringtify(cashbill)
 
-        return self._httppost('/Cashbill',postData,CorpNum,UserID)
+        return self._httppost('/Cashbill', postData, CorpNum, UserID)
 
-    def revokeRegistIssue(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN = False, memo = None, UserID = None,
-        isPartCancel = False, cancelType = None, supplyCost = None, tax = None, serviceFee = None, totalAmount = None):
+    def revokeRegistIssue(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN=False, memo=None, UserID=None,
+                          isPartCancel=False, cancelType=None, supplyCost=None, tax=None, serviceFee=None,
+                          totalAmount=None):
         """ 취소현금영수증 즉시발행
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -155,23 +156,24 @@ class CashbillService(PopbillBase):
         """
 
         postData = self._stringtify({
-                                        "mgtKey" : mgtKey,
-                                        "orgConfirmNum" : orgConfirmNum,
-                                        "orgTradeDate" : orgTradeDate,
-                                        "smssendYN" : smssendYN,
-                                        "memo" : memo,
-                                        "isPartCancel" : isPartCancel,
-                                        "cancelType" : cancelType,
-                                        "supplyCost" : supplyCost,
-                                        "tax" : tax,
-                                        "serviceFee" : serviceFee,
-                                        "totalAmount" : totalAmount,
-                                    })
+            "mgtKey": mgtKey,
+            "orgConfirmNum": orgConfirmNum,
+            "orgTradeDate": orgTradeDate,
+            "smssendYN": smssendYN,
+            "memo": memo,
+            "isPartCancel": isPartCancel,
+            "cancelType": cancelType,
+            "supplyCost": supplyCost,
+            "tax": tax,
+            "serviceFee": serviceFee,
+            "totalAmount": totalAmount,
+        })
 
         return self._httppost('/Cashbill', postData, CorpNum, UserID, "REVOKEISSUE")
 
-    def revokeRegister(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN = False, UserID = None,
-        isPartCancel = False, cancelType = None, supplyCost = None, tax = None, serviceFee = None, totalAmount = None):
+    def revokeRegister(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN=False, UserID=None,
+                       isPartCancel=False, cancelType=None, supplyCost=None, tax=None, serviceFee=None,
+                       totalAmount=None):
         """ 취소현금영수증 임시저장
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -193,21 +195,21 @@ class CashbillService(PopbillBase):
         """
 
         postData = self._stringtify({
-                                        "mgtKey" : mgtKey,
-                                        "orgConfirmNum" : orgConfirmNum,
-                                        "orgTradeDate" : orgTradeDate,
-                                        "smssendYN" : smssendYN,
-                                        "isPartCancel" : isPartCancel,
-                                        "cancelType" : cancelType,
-                                        "supplyCost" : supplyCost,
-                                        "tax" : tax,
-                                        "serviceFee" : serviceFee,
-                                        "totalAmount" : totalAmount,
-                                    })
+            "mgtKey": mgtKey,
+            "orgConfirmNum": orgConfirmNum,
+            "orgTradeDate": orgTradeDate,
+            "smssendYN": smssendYN,
+            "isPartCancel": isPartCancel,
+            "cancelType": cancelType,
+            "supplyCost": supplyCost,
+            "tax": tax,
+            "serviceFee": serviceFee,
+            "totalAmount": totalAmount,
+        })
 
         return self._httppost('/Cashbill', postData, CorpNum, UserID, "REVOKE")
 
-    def update(self, CorpNum, MgtKey, cashbill, UserID = None):
+    def update(self, CorpNum, MgtKey, cashbill, UserID=None):
         """ 수정
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -219,17 +221,16 @@ class CashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
         if cashbill == None:
-            raise PopbillException(-99999999,"현금영수증 정보가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "현금영수증 정보가 입력되지 않았습니다.")
 
         postData = self._stringtify(cashbill)
 
-        return self._httppost('/Cashbill/'+ MgtKey, postData, CorpNum, UserID, "PATCH")
+        return self._httppost('/Cashbill/' + MgtKey, postData, CorpNum, UserID, "PATCH")
 
-
-    def issue(self, CorpNum, MgtKey, Memo = None, UserID = None):
+    def issue(self, CorpNum, MgtKey, Memo=None, UserID=None):
         """ 발행
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -242,8 +243,8 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
 
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         postData = ""
         req = {}
@@ -255,7 +256,7 @@ class CashbillService(PopbillBase):
 
         return self._httppost('/Cashbill/' + MgtKey, postData, CorpNum, UserID, "ISSUE")
 
-    def cancelIssue(self, CorpNum, MgtKey, Memo = None, UserID = None):
+    def cancelIssue(self, CorpNum, MgtKey, Memo=None, UserID=None):
         """ 발행취소
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -268,8 +269,8 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
 
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         postData = ""
         req = {}
@@ -281,7 +282,7 @@ class CashbillService(PopbillBase):
 
         return self._httppost('/Cashbill/' + MgtKey, postData, CorpNum, UserID, "CANCELISSUE")
 
-    def delete(self, CorpNum, MgtKey, UserID = None):
+    def delete(self, CorpNum, MgtKey, UserID=None):
         """ 삭제
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -293,12 +294,13 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
 
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
-        return self._httppost('/Cashbill/' + MgtKey,'', CorpNum, UserID, "DELETE")
+        return self._httppost('/Cashbill/' + MgtKey, '', CorpNum, UserID, "DELETE")
 
-    def search(self,CorpNum,DType,SDate,EDate,State,TradeType,TradeUsage,TaxationType,Page,PerPage,Order,UserID=None,QString=None) :
+    def search(self, CorpNum, DType, SDate, EDate, State, TradeType, TradeUsage, TaxationType, Page, PerPage, Order,
+               UserID=None, QString=None):
         """ 목록 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -328,10 +330,10 @@ class CashbillService(PopbillBase):
         uri += '&PerPage=' + str(PerPage)
         uri += '&Order=' + Order
 
-        if QString is not None :
+        if QString is not None:
             uri += '&QString=' + QString
 
-        return self._httpget(uri, CorpNum,UserID)
+        return self._httpget(uri, CorpNum, UserID)
 
     def getInfo(self, CorpNum, MgtKey):
         """ 상태/요약 정보 조회
@@ -344,12 +346,12 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
 
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         return self._httpget('/Cashbill/' + MgtKey, CorpNum)
 
-    def getInfos(self,CorpNum,MgtKeyList):
+    def getInfos(self, CorpNum, MgtKeyList):
         """ 상태정보 다량 확인, 최대 1000건
             args
                 CorpNum : 회원 사업자 번호
@@ -360,11 +362,11 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
         if MgtKeyList == None or len(MgtKeyList) < 1:
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         postData = self._stringtify(MgtKeyList)
 
-        return self._httppost('/Cashbill/States',postData,CorpNum)
+        return self._httppost('/Cashbill/States', postData, CorpNum)
 
     def getDetailInfo(self, CorpNum, MgtKey):
         """ 상세정보 조회
@@ -377,12 +379,12 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
 
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         return self._httpget('/Cashbill/' + MgtKey + '?Detail', CorpNum)
 
-    def sendEmail(self, CorpNum, MgtKey, ReceiverEmail, UserID = None):
+    def sendEmail(self, CorpNum, MgtKey, ReceiverEmail, UserID=None):
         """ 알림메일 재전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -395,16 +397,16 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
 
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-        if ReceiverEmail == None or ReceiverEmail == "" :
-            raise PopbillException(-99999999,"수신자 메일주소가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+        if ReceiverEmail == None or ReceiverEmail == "":
+            raise PopbillException(-99999999, "수신자 메일주소가 입력되지 않았습니다.")
 
-        postData = self._stringtify({"receiver" : ReceiverEmail})
+        postData = self._stringtify({"receiver": ReceiverEmail})
 
         return self._httppost('/Cashbill/' + MgtKey, postData, CorpNum, UserID, "EMAIL")
 
-    def sendSMS(self, CorpNum, MgtKey, Sender, Receiver, Contents, UserID = None):
+    def sendSMS(self, CorpNum, MgtKey, Sender, Receiver, Contents, UserID=None):
         """ 알림문자 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -419,20 +421,20 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
 
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-        if Receiver == None or Receiver == "" :
-            raise PopbillException(-99999999,"문자 수신번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+        if Receiver == None or Receiver == "":
+            raise PopbillException(-99999999, "문자 수신번호가 입력되지 않았습니다.")
 
         postData = self._stringtify({
-                                    "sender" : Sender,
-                                    "receiver" : Receiver,
-                                    "contents" : Contents
-                                    })
+            "sender": Sender,
+            "receiver": Receiver,
+            "contents": Contents
+        })
 
         return self._httppost('/Cashbill/' + MgtKey, postData, CorpNum, UserID, "SMS")
 
-    def sendFAX(self, CorpNum, MgtKey, Sender, Receiver, UserID = None):
+    def sendFAX(self, CorpNum, MgtKey, Sender, Receiver, UserID=None):
         """ 현금영수증 팩스전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -445,18 +447,17 @@ class CashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
-        if Receiver == None or Receiver == "" :
-            raise PopbillException(-99999999,"팩스 수신번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+        if Receiver == None or Receiver == "":
+            raise PopbillException(-99999999, "팩스 수신번호가 입력되지 않았습니다.")
 
         postData = self._stringtify({
-                                        "sender" : Sender,
-                                        "receiver" : Receiver
-                                    })
+            "sender": Sender,
+            "receiver": Receiver
+        })
 
         return self._httppost('/Cashbill/' + MgtKey, postData, CorpNum, UserID, "FAX")
-
 
     def getLogs(self, CorpNum, MgtKey):
         """ 문서이력 조회
@@ -468,12 +469,12 @@ class CashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         return self._httpget('/Cashbill/' + MgtKey + '/Logs', CorpNum)
 
-    def getPopUpURL(self, CorpNum, MgtKey, UserID = None):
+    def getPopUpURL(self, CorpNum, MgtKey, UserID=None):
         """ 현금영수증 1장의 팝빌 화면을 볼수있는 팝업 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -484,14 +485,14 @@ class CashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         result = self._httpget('/Cashbill/' + MgtKey + '?TG=POPUP', CorpNum, UserID)
 
         return result.url
 
-    def getPrintURL(self, CorpNum, MgtKey, UserID = None):
+    def getPrintURL(self, CorpNum, MgtKey, UserID=None):
         """ 공급자용 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -502,15 +503,14 @@ class CashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         result = self._httpget('/Cashbill/' + MgtKey + '?TG=PRINT', CorpNum, UserID)
 
         return result.url
 
-
-    def getEPrintURL(self, CorpNum, MgtKey, UserID = None):
+    def getEPrintURL(self, CorpNum, MgtKey, UserID=None):
         """ 공급받는자용 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -521,15 +521,14 @@ class CashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         result = self._httpget('/Cashbill/' + MgtKey + '?TG=EPRINT', CorpNum, UserID)
 
         return result.url
 
-
-    def getMailURL(self, CorpNum, MgtKey, UserID = None):
+    def getMailURL(self, CorpNum, MgtKey, UserID=None):
         """ 공급받는자용 메일 링크 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -540,15 +539,14 @@ class CashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if MgtKey == None or MgtKey == "" :
-            raise PopbillException(-99999999,"관리번호가 입력되지 않았습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         result = self._httpget('/Cashbill/' + MgtKey + '?TG=MAIL', CorpNum, UserID)
 
         return result.url
 
-
-    def getMassPrintURL(self, CorpNum, MgtKeyList, UserID = None):
+    def getMassPrintURL(self, CorpNum, MgtKeyList, UserID=None):
         """ 다량 인쇄 URL 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -560,7 +558,7 @@ class CashbillService(PopbillBase):
                 PopbillException
         """
         if MgtKeyList == None:
-            raise PopbillException(-99999999,"관리번호 배열이 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "관리번호 배열이 입력되지 않았습니다.")
 
         postData = self._stringtify(MgtKeyList)
 
@@ -568,6 +566,37 @@ class CashbillService(PopbillBase):
 
         return result.url
 
+    def listEmailConfig(self, CorpNum, UserID=None):
+        """ 알림메일 전송목록 조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+               현금영수증 관련 메일전송 항목에 대한 전송여부 목록
+            raise
+                PopbillException
+        """
+        return self._httpget('/Cashbill/EmailSendConfig', CorpNum, UserID)
+
+    def updateEmailConfig(self, Corpnum, EmailType, SendYN, UserID=None):
+        """ 알림메일 전송설정 수정
+            args
+                CorpNum : 팝빌회원 사업자번호
+                EmailType: 메일전송유형
+                SendYN: 전송여부 (True-전송, False-미전송)
+                UserID : 팝빌회원 아이디
+            return
+               처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        if EmailType == None:
+            raise PopbillException(-99999999, "메일전송 타입이 입력되지 않았습니다.")
+
+        uri = "/Cashbill/EmailSendConfig?EmailType=" + EmailType + "&SendYN=" + str(SendYN)
+        return self._httppost(uri, "", Corpnum, UserID)
+
+
 class Cashbill(object):
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         self.__dict__ = kwargs
