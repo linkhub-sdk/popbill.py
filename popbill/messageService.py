@@ -342,7 +342,23 @@ class MessageService(PopbillBase):
         if ReceiptNum == None or ReceiptNum == '' :
             raise PopbillException(-99999999,"접수번호가 입력되지 않았습니다.")
 
-        return self._httpget('/Message/' + ReceiptNum, CorpNum)
+        return self._httpget('/Message/' + ReceiptNum, CorpNum, UserID)
+
+    def getMessagesRN(self, CorpNum, RequestNum, UserID = None):
+        """ 문자 전송결과 조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                RequestNum : 전송요청시 할당한 전송요청번호
+                UserID : 팝빌회원 아이디
+            return
+                전송정보 as list
+            raise
+                PopbillException
+        """
+        if RequestNum == None or RequestNum == '' :
+            raise PopbillException(-99999999,"요청번호가 입력되지 않았습니다.")
+
+        return self._httpget('/Message/Get/' + RequestNum, CorpNum, UserID)
 
     def cancelReserve(self, CorpNum, ReceiptNum, UserID = None):
         """ 문자 예약전송 취소
@@ -358,7 +374,23 @@ class MessageService(PopbillBase):
         if ReceiptNum == None or ReceiptNum == '' :
             raise PopbillException(-99999999,"접수번호가 입력되지 않았습니다.")
 
-        return self._httpget('/Message/' + ReceiptNum + '/Cancel', CorpNum)
+        return self._httpget('/Message/' + ReceiptNum + '/Cancel', CorpNum, UserID)
+
+    def cancelReserveRN(self, CorpNum, RequestNum, UserID = None):
+        """ 문자 예약전송 취소
+            args
+                CorpNum : 팝빌회원 사업자번호
+                RequestNum : 전송요청시 할당한 전송요청번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        if RequestNum == None or RequestNum == '' :
+            raise PopbillException(-99999999,"요청번호가 입력되지 않았습니다.")
+
+        return self._httpget('/Message/Cancel/'+RequestNum, CorpNum, UserID)
 
     def search(self, CorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, UserID = None) :
         """ 문자전송 목록조회

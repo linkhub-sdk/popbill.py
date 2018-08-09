@@ -109,6 +109,19 @@ class FaxService(PopbillBase):
 
         return self._httpget('/FAX/' + ReceiptNum, CorpNum, UserID)
 
+    def getFaxResultRN(self, CorpNum, RequestNum, UserID = None):
+        """ 팩스 전송결과 조회
+            args
+                CorpNum : 팝빌회원 사업자번호
+                RequestNum : 전송요청시 할당한 전송요청번호
+                UserID : 팝빌회원 아이디
+            return
+                팩스전송정보 as list
+            raise
+                PopbillException
+        """
+
+        return self._httpget('/FAX/Get/' + RequestNum, CorpNum, UserID)
 
     def cancelReserve(self, CorpNum, ReceiptNum, UserID = None):
         """ 팩스 예약전송 취소
@@ -123,6 +136,20 @@ class FaxService(PopbillBase):
         """
 
         return self._httpget('/FAX/' + ReceiptNum + '/Cancel', CorpNum, UserID)
+
+    def cancelReserveRN(self, CorpNum, RequestNum, UserID = None):
+        """ 팩스 예약전송 취소
+            args
+                CorpNum : 팝빌회원 사업자번호
+                ReceiptNum : 팩스전송요청시 할당한 전송요청번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+
+        return self._httpget('/FAX/Cancel/'+RequestNum, CorpNum, UserID)
 
 
     def sendFax(self, CorpNum, SenderNum, ReceiverNum, ReceiverName, FilePath, ReserveDT = None, UserID = None, SenderName = None, adsYN = False, title = None):

@@ -401,7 +401,20 @@ class KakaoService(PopbillBase):
         if ReceiptNum is None or ReceiptNum == '':
             raise PopbillException(-99999999, "접수번호가 입력되지 않았습니다")
 
-        return self._httpget('/KakaoTalk/' + ReceiptNum + '/Cancel', CorpNum)
+        return self._httpget('/KakaoTalk/' + ReceiptNum + '/Cancel', CorpNum, UserID)
+
+    def cancelReserveRN(self, CorpNum, RequestNum, UserID=None):
+        """
+        예약전송 취소
+        :param CorpNum: 팝빌회원 사업자번호
+        :param RequestNum: 전송요청시 할당한 전송요청번호
+        :param UserID: 팝빌회원 아이디
+        :return: code (요청에 대한 상태 응답코드), message (요청에 대한 응답 메시지)
+        """
+        if RequestNum is None or RequestNum == '':
+            raise PopbillException(-99999999, "요청번호 입력되지 않았습니다")
+
+        return self._httpget('/KakaoTalk/Cancel/'+RequestNum, CorpNum, UserID)
 
     def getMessages(self, CorpNum, ReceiptNum, UserID=None):
         """
@@ -414,7 +427,20 @@ class KakaoService(PopbillBase):
         if ReceiptNum is None or ReceiptNum == '':
             raise PopbillException(-99999999, "접수번호가 입력되지 않았습니다.")
 
-        return self._httpget('/KakaoTalk/' + ReceiptNum, CorpNum)
+        return self._httpget('/KakaoTalk/' + ReceiptNum, CorpNum, UserID)
+
+    def getMessagesRN(self, CorpNum, RequestNum, UserID=None):
+        """
+        알림톡/친구톡 전송내역 확인
+        :param CorpNum: 팝빌회원 사업자번호
+        :param RequestNum: 전송요청시 할당한 전송요청번호
+        :param UserID: 팝빌회원 아이디
+        :return: 알림톡/친구톡 전송내역 및 전송상태
+        """
+        if RequestNum is None or RequestNum == '':
+            raise PopbillException(-99999999, "요청번호 입력되지 않았습니다.")
+
+        return self._httpget('/KakaoTalk/Get/' + RequestNum, CorpNum, UserID)
 
     def search(self, CorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, UserID):
         """
