@@ -183,7 +183,7 @@ class FaxServiceTestCase(unittest.TestCase):
             ReserveDT = ""
             UserID = ""
             title = ""
-            RequestNum = "py_20180809_1"
+            RequestNum = "py_20180910105755"
 
             response = self.faxService.resendFaxRN(self.testCorpNum, OrgRequestNum, SenderNum, SenderName, ReceiverNum,
                                                    ReceiverName, ReserveDT, UserID, title, RequestNum)
@@ -199,7 +199,7 @@ class FaxServiceTestCase(unittest.TestCase):
             ReserveDT = ""
             UserID = ""
             title = "제목입니다."
-            RequestNum = "py_20180809_3RN"
+            RequestNum = "py_20180809_4RN"
 
             receivers = []
             for x in range(0, 5):

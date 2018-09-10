@@ -81,8 +81,8 @@ class MessageServiceTestCase(unittest.TestCase):
 
     def test_06_sendSMS_one(self):
         try:
-            receiptNum = self.messageService.sendSMS(self.testCorpNum, "07043042992", "010000000", "수신자명", "단건전송 내용",
-                                                     "20180810144409", "", "testkorea", "수신받는자명", "20180809144427")
+            receiptNum = self.messageService.sendSMS(self.testCorpNum, "07043042991", "010000000", "수신자명", "단건전송 내용",
+                                                     "20180810144409", "", "testkorea", "수신받는자명", "")
             print("sendSMS_one : " + receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -154,7 +154,7 @@ class MessageServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.messageService.sendXMS(self.testCorpNum, "07043042992", "010000000", "수신자명", "메시지 제목",
                                                      "메시지 내용90Byte초과시 장문전송 메시지 내용90Byte초과시 장문전송 메시지 내용90Byte초과시 장문전송 메시지 내용90Byte초과시 장문전송",
-                                                     reserveDT, True, "testkorea", "20180809140942")
+                                                     reserveDT, True, "testkorea", "발신자명", "20180910103454")
             print("sendXMS_one : " + receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -259,8 +259,10 @@ class MessageServiceTestCase(unittest.TestCase):
             print(senderObj.state)
 
     def test_getStates(self):
-        reciptNumList = ["018061814000000039", "018061815000000002"]
-        response = self.messageService.getStates(self.testCorpNum, reciptNumList, 'testkorea')
+        receiptNumList = []
+        receiptNumList.append("018041717000000018")
+        receiptNumList.append("018041717000000019")
+        response = self.messageService.getStates(self.testCorpNum, receiptNumList, 'testkorea')
         print(len(response));
 
     def test_getMessagesRN(self):

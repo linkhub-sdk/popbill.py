@@ -258,7 +258,7 @@ class MessageService(PopbillBase):
         return result.receiptNum
 
     def sendXMS(self, CorpNum, Sender, Receiver, ReceiverName, Subject, Contents, reserveDT, adsYN=False, UserID=None,
-                RequestNum=None):
+                SenderName=None, RequestNum=None):
         """ 단/장문 자동인식 단건 전송
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -279,6 +279,7 @@ class MessageService(PopbillBase):
         Messages = []
         Messages.append(MessageReceiver(
             snd=Sender,
+            sndnm=SenderName,
             rcv=Receiver,
             rcvnm=ReceiverName,
             msg=Contents,

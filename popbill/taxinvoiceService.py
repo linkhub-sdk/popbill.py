@@ -893,7 +893,7 @@ class TaxinvoiceService(PopbillBase):
 
         req = {}
 
-        if ItemCode != None or Sender != '':
+        if ItemCode != None or ItemCode != '':
             req['ItemCode'] = ItemCode
         if StmtMgtKey != None or StmtMgtKey != '':
             req['MgtKey'] = StmtMgtKey
@@ -915,6 +915,15 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
+        if MgtKeyType == None or MgtKeyType == '':
+            raise PopbillException(-99999999, "세금계산서 발행유형이 입력되지 않았습니다.")
+
+        if ItemKey == None or ItemKey == '':
+            raise PopbillException(-99999999, "아이템키가 입력되지 않았습니다.")
+
+        if MgtKey == None or MgtKey == '':
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+
         postDate = "MgtKey=" + MgtKey
         return self._httppost('/Taxinvoice/' + ItemKey + '/' + MgtKeyType, postDate, CorpNum, UserID, "",
                               "application/x-www-form-urlencoded; charset=utf-8")
@@ -943,8 +952,11 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if EmailType == None:
+        if EmailType == None or EmailType == '':
             raise PopbillException(-99999999, "메일전송 타입이 입력되지 않았습니다.")
+
+        if SendYN == None or SendYN == '':
+            raise PopbillException(-99999999, "메일전송 여부 항목이 입력되지 않았습니다.")
 
         uri = "/Taxinvoice/EmailSendConfig?EmailType=" + EmailType + "&SendYN=" + str(SendYN)
         return self._httppost(uri, "", Corpnum, UserID)

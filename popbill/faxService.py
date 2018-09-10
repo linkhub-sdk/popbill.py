@@ -362,8 +362,8 @@ class FaxService(PopbillBase):
             receivers.append(FaxReceiver(receiveNum=ReceiverNum,
                                          receiveName=ReceiverName)
                              )
-        return self.resendFaxRN_multi(CorpNum, OrgRequestNum, SenderNum, SenderName, receivers, ReserveDT=None,
-                                      UserID=None, title=None, RequestNum=None)
+        return self.resendFaxRN_multi(CorpNum, OrgRequestNum, SenderNum, SenderName, receivers, ReserveDT,
+                                      UserID, title, RequestNum)
 
     def resendFaxRN_multi(self, CorpNum, OrgRequestNum, SenderNum, SenderName, Receiver, ReserveDT=None, UserID=None,
                           title=None, RequestNum=None):

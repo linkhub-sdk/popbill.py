@@ -590,8 +590,11 @@ class CashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if EmailType == None:
+        if EmailType == None or EmailType == '':
             raise PopbillException(-99999999, "메일전송 타입이 입력되지 않았습니다.")
+
+        if SendYN == None or SendYN == '':
+            raise PopbillException(-99999999, "메일전송 여부 항목이 입력되지 않았습니다.")
 
         uri = "/Cashbill/EmailSendConfig?EmailType=" + EmailType + "&SendYN=" + str(SendYN)
         return self._httppost(uri, "", Corpnum, UserID)
