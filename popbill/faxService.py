@@ -108,6 +108,9 @@ class FaxService(PopbillBase):
                 PopbillException
         """
 
+        if len(ReceiptNum) != 18:
+            raise PopbillException(-99999999, "올바른 접수번호가 입력되지 않았습니다. (ReceiptNum : 18자리)")
+
         return self._httpget('/FAX/' + ReceiptNum, CorpNum, UserID)
 
     def getFaxResultRN(self, CorpNum, RequestNum, UserID=None):
@@ -121,6 +124,9 @@ class FaxService(PopbillBase):
             raise
                 PopbillException
         """
+
+        if RequestNum == None or RequestNum == '':
+            raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다.")
 
         return self._httpget('/FAX/Get/' + RequestNum, CorpNum, UserID)
 
@@ -136,6 +142,9 @@ class FaxService(PopbillBase):
                 PopbillException
         """
 
+        if len(ReceiptNum) != 18:
+            raise PopbillException(-99999999, "올바른 접수번호가 입력되지 않았습니다. (ReceiptNum : 18자리)")
+
         return self._httpget('/FAX/' + ReceiptNum + '/Cancel', CorpNum, UserID)
 
     def cancelReserveRN(self, CorpNum, RequestNum, UserID=None):
@@ -149,6 +158,9 @@ class FaxService(PopbillBase):
             raise
                 PopbillException
         """
+
+        if RequestNum == None or RequestNum == '':
+            raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다.")
 
         return self._httpget('/FAX/Cancel/' + RequestNum, CorpNum, UserID)
 
@@ -210,8 +222,8 @@ class FaxService(PopbillBase):
             raise PopbillException(-99999999, "발신 파일경로가 입력되지 않았습니다.")
         if not (type(FilePath) is str or type(FilePath) is list):
             raise PopbillException(-99999999, "발신 파일은 파일경로 또는 경로목록만 입력 가능합니다.")
-        if type(FilePath) is list and (len(FilePath) < 1 or len(FilePath) > 5):
-            raise PopbillException(-99999999, "파일은 1개 이상, 5개 까지 전송 가능합니다.")
+        if type(FilePath) is list and (len(FilePath) < 1 or len(FilePath) > 20):
+            raise PopbillException(-99999999, "파일은 1개 이상, 20개 까지 전송 가능합니다.")
 
         req = {"snd": SenderNum, "sndnm": SenderName, "fCnt": 1 if type(FilePath) is str else len(FilePath), "rcvs": [],
                "sndDT": None}
@@ -386,8 +398,8 @@ class FaxService(PopbillBase):
 
         req = {}
 
-        if not RequestNum:
-            raise PopbillException(-99999999, "요청번호(RequestNum)가 입력되지 않았습니다.")
+        if not OrgRequestNum:
+            raise PopbillException(-99999999, "원본 팩스 요청번호가 입력되지 않았습니다")
 
         if SenderNum != "":
             req['snd'] = SenderNum

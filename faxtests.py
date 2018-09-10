@@ -157,6 +157,22 @@ class FaxServiceTestCase(unittest.TestCase):
             print(senderObj.representYN)
             print(senderObj.state)
 
+    def test_getFaxResult(self):
+        try:
+            receiptNum = "018091015373100001"
+            response = self.faxService.getFaxResult(self.testCorpNum, receiptNum)
+            print(response)
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_cancelReserve(self):
+        try:
+            receiptNum = "018091015373100001"
+            response = self.faxService.cancelReserve(self.testCorpNum, receiptNum)
+            print(response)
+        except PopbillException as PE:
+            print(PE.message)
+
     def test_getFaxResultRN(self):
         try:
             RequestNum = "20180809162125"
@@ -198,8 +214,8 @@ class FaxServiceTestCase(unittest.TestCase):
             SenderName = ""
             ReserveDT = ""
             UserID = ""
-            title = "제목입니다."
-            RequestNum = "py_20180809_4RN"
+            title = ""
+            RequestNum = "py_20180809_7"
 
             receivers = []
             for x in range(0, 5):

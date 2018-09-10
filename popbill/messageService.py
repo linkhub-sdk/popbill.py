@@ -238,7 +238,7 @@ class MessageService(PopbillBase):
         if Messages != None or Messages != '':
             req['msgs'] = Messages
         if RequestNum != None or RequestNum != '':
-            req['requestnum'] = RequestNum
+            req['requestNum'] = RequestNum
         if adsYN:
             req['adsYN'] = True
 
@@ -367,8 +367,8 @@ class MessageService(PopbillBase):
             raise
                 PopbillException
         """
-        if ReceiptNum == None or ReceiptNum == '':
-            raise PopbillException(-99999999, "접수번호가 입력되지 않았습니다.")
+        if len(ReceiptNum) != 18:
+            raise PopbillException(-99999999, "올바른 접수번호가 입력되지 않았습니다. (ReceiptNum : 18자리)")
 
         return self._httpget('/Message/' + ReceiptNum, CorpNum, UserID)
 
@@ -399,8 +399,8 @@ class MessageService(PopbillBase):
             raise
                 PopbillException
         """
-        if ReceiptNum == None or ReceiptNum == '':
-            raise PopbillException(-99999999, "접수번호가 입력되지 않았습니다.")
+        if len(ReceiptNum) != 18:
+            raise PopbillException(-99999999, "올바른 접수번호가 입력되지 않았습니다. (ReceiptNum : 18자리)")
 
         return self._httpget('/Message/' + ReceiptNum + '/Cancel', CorpNum, UserID)
 

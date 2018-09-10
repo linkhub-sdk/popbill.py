@@ -289,8 +289,8 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: code (요청에 대한 상태 응답코드), message (요청에 대한 응답 메시지)
         """
-        if ReceiptNum is None or ReceiptNum == '':
-            raise PopbillException(-99999999, "접수번호가 입력되지 않았습니다")
+        if len(ReceiptNum) != 18:
+            raise PopbillException(-99999999, "올바른 접수번호가 입력되지 않았습니다. (ReceiptNum : 18자리)")
 
         return self._httpget('/KakaoTalk/' + ReceiptNum + '/Cancel', CorpNum, UserID)
 
@@ -315,8 +315,8 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: 알림톡/친구톡 전송내역 및 전송상태
         """
-        if ReceiptNum is None or ReceiptNum == '':
-            raise PopbillException(-99999999, "접수번호가 입력되지 않았습니다.")
+        if len(ReceiptNum) != 18:
+            raise PopbillException(-99999999, "올바른 접수번호가 입력되지 않았습니다. (ReceiptNum : 18자리)")
 
         return self._httpget('/KakaoTalk/' + ReceiptNum, CorpNum, UserID)
 

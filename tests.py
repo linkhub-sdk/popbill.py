@@ -456,7 +456,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         self.assertGreater(len(logs), 0, "로그 갯수 확인")
 
     def test_assignMgtKey(self):
-        response = self.taxinvoiceService.assignMgtKey(self.testCorpNum, "SELL", "018080910263700001", "",
+        response = self.taxinvoiceService.assignMgtKey(self.testCorpNum, "SELL", "018081611561900001", "20180910-002",
                                                        self.testUserID)
         print(response.code)
         print(response.message)
