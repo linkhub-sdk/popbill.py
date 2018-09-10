@@ -108,8 +108,8 @@ class FaxService(PopbillBase):
                 PopbillException
         """
 
-        if len(ReceiptNum) != 18:
-            raise PopbillException(-99999999, "올바른 접수번호가 입력되지 않았습니다. (ReceiptNum : 18자리)")
+        if ReceiptNum == None or len(ReceiptNum) != 18:
+            raise PopbillException(-99999999, "접수번호가 올바르지 않습니다.")
 
         return self._httpget('/FAX/' + ReceiptNum, CorpNum, UserID)
 
@@ -142,8 +142,8 @@ class FaxService(PopbillBase):
                 PopbillException
         """
 
-        if len(ReceiptNum) != 18:
-            raise PopbillException(-99999999, "올바른 접수번호가 입력되지 않았습니다. (ReceiptNum : 18자리)")
+        if ReceiptNum == None or len(ReceiptNum) != 18:
+            raise PopbillException(-99999999, "접수번호가 올바르지 않습니다.")
 
         return self._httpget('/FAX/' + ReceiptNum + '/Cancel', CorpNum, UserID)
 
