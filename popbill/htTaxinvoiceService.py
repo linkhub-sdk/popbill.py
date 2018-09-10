@@ -69,7 +69,7 @@ class HTTaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if len(JobID) != 18:
+        if JobID == None or len(JobID) != 18:
             raise PopbillException(-99999999,"작업아이디(jobID)가 올바르지 않습니다.")
 
         return self._httpget('/HomeTax/Taxinvoice/'+JobID+'/State', CorpNum, UserID)
@@ -107,7 +107,7 @@ class HTTaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if len(JobID) != 18 :
+        if JobID == None or len(JobID) != 18 :
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
         uri = '/HomeTax/Taxinvoice/' + JobID
@@ -142,7 +142,7 @@ class HTTaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if len(JobID) != 18 :
+        if JobID == None or len(JobID) != 18 :
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
         uri = '/HomeTax/Taxinvoice/' + JobID + '/Summary'
@@ -168,7 +168,7 @@ class HTTaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if len(NTSConfirmNum) != 24 :
+        if NTSConfirmNum == None or len(NTSConfirmNum) != 24 :
             raise PopbillException(-99999999, "국세청승인번호(NTSConfirmNum)가 올바르지 않습니다.")
 
         return self._httpget('/HomeTax/Taxinvoice/' + NTSConfirmNum, CorpNum, UserID)
@@ -184,7 +184,7 @@ class HTTaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if len(NTSConfirmNum) != 24 :
+        if NTSConfirmNum == None or len(NTSConfirmNum) != 24 :
             raise PopbillException(-99999999, "국세청승인번호(NTSConfirmNum)가 올바르지 않습니다.")
 
         return self._httpget('/HomeTax/Taxinvoice/' + NTSConfirmNum + '?T=xml', CorpNum, UserID)

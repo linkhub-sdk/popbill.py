@@ -67,7 +67,7 @@ class HTCashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if len(JobID) != 18:
+        if JobID == None or len(JobID) != 18:
             raise PopbillException(-99999999,"작업아이디(jobID)가 올바르지 않습니다.")
 
         return self._httpget('/HomeTax/Cashbill/'+JobID+'/State', CorpNum, UserID)
@@ -101,7 +101,7 @@ class HTCashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if len(JobID) != 18 :
+        if JobID == None or len(JobID) != 18 :
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
         uri = '/HomeTax/Cashbill/' + JobID
@@ -126,7 +126,7 @@ class HTCashbillService(PopbillBase):
             raise
                 PopbillException
         """
-        if len(JobID) != 18 :
+        if JobID == None or len(JobID) != 18 :
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
         uri = '/HomeTax/Cashbill/' + JobID + '/Summary'

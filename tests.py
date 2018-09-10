@@ -222,7 +222,8 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         self.assertGreaterEqual(balance, 0, '잔액 0 이상.')
 
     def test_getPopbillURL(self):
-        url = self.taxinvoiceService.getPopbillURL(self.testCorpNum, self.testUserID, "CHRG")
+        url = self.taxinvoiceService.getPopbillURL(self.testCorpNum, self.testUserID, "CERT")
+        print url
         self.assertEqual(url[:5], "https", "https로시작")
 
     def test_checkIsMember(self):
@@ -456,7 +457,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         self.assertGreater(len(logs), 0, "로그 갯수 확인")
 
     def test_assignMgtKey(self):
-        response = self.taxinvoiceService.assignMgtKey(self.testCorpNum, "SELL", "018081611561900001", "20180910-002",
+        response = self.taxinvoiceService.assignMgtKey(self.testCorpNum, "SELL", "", "20180903-003",
                                                        self.testUserID)
         print(response.code)
         print(response.message)
