@@ -350,6 +350,13 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌 회원아이디
         :return: 알림톡/친구톡 전송내역 및 전송상태 및 검색결과 조회
         """
+
+        if SDate == None or SDate == '':
+            raise PopbillException(-99999999, "시작일자가 입력되지 않았습니다.")
+
+        if EDate == None or EDate == '':
+            raise PopbillException(-99999999, "종료일자가 입력되지 않았습니다.")
+
         uri = '/KakaoTalk/Search'
         uri += '?SDate=' + SDate
         uri += '&EDate=' + EDate

@@ -50,6 +50,16 @@ class HTCashbillService(PopbillBase):
             raise
                 PopbillException
         """
+
+        if Type == None or Type == '':
+            raise PopbillException(-99999999, "현금영수증 유형이 입력되지 않았습니다.")
+
+        if SDate == None or SDate == '':
+            raise PopbillException(-99999999, "시작일자가 입력되지 않았습니다.")
+
+        if EDate == None or EDate == '':
+            raise PopbillException(-99999999, "종료일자가 입력되지 않았습니다.")
+
         uri = '/HomeTax/Cashbill/' + Type
         uri += '?SDate=' + SDate
         uri += '&EDate=' + EDate

@@ -294,6 +294,15 @@ class StatementService(PopbillBase):
                 UserID : 팝빌 회원아이디
         """
 
+        if DType == None or DType == '':
+            raise PopbillException(-99999999, "일자유형이 입력되지 않았습니다.")
+
+        if SDate == None or SDate == '':
+            raise PopbillException(-99999999, "시작일자가 입력되지 않았습니다.")
+
+        if EDate == None or EDate == '':
+            raise PopbillException(-99999999, "종료일자가 입력되지 않았습니다.")
+
         uri = '/Statement/Search'
         uri += '?DType=' + DType
         uri += '&SDate=' + SDate

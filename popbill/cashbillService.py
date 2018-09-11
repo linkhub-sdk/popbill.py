@@ -318,6 +318,15 @@ class CashbillService(PopbillBase):
                 QString : 현금영수증 식별번호, 미기재시 전체조회
         """
 
+        if DType == None or DType == '':
+            raise PopbillException(-99999999, "일자유형이 입력되지 않았습니다.")
+
+        if SDate == None or SDate == '':
+            raise PopbillException(-99999999, "시작일자가 입력되지 않았습니다.")
+
+        if EDate == None or EDate == '':
+            raise PopbillException(-99999999, "종료일자가 입력되지 않았습니다.")
+
         uri = '/Cashbill/Search'
         uri += '?DType=' + DType
         uri += '&SDate=' + SDate

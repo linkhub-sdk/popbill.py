@@ -827,6 +827,15 @@ class TaxinvoiceService(PopbillBase):
                 PopbillException
         """
 
+        if DType == None or DType == '':
+            raise PopbillException(-99999999, "일자유형이 입력되지 않았습니다.")
+
+        if SDate == None or SDate == '':
+            raise PopbillException(-99999999, "시작일자가 입력되지 않았습니다.")
+
+        if EDate == None or EDate == '':
+            raise PopbillException(-99999999, "종료일자가 입력되지 않았습니다.")
+
         uri = '/Taxinvoice/' + MgtKeyType
         uri += '?DType=' + DType
         uri += '&SDate=' + SDate
@@ -869,6 +878,11 @@ class TaxinvoiceService(PopbillBase):
                 PopbillException
         """
 
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+
         uri = '/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '/AttachStmt'
 
         postData = self._stringtify({"ItemCode": ItemCode, "MgtKey": StmtMgtKey})
@@ -889,6 +903,11 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+
         uri = '/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '/DetachStmt'
 
         req = {}
