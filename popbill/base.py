@@ -129,6 +129,9 @@ class PopbillBase(__with_metaclass(Singleton,object)):
             raise
                 PopbillException
         """
+        if ToGo == None or ToGo == '':
+            raise PopbillException(-99999999, "ToGo값이 입력되지 않았습니다.")
+
         result = self._httpget('/?TG=' + ToGo , CorpNum,UserID)
         return result.url
 
@@ -141,6 +144,9 @@ class PopbillBase(__with_metaclass(Singleton,object)):
             raise
                 PopbillException
         """
+        if CorpNum == None or CorpNum == '':
+            raise PopbillException(-99999999, "사업자번호가 입력되지 않았습니다.")
+
         return self._httpget('/Join?CorpNum=' + CorpNum + '&LID=' + self.__linkID,None,None)
 
     def joinMember(self,JoinInfo):
@@ -165,6 +171,9 @@ class PopbillBase(__with_metaclass(Singleton,object)):
             raise
                 PopbillException
         """
+        if checkID == None or checkID == '':
+            raise PopbillException(-99999999, "아이디가 입력되지 않았습니다.")
+
         return self._httpget('/IDCheck?ID=' + checkID)
 
     def listContact(self, CorpNum, UserID = None) :

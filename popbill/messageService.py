@@ -38,6 +38,9 @@ class MessageService(PopbillBase):
             raise
                 PopbillException
         """
+        if MsgType == None or MsgType == "":
+            raise PopbillException(-99999999, "전송유형이 입력되지 않았습니다.")
+
         return self._httpget('/Message/ChargeInfo?Type=' + MsgType, CorpNum, UserID)
 
     def getAutoDenyList(self, CorpNum, UserID=None):
@@ -455,7 +458,7 @@ class MessageService(PopbillBase):
 
         return self._httpget(uri, CorpNum, UserID)
 
-    def getURL(self, CorpNum, UserID, TOGO):
+    def getURL(self, CorpNum, UserID, ToGo):
         """ 문자 관련 팝빌 URL
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -466,8 +469,10 @@ class MessageService(PopbillBase):
             raise
                 PopbillException
         """
+        if ToGo == None or ToGo == '':
+            raise PopbillException(-99999999, "TOGO값이 입력되지 않았습니다.")
 
-        result = self._httpget('/Message/?TG=' + TOGO, CorpNum, UserID)
+        result = self._httpget('/Message/?TG=' + ToGo, CorpNum, UserID)
 
         return result.url
 

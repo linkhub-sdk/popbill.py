@@ -827,6 +827,9 @@ class TaxinvoiceService(PopbillBase):
                 PopbillException
         """
 
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+
         if DType == None or DType == '':
             raise PopbillException(-99999999, "일자유형이 입력되지 않았습니다.")
 

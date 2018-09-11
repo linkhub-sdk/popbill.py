@@ -32,6 +32,9 @@ class KakaoService(PopbillBase):
         :param ToGo: [PLUSFRIEND-플러스친구계정관리, SENDER-발신번호관리, TEMPLATE-알림톡템플릿관리, BOX-카카오톡전송내용]
         :return: 팝빌 URL
         """
+        if ToGo == None or ToGo == '':
+            raise PopbillException(-99999999, "ToGo값이 입력되지 않았습니다.")
+
         if ToGo == 'SENDER':
             result = self._httpget('/Message/?TG=' + ToGo, CorpNum, UserID)
         else:
@@ -303,7 +306,7 @@ class KakaoService(PopbillBase):
         :return: code (요청에 대한 상태 응답코드), message (요청에 대한 응답 메시지)
         """
         if RequestNum is None or RequestNum == '':
-            raise PopbillException(-99999999, "요청번호 입력되지 않았습니다")
+            raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다")
 
         return self._httpget('/KakaoTalk/Cancel/' + RequestNum, CorpNum, UserID)
 
@@ -329,7 +332,7 @@ class KakaoService(PopbillBase):
         :return: 알림톡/친구톡 전송내역 및 전송상태
         """
         if RequestNum is None or RequestNum == '':
-            raise PopbillException(-99999999, "요청번호 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다.")
 
         return self._httpget('/KakaoTalk/Get/' + RequestNum, CorpNum, UserID)
 
