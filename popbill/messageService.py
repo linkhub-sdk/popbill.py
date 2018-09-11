@@ -331,6 +331,9 @@ class MessageService(PopbillBase):
             raise
                 PopbillException
         """
+        if MsgType == None or MsgType == '':
+            raise PopbillException(-99999999, "문자 전송 유형이 입력되지 않았습니다.")
+
         if Messages == None or len(Messages) < 1:
             raise PopbillException(-99999999, "전송할 메시지가 입력되지 않았습니다.")
 
@@ -470,7 +473,7 @@ class MessageService(PopbillBase):
                 PopbillException
         """
         if ToGo == None or ToGo == '':
-            raise PopbillException(-99999999, "ToGo값이 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "TOGO값이 입력되지 않았습니다.")
 
         result = self._httpget('/Message/?TG=' + ToGo, CorpNum, UserID)
 

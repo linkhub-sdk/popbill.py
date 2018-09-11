@@ -33,7 +33,7 @@ class KakaoService(PopbillBase):
         :return: 팝빌 URL
         """
         if ToGo == None or ToGo == '':
-            raise PopbillException(-99999999, "ToGo값이 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "TOGO값이 입력되지 않았습니다.")
 
         if ToGo == 'SENDER':
             result = self._httpget('/Message/?TG=' + ToGo, CorpNum, UserID)

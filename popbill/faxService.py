@@ -49,7 +49,7 @@ class FaxService(PopbillBase):
                 PopbillException
         """
         if ToGo == None or ToGo == '':
-            raise PopbillException(-99999999, "ToGo값이 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "TOGO값이 입력되지 않았습니다.")
 
         result = self._httpget('/FAX/?TG=' + ToGo, CorpNum, UserID)
         return result.url
