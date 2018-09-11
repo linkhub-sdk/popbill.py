@@ -82,7 +82,7 @@ class MessageServiceTestCase(unittest.TestCase):
     def test_06_sendSMS_one(self):
         try:
             receiptNum = self.messageService.sendSMS(self.testCorpNum, "07043042991", "010000000", "수신자명", "단건전송 내용",
-                                                     "20180810144409", "", "testkorea", "수신받는자명", "")
+                                                     "20180912102154", "", "testkorea", "수신받는자명", "20180911102147")
             print("sendSMS_one : " + receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -272,7 +272,7 @@ class MessageServiceTestCase(unittest.TestCase):
 
     def test_cancelReserve(self):
         try:
-            receiptNum = "01809101500000002"
+            receiptNum = "0180910150000000"
             respone = self.messageService.cancelReserve(self.testCorpNum, receiptNum)
             print(respone)
         except PopbillException as PE:
