@@ -324,8 +324,8 @@ class FaxService(PopbillBase):
 
         req = {}
 
-        if not ReceiptNum:
-            raise PopbillException(-99999999, "접수번호(ReceiptNum)가 입력되지 않았습니다.")
+        if ReceiptNum == None or len(ReceiptNum) != 18:
+            raise PopbillException(-99999999, "접수번호가 올바르지 않습니다.")
 
         if SenderNum != "":
             req['snd'] = SenderNum
