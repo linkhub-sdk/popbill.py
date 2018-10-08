@@ -987,6 +987,18 @@ class TaxinvoiceService(PopbillBase):
         uri = "/Taxinvoice/EmailSendConfig?EmailType=" + EmailType + "&SendYN=" + str(SendYN)
         return self._httppost(uri, "", Corpnum, UserID)
 
+    def checkCertValidation(self, CorpNum, UserID=None):
+        """ 팝빌에 등록된 공인인증서 유효성을 확인한다.
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+               처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        return self._httpget('/Taxinvoice/CertCheck', CorpNum, UserID)
+
 
 class Taxinvoice(object):
     def __init__(self, **kwargs):

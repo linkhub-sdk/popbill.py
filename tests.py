@@ -476,6 +476,12 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         except PopbillException as PE:
             print(PE.message)
 
+    def test_checkCertValidation(self):
+        response = self.taxinvoiceService.checkCertValidation(self.testCorpNum, self.testUserID)
+
+        print response.code
+        print response.message
+
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TaxinvoiceServiceTestCase)
