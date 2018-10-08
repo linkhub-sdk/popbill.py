@@ -9,22 +9,23 @@
 # Updated : 2016-07-27
 # Thanks for your interest.
 
-from .base import PopbillBase,PopbillException
+from .base import PopbillBase, PopbillException
+
 
 class HTTaxinvoiceService(PopbillBase):
     """ 팝빌 홈택스 전자세금계산서 연계 API Service Implementation. """
 
-    def __init__(self,LinkID,SecretKey):
+    def __init__(self, LinkID, SecretKey):
         """ 생성자
             args
                 LinkID : 링크허브에서 발급받은 링크아이디(LinkID)
                 SecretKeye 링크허브에서 발급받은 비밀키(SecretKey)
         """
 
-        super(self.__class__,self).__init__(LinkID,SecretKey)
+        super(self.__class__, self).__init__(LinkID, SecretKey)
         self._addScope("111")
 
-    def getChargeInfo(self, CorpNum, UserID = None):
+    def getChargeInfo(self, CorpNum, UserID=None):
         """ 과금정보 확인
             args
                 CorpNum : 회원 사업자번호
@@ -37,7 +38,7 @@ class HTTaxinvoiceService(PopbillBase):
 
         return self._httpget('/HomeTax/Taxinvoice/ChargeInfo', CorpNum, UserID)
 
-    def requestJob(self, CorpNum, Type, DType, SDate, EDate, UserID = None):
+    def requestJob(self, CorpNum, Type, DType, SDate, EDate, UserID=None):
         """ 수집 요청
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -67,7 +68,7 @@ class HTTaxinvoiceService(PopbillBase):
 
         return self._httppost(uri, "", CorpNum, UserID).jobID
 
-    def getJobState(self, CorpNum, JobID, UserID = None):
+    def getJobState(self, CorpNum, JobID, UserID=None):
         """ 수집 상태 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -79,11 +80,11 @@ class HTTaxinvoiceService(PopbillBase):
                 PopbillException
         """
         if JobID == None or len(JobID) != 18:
-            raise PopbillException(-99999999,"작업아이디(jobID)가 올바르지 않습니다.")
+            raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
-        return self._httpget('/HomeTax/Taxinvoice/'+JobID+'/State', CorpNum, UserID)
+        return self._httpget('/HomeTax/Taxinvoice/' + JobID + '/State', CorpNum, UserID)
 
-    def listActiveJob(self, CorpNum, UserID = None):
+    def listActiveJob(self, CorpNum, UserID=None):
         """ 수집 상태 목록 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -96,7 +97,8 @@ class HTTaxinvoiceService(PopbillBase):
 
         return self._httpget('/HomeTax/Taxinvoice/JobList', CorpNum, UserID)
 
-    def search(self, CorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, Page, PerPage, Order, UserID = None):
+    def search(self, CorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, Page, PerPage,
+               Order, UserID=None):
         """ 수집 결과 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -116,7 +118,7 @@ class HTTaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if JobID == None or len(JobID) != 18 :
+        if JobID == None or len(JobID) != 18:
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
         uri = '/HomeTax/Taxinvoice/' + JobID
@@ -129,12 +131,12 @@ class HTTaxinvoiceService(PopbillBase):
         uri += '&PerPage=' + str(PerPage)
         uri += '&Order=' + Order
 
-        if TaxRegIDYN != '' :
+        if TaxRegIDYN != '':
             uri += '&TaxRegIDYN=' + TaxRegIDYN
 
         return self._httpget(uri, CorpNum, UserID)
 
-    def summary(self, CorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, UserID = None):
+    def summary(self, CorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, UserID=None):
         """ 수집 결과 요약정보 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -151,7 +153,7 @@ class HTTaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if JobID == None or len(JobID) != 18 :
+        if JobID == None or len(JobID) != 18:
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
         uri = '/HomeTax/Taxinvoice/' + JobID + '/Summary'
@@ -161,12 +163,12 @@ class HTTaxinvoiceService(PopbillBase):
         uri += '&TaxRegIDType=' + TaxRegIDType
         uri += '&TaxRegID=' + TaxRegID
 
-        if TaxRegIDYN != '' :
+        if TaxRegIDYN != '':
             uri += '&TaxRegIDYN=' + TaxRegIDYN
 
         return self._httpget(uri, CorpNum, UserID)
 
-    def getTaxinvoice(self, CorpNum, NTSConfirmNum, UserID = None):
+    def getTaxinvoice(self, CorpNum, NTSConfirmNum, UserID=None):
         """ 전자세금계산서 상세정보 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -177,12 +179,12 @@ class HTTaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if NTSConfirmNum == None or len(NTSConfirmNum) != 24 :
+        if NTSConfirmNum == None or len(NTSConfirmNum) != 24:
             raise PopbillException(-99999999, "국세청승인번호(NTSConfirmNum)가 올바르지 않습니다.")
 
         return self._httpget('/HomeTax/Taxinvoice/' + NTSConfirmNum, CorpNum, UserID)
 
-    def getXML(self, CorpNum, NTSConfirmNum, UserID = None):
+    def getXML(self, CorpNum, NTSConfirmNum, UserID=None):
         """ 전자세금계산서 상세정보 확인 - XML
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -193,12 +195,12 @@ class HTTaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        if NTSConfirmNum == None or len(NTSConfirmNum) != 24 :
+        if NTSConfirmNum == None or len(NTSConfirmNum) != 24:
             raise PopbillException(-99999999, "국세청승인번호(NTSConfirmNum)가 올바르지 않습니다.")
 
         return self._httpget('/HomeTax/Taxinvoice/' + NTSConfirmNum + '?T=xml', CorpNum, UserID)
 
-    def getFlatRatePopUpURL(self, CorpNum, UserID = None):
+    def getFlatRatePopUpURL(self, CorpNum, UserID=None):
         """ 정액제 서비스 신청 URL
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -210,7 +212,7 @@ class HTTaxinvoiceService(PopbillBase):
         """
         return self._httpget('/HomeTax/Taxinvoice?TG=CHRG', CorpNum, UserID).url
 
-    def getCertificatePopUpURL(self, CorpNum, UserID = None):
+    def getCertificatePopUpURL(self, CorpNum, UserID=None):
         """ 홈택스 공인인증서 등록 URL
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -222,7 +224,7 @@ class HTTaxinvoiceService(PopbillBase):
         """
         return self._httpget('/HomeTax/Taxinvoice?TG=CERT', CorpNum, UserID).url
 
-    def getFlatRateState(self, CorpNum, UserID = None) :
+    def getFlatRateState(self, CorpNum, UserID=None):
         """ 정액제 서비스 상태 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -234,7 +236,7 @@ class HTTaxinvoiceService(PopbillBase):
         """
         return self._httpget('/HomeTax/Taxinvoice/Contract', CorpNum, UserID)
 
-    def getCertificateExpireDate(self, CorpNum, UserID = None):
+    def getCertificateExpireDate(self, CorpNum, UserID=None):
         """ 공인인증서 만료일자 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -246,3 +248,20 @@ class HTTaxinvoiceService(PopbillBase):
         """
 
         return self._httpget('/HomeTax/Taxinvoice/CertInfo', CorpNum, UserID).certificateExpiration
+
+    def getPopUpURL(self, CorpNum, NTSConfirmNum, UserID=None):
+        """ 홈택스 전자세금계산서 보기 팝업 URL
+            args
+                CorpNum : 팝빌회원 사업자번호
+                CorpNum : 국세청 승인 번호
+                UserID : 팝빌회원 아이디
+            return
+                전자세금계산서 보기 팝업 URL 반환
+            raise
+                PopbillException
+        """
+
+        if NTSConfirmNum == None or len(NTSConfirmNum) != 24:
+            raise PopbillException(-99999999, "국세청승인번호(NTSConfirmNum)가 올바르지 않습니다.")
+
+        return self._httpget('/HomeTax/Taxinvoice/' + NTSConfirmNum + '/PopUp', CorpNum, UserID).url

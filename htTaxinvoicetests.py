@@ -20,6 +20,7 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         self.htTaxinvoiceService.IsTest = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
+
     def test_getPartnerURL(self):
         url = self.htTaxinvoiceService.getPartnerURL(self.testCorpNum, "CHRG")
         self.assertIsNotNone(url, "파트너 포인트 충전 URL")
@@ -84,8 +85,8 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
     def test_requestJob(self):
         Type = "SELL"
         DType = "W"
-        SDate = "20160601"
-        EDate = "20160831"
+        SDate = "20180101"
+        EDate = "20181008"
         jobID = self.htTaxinvoiceService.requestJob(self.testCorpNum, Type, DType, SDate, EDate, self.testUserID)
         print("작업아이디 : " + jobID)
         self.assertIsNotNone(jobID, "수집요청 작업아이디 확인")
@@ -194,6 +195,7 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
     def test_getFlatRatePopUpURL(self):
         url = self.htTaxinvoiceService.getCertificatePopUpURL(self.testCorpNum, self.testUserID)
         self.assertIsNotNone(url, "정액제 결제 신청 URL")
+        print url
 
     def test_getFlatRateState(self):
         flatRateInfo = self.htTaxinvoiceService.getFlatRateState(self.testCorpNum, self.testUserID)
@@ -203,6 +205,10 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         expireDate = self.htTaxinvoiceService.getCertificateExpireDate(self.testCorpNum, self.testUserID)
         self.assertIsNotNone(expireDate, "홈택스 공인인증서 만료일시 확인")
 
+    def test_getPopUpURL(self):
+        NTSConfirmNum = "201809194100020300000cd5"
+        url = self.htTaxinvoiceService.getPopUpURL(self.testCorpNum, NTSConfirmNum)
+        print url
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(HTTaxinvoiceServiceTestCase)
