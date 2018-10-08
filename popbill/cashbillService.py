@@ -302,7 +302,7 @@ class CashbillService(PopbillBase):
         return self._httppost('/Cashbill/' + MgtKey, '', CorpNum, UserID, "DELETE")
 
     def search(self, CorpNum, DType, SDate, EDate, State, TradeType, TradeUsage, TaxationType, Page, PerPage, Order,
-               UserID=None, QString=None):
+               UserID=None, QString=None, TradeOpt=None):
         """ 목록 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -310,14 +310,15 @@ class CashbillService(PopbillBase):
                 SDate : 시작일자, 표시형식(yyyyMMdd)
                 EDate : 종료일자, 표시형식(yyyyMMdd)
                 State : 상태코드 배열, 2,3번째 자리에 와일드카드(*) 사용가능
-                TradeType : 현금영수증 형태 배열, N-일반현금영수증, C-취소현금영수증
-                TradeUsage : 거래용도 배열, P-소득공제용, C-지출증빙용
+                TradeType : 문서형태 배열, N-일반현금영수증, C-취소현금영수증
+                TradeUsage : 거래구분 배열, P-소득공제용, C-지출증빙용
                 TaxationType : 과세형태 배열, T-과세, N-비과세
                 Page : 페이지번호
-                PerPage : 페이지당 목록개수
+                PerPage : 페이지당 검색개수
                 Order : 정렬방향, D-내림차순, A-오름차순
                 UserID : 팝빌 회원아이디
                 QString : 현금영수증 식별번호, 미기재시 전체조회
+                TradeOpt : 거래유형, N-일반, B-도서공연, T-대중교통
         """
 
         if DType == None or DType == '':
@@ -343,6 +344,8 @@ class CashbillService(PopbillBase):
 
         if QString is not None:
             uri += '&QString=' + QString
+
+        uri += '&TradeOpt=' + ','.join(TradeOpt)
 
         return self._httpget(uri, CorpNum, UserID)
 

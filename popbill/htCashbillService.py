@@ -102,7 +102,7 @@ class HTCashbillService(PopbillBase):
                 CorpNum : 팝빌회원 사업자번호
                 JobID : 작업아이디
                 TradeType : 현금영수증 유형 배열, N-일반 현금영수증, C-취소 현금영수증
-                TradeUsage : 거래용도 배열, P-소등공제용, C-지출증빙용
+                TradeUsage : 거래구분 배열, P-소등공제용, C-지출증빙용
                 Page : 페이지 번호
                 PerPage : 페이지당 목록 개수, 최대 1000개
                 Order : 정렬 방향, D-내림차순, A-오름차순
@@ -130,7 +130,7 @@ class HTCashbillService(PopbillBase):
                 CorpNum : 팝빌회원 사업자번호
                 JobID : 작업아이디
                 TradeType : 현금영수증 유형 배열, N-일반 현금영수증, C-취소 현금영수증
-                TradeUsage : 거래용도 배열, P-소등공제용, C-지출증빙용
+                TradeUsage : 거래구분 배열, P-소등공제용, C-지출증빙용
                 UserID : 팝빌회원 아이디
             return
                 수집 결과 요약정보

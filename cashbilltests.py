@@ -34,8 +34,8 @@ class CashbillServiceTestCase(unittest.TestCase):
 
     def test_search(self):
         DType = "R"
-        SDate = "20160701"
-        EDate = "20160831"
+        SDate = "20180901"
+        EDate = "20181008"
         State = ["3**", "4**"]
         TradeType = ["N", "C"]
         TradeUsage = ["P", "C"]
@@ -44,10 +44,12 @@ class CashbillServiceTestCase(unittest.TestCase):
         PerPage = 10
         Order = "D"
         QString = ""
+        TradeOpt = ["N", "B", "T"]
+
 
         try:
             result = self.cashbillService.search(self.testCorpNum, DType, SDate, EDate, State, TradeType, TradeUsage,
-                                                 TaxationType, Page, PerPage, Order, self.testUserID, QString)
+                                                 TaxationType, Page, PerPage, Order, self.testUserID, QString, TradeOpt)
             print(result.total)
             self.assertEqual(result.code, 1, "등록 오류 : " + result.message)
         except PopbillException as PE:
@@ -203,9 +205,9 @@ class CashbillServiceTestCase(unittest.TestCase):
         self.assertEqual(result.code, 1, "발행취소 오류 : " + result.message)
 
     def test_05_getInfo(self):
-        result = self.cashbillService.getInfo(self.testCorpNum, "20150325-01")
+        result = self.cashbillService.getInfo(self.testCorpNum, "20180926_06")
         print(result.itemKey)
-        self.assertEqual(result.mgtKey, "20150325-01", "getInfo 오류 :" + str(result.message))
+        self.assertEqual(result.mgtKey, "20180926_06", "getInfo 오류 :" + str(result.message))
 
     def test_06_getDetailInfo(self):
         result = self.cashbillService.getDetailInfo(self.testCorpNum, "20171114-20")
