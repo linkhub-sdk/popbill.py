@@ -253,7 +253,7 @@ class HTTaxinvoiceService(PopbillBase):
         """ 홈택스 전자세금계산서 보기 팝업 URL
             args
                 CorpNum : 팝빌회원 사업자번호
-                CorpNum : 국세청 승인 번호
+                NTSConfirmNum : 국세청 승인 번호
                 UserID : 팝빌회원 아이디
             return
                 전자세금계산서 보기 팝업 URL 반환
@@ -265,3 +265,78 @@ class HTTaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999, "국세청승인번호(NTSConfirmNum)가 올바르지 않습니다.")
 
         return self._httpget('/HomeTax/Taxinvoice/' + NTSConfirmNum + '/PopUp', CorpNum, UserID).url
+
+    def checkCertValidation(self, CorpNum, UserID=None):
+        """ 홈택스 공인인증서 로그인 테스트
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+
+        return self._httpget('/HomeTax/Taxinvoice/CertCheck', CorpNum, UserID)
+
+    def registDeptUser(self, CorpNum, DeptUserID, DeptUserPWD, UserID=None):
+        """ 홈택스 전자세금계산서 부서사용자 계정 등록
+            args
+                CorpNum : 팝빌회원 사업자번호
+                DeptUserID : 홈택스 부서사용자 계정아이디
+                DeptUserPWD : 홈택스 부서사용자 계정비밀번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        if DeptUserID == None or len(DeptUserID) == 0:
+            raise PopbillException(-99999999, "홈택스 부서사용자 계정 아이디가 입력되지 않았습니다.")
+
+        if DeptUserPWD == None or len(DeptUserPWD) == 0:
+            raise PopbillException(-99999999, "홈택스 부서사용자 계정 비밀번호가 입력되지 않았습니다.")
+
+        req = {}
+        req["id"] = DeptUserID
+        req["pwd"] = DeptUserPWD
+
+        postData = self._stringtify(req)
+
+        return self._httppost("/HomeTax/Taxinvoice/DeptUser", postData, CorpNum, UserID)
+
+    def checkDeptUser(self, CorpNum, UserID=None):
+        """ 홈택스 전자세금계산서 부서사용자 등록정보 확인
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        return self._httpget('/HomeTax/Taxinvoice/DeptUser', CorpNum, UserID)
+
+    def checkLoginDeptUser(self, CorpNum, UserID=None):
+        """ 홈택스 전자세금계산서 부서사용자 로그인 테스트
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        return self._httpget('/HomeTax/Taxinvoice/DeptUser/Check', CorpNum, UserID)
+
+    def deleteDeptUser(self, CorpNum, UserID=None):
+        """ 홈택스 전자세금계산서 부서사용자 등록정보 삭제
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        return self._httppost("/HomeTax/Taxinvoice/DeptUser", "", CorpNum, UserID, "DELETE")

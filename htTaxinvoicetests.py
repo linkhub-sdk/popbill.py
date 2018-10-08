@@ -3,9 +3,12 @@
 import sys
 import imp
 import random
+
 imp.reload(sys)
-try: sys.setdefaultencoding('UTF8')
-except Exception as E: pass
+try:
+    sys.setdefaultencoding('UTF8')
+except Exception as E:
+    pass
 
 try:
     import unittest2 as unittest
@@ -13,10 +16,11 @@ except ImportError:
     import unittest
 from popbill import *
 
+
 class HTTaxinvoiceServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.htTaxinvoiceService =  HTTaxinvoiceService('TESTER','SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
+        self.htTaxinvoiceService = HTTaxinvoiceService('TESTER', 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.htTaxinvoiceService.IsTest = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
@@ -25,22 +29,23 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         url = self.htTaxinvoiceService.getPartnerURL(self.testCorpNum, "CHRG")
         self.assertIsNotNone(url, "파트너 포인트 충전 URL")
         print url
+
     def test_checkID(self):
         response = self.htTaxinvoiceService.checkID("testkorea")
         self.assertEqual(response.code, 1, "해당 아이디 사용중")
 
     def test_registContact(self):
-        contactInfo = ContactInfo (
-                        id = "testkorea_0726",
-                        pwd = "popbill",
-                        personName = "정씨네",
-                        tel = "010-1234-1234",
-                        hp = "010-4324-5117",
-                        fax = "070-7510-3710",
-                        email = "code@linkhub.co.kr",
-                        searchAllAllowYN = True,
-                        mgrYN = False
-                        )
+        contactInfo = ContactInfo(
+            id="testkorea_0726",
+            pwd="popbill",
+            personName="정씨네",
+            tel="010-1234-1234",
+            hp="010-4324-5117",
+            fax="070-7510-3710",
+            email="code@linkhub.co.kr",
+            searchAllAllowYN=True,
+            mgrYN=False
+        )
         response = self.htTaxinvoiceService.registContact(self.testCorpNum, contactInfo, self.testUserID)
         self.assertEqual(response.code, 1, "담당자 추가 성공")
 
@@ -50,14 +55,14 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
 
     def test_updateContact(self):
         contactInfo = ContactInfo(
-                            personName = "담당자 성명_0728",
-                            tel = "010-8888-8888",
-                            hp = "010-8888-8888",
-                            fax = "02-6442-9700",
-                            email = "weicome@linkhub.co.kr",
-                            searchAllAllowYN = True,
-                            mgtYN = False
-                            )
+            personName="담당자 성명_0728",
+            tel="010-8888-8888",
+            hp="010-8888-8888",
+            fax="02-6442-9700",
+            email="weicome@linkhub.co.kr",
+            searchAllAllowYN=True,
+            mgtYN=False
+        )
         response = self.htTaxinvoiceService.updateContact(self.testCorpNum, contactInfo, self.testUserID)
         self.assertEqual(response.code, 1, "담당자 정보 수정성공.")
 
@@ -66,21 +71,20 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         self.assertIsNotNone(corpInfo)
 
     def test_updateCorpInfo(self):
-        corpInfo = CorpInfo (
-                        ceoname = "대표자성명_0728",
-                        corpName = "상호_0728",
-                        addr = "주소_0728",
-                        bizType = "업태_0728",
-                        bizClass = "종목_0728"
-                        )
+        corpInfo = CorpInfo(
+            ceoname="대표자성명_0728",
+            corpName="상호_0728",
+            addr="주소_0728",
+            bizType="업태_0728",
+            bizClass="종목_0728"
+        )
         response = self.htTaxinvoiceService.updateCorpInfo(self.testCorpNum, corpInfo, self.testUserID)
         self.assertEqual(response.code, 1, "회사정보 수정성공")
 
     def test_getChrgInfo(self):
         chrgInfo = self.htTaxinvoiceService.getChargeInfo(self.testCorpNum, self.testUserID)
         self.assertIsNotNone(chrgInfo)
-        print("단가 : " +chrgInfo.unitCost)
-
+        print("단가 : " + chrgInfo.unitCost)
 
     def test_requestJob(self):
         Type = "SELL"
@@ -145,7 +149,8 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         PerPage = 10
         Order = "D"
 
-        searchInfo = self.htTaxinvoiceService.search(self.testCorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, Page, PerPage, Order, self.testUserID)
+        searchInfo = self.htTaxinvoiceService.search(self.testCorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType,
+                                                     TaxRegIDYN, TaxRegID, Page, PerPage, Order, self.testUserID)
         self.assertIsNotNone(searchInfo, "수집 결과 조회")
 
         tmp = '\n\t======== search Response ========\n'
@@ -158,8 +163,6 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
 
         print(tmp)
 
-
-
     def test_summary(self):
         JobID = "016072810000000013"
         Type = ["N", "M"]
@@ -169,7 +172,8 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         TaxRegIDYN = ""
         TaxRegID = ""
 
-        summaryInfo = self.htTaxinvoiceService.summary(self.testCorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, self.testUserID)
+        summaryInfo = self.htTaxinvoiceService.summary(self.testCorpNum, JobID, Type, TaxType, PurposeType,
+                                                       TaxRegIDType, TaxRegIDYN, TaxRegID, self.testUserID)
         self.assertIsNotNone(summaryInfo, "수집결과 요약정보 조회")
 
         tmp = '\n\t======== Summary Response ========\n'
@@ -180,7 +184,6 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
 
         print(tmp)
 
-
     def test_getTaxinvoice(self):
         NTSConfirmNum = "201607274100002900000209"
         taxinvoiceInfo = self.htTaxinvoiceService.getTaxinvoice(self.testCorpNum, NTSConfirmNum, self.testUserID)
@@ -190,7 +193,6 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         NTSConfirmNum = "201607274100002900000209"
         taxinvoiceXML = self.htTaxinvoiceService.getXML(self.testCorpNum, NTSConfirmNum, self.testUserID)
         self.assertIsNotNone(taxinvoiceXML, "상세정보 조회-XML")
-
 
     def test_getFlatRatePopUpURL(self):
         url = self.htTaxinvoiceService.getCertificatePopUpURL(self.testCorpNum, self.testUserID)
@@ -209,6 +211,47 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         NTSConfirmNum = "201809194100020300000cd5"
         url = self.htTaxinvoiceService.getPopUpURL(self.testCorpNum, NTSConfirmNum)
         print url
+
+    def test_checkCertValidation(self):
+        try:
+            response = self.htTaxinvoiceService.checkCertValidation(self.testCorpNum)
+            print response.code
+            print response.message
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_registDeptUser(self):
+        try:
+            response = self.htTaxinvoiceService.registDeptUser(self.testCorpNum, "testpy", "123123")
+            print response.code
+            print response.message
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_checkDeptUser(self):
+        try:
+            response = self.htTaxinvoiceService.checkDeptUser(self.testCorpNum)
+            print response.code
+            print response.message
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_checkLoginDeptUser(self):
+        try:
+            response = self.htTaxinvoiceService.checkLoginDeptUser(self.testCorpNum)
+            print response.code
+            print response.message
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_deleteDeptUser(self):
+        try:
+            response = self.htTaxinvoiceService.deleteDeptUser(self.testCorpNum)
+            print response.code
+            print response.message
+        except PopbillException as PE:
+            print(PE.message)
+
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(HTTaxinvoiceServiceTestCase)

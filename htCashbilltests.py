@@ -3,9 +3,12 @@
 import sys
 import imp
 import random
+
 imp.reload(sys)
-try: sys.setdefaultencoding('UTF8')
-except Exception as E: pass
+try:
+    sys.setdefaultencoding('UTF8')
+except Exception as E:
+    pass
 
 try:
     import unittest2 as unittest
@@ -13,10 +16,11 @@ except ImportError:
     import unittest
 from popbill import *
 
+
 class HTCashbillServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.htCashbillService =  HTCashbillService('TESTER','SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
+        self.htCashbillService = HTCashbillService('TESTER', 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.htCashbillService.IsTest = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
@@ -26,17 +30,17 @@ class HTCashbillServiceTestCase(unittest.TestCase):
         self.assertEqual(response.code, 1, "해당 아이디 사용중")
 
     def test_registContact(self):
-        contactInfo = ContactInfo (
-                        id = "testkorea_0726",
-                        pwd = "popbill",
-                        personName = "정씨네",
-                        tel = "010-1234-1234",
-                        hp = "010-4324-5117",
-                        fax = "070-7510-3710",
-                        email = "code@linkhub.co.kr",
-                        searchAllAllowYN = True,
-                        mgrYN = False
-                        )
+        contactInfo = ContactInfo(
+            id="testkorea_0726",
+            pwd="popbill",
+            personName="정씨네",
+            tel="010-1234-1234",
+            hp="010-4324-5117",
+            fax="070-7510-3710",
+            email="code@linkhub.co.kr",
+            searchAllAllowYN=True,
+            mgrYN=False
+        )
         response = self.htCashbillService.registContact(self.testCorpNum, contactInfo, self.testUserID)
         self.assertEqual(response.code, 1, "담당자 추가 성공")
 
@@ -46,14 +50,14 @@ class HTCashbillServiceTestCase(unittest.TestCase):
 
     def test_updateContact(self):
         contactInfo = ContactInfo(
-                            personName = "담당자 성명_0728",
-                            tel = "010-8888-8888",
-                            hp = "010-8888-8888",
-                            fax = "02-6442-9700",
-                            email = "weicome@linkhub.co.kr",
-                            searchAllAllowYN = True,
-                            mgtYN = False
-                            )
+            personName="담당자 성명_0728",
+            tel="010-8888-8888",
+            hp="010-8888-8888",
+            fax="02-6442-9700",
+            email="weicome@linkhub.co.kr",
+            searchAllAllowYN=True,
+            mgtYN=False
+        )
         response = self.htCashbillService.updateContact(self.testCorpNum, contactInfo, self.testUserID)
         self.assertEqual(response.code, 1, "담당자 정보 수정성공.")
 
@@ -62,13 +66,13 @@ class HTCashbillServiceTestCase(unittest.TestCase):
         self.assertIsNotNone(corpInfo)
 
     def test_updateCorpInfo(self):
-        corpInfo = CorpInfo (
-                        ceoname = "대표자성명_0728",
-                        corpName = "상호_0728",
-                        addr = "주소_0728",
-                        bizType = "업태_0728",
-                        bizClass = "종목_0728"
-                        )
+        corpInfo = CorpInfo(
+            ceoname="대표자성명_0728",
+            corpName="상호_0728",
+            addr="주소_0728",
+            bizType="업태_0728",
+            bizClass="종목_0728"
+        )
         response = self.htCashbillService.updateCorpInfo(self.testCorpNum, corpInfo, self.testUserID)
         self.assertEqual(response.code, 1, "회사정보 수정성공")
 
@@ -76,8 +80,7 @@ class HTCashbillServiceTestCase(unittest.TestCase):
         chrgInfo = self.htCashbillService.getChargeInfo(self.testCorpNum, self.testUserID)
         self.assertIsNotNone(chrgInfo)
 
-        print("단가 : " +chrgInfo.unitCost)
-
+        print("단가 : " + chrgInfo.unitCost)
 
     def test_requestJob(self):
         Type = "SELL"
@@ -87,8 +90,7 @@ class HTCashbillServiceTestCase(unittest.TestCase):
         jobID = self.htCashbillService.requestJob(self.testCorpNum, Type, SDate, EDate, self.testUserID)
         self.assertIsNotNone(jobID, "수집 요청")
 
-        print ( "작업아이디(jobID) : " + jobID )
-
+        print ("작업아이디(jobID) : " + jobID)
 
     def test_getJobState(self):
         JobID = "016072811000000010"
@@ -111,7 +113,6 @@ class HTCashbillServiceTestCase(unittest.TestCase):
         tmp += '\tregDT : ' + state.regDT
         print(tmp)
 
-
     def test_listACtiveJob(self):
         jobInfos = self.htCashbillService.listActiveJob(self.testCorpNum, self.testUserID)
         self.assertIsNotNone(jobInfos, "수집 상태 목록 조회")
@@ -133,7 +134,6 @@ class HTCashbillServiceTestCase(unittest.TestCase):
         tmp += '\tregDT : ' + state.regDT + '\n'
         print(tmp)
 
-
     def test_search(self):
         JobID = "016072811000000010"
         TradeType = ["N", "C"]
@@ -142,7 +142,8 @@ class HTCashbillServiceTestCase(unittest.TestCase):
         PerPage = 10
         Order = "D"
 
-        searchInfo = self.htCashbillService.search(self.testCorpNum, JobID, TradeType, TradeUsage, Page, PerPage, Order, self.testUserID)
+        searchInfo = self.htCashbillService.search(self.testCorpNum, JobID, TradeType, TradeUsage, Page, PerPage, Order,
+                                                   self.testUserID)
         self.assertIsNotNone(searchInfo, "수집 결과 조회")
 
         tmp = '\n ======== search Response ========\n'
@@ -177,7 +178,6 @@ class HTCashbillServiceTestCase(unittest.TestCase):
         url = self.htCashbillService.getFlatRatePopUpURL(self.testCorpNum, self.testUserID)
         self.assertIsNotNone(url)
 
-
     def test_getCertificatePopUpURL(self):
         url = self.htCashbillService.getCertificatePopUpURL(self.testCorpNum, self.testUserID)
         self.assertIsNotNone(url)
@@ -203,7 +203,47 @@ class HTCashbillServiceTestCase(unittest.TestCase):
     def test_getCertificateExpireDate(self):
         expireDate = self.htCashbillService.getCertificateExpireDate(self.testCorpNum, self.testUserID)
         self.assertIsNotNone(expireDate)
-        print("CertificateExpireDate : " +expireDate)
+        print("CertificateExpireDate : " + expireDate)
+
+    def test_checkCertValidation(self):
+        try:
+            response = self.htCashbillService.checkCertValidation(self.testCorpNum)
+            print response.code
+            print response.message
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_registDeptUser(self):
+        try:
+            response = self.htCashbillService.registDeptUser(self.testCorpNum, "cash_testpy", "123123")
+            print response.code
+            print response.message
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_checkDeptUser(self):
+        try:
+            response = self.htCashbillService.checkDeptUser(self.testCorpNum)
+            print response.code
+            print response.message
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_checkLoginDeptUser(self):
+        try:
+            response = self.htCashbillService.checkLoginDeptUser(self.testCorpNum)
+            print response.code
+            print response.message
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_deleteDeptUser(self):
+        try:
+            response = self.htCashbillService.deleteDeptUser(self.testCorpNum)
+            print response.code
+            print response.message
+        except PopbillException as PE:
+            print(PE.message)
 
 
 if __name__ == '__main__':
