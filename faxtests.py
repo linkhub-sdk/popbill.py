@@ -32,18 +32,26 @@ class FaxServiceTestCase(unittest.TestCase):
         print(chrgInfo.rateSystem)
 
     def test_search(self):
-        SDate = "20160601"
-        EDate = "20160831"
+        SDate = "20180920"
+        EDate = "20181008"
         State = ["1", "2", "3", "4"]
         ReserveYN = False
         SenderOnly = False
         Page = 1
         PerPage = 10
         Order = "D"
+        QString =""
 
         response = self.faxService.search(self.testCorpNum, SDate, EDate, State, ReserveYN, SenderOnly, Page, PerPage,
-                                          Order, self.testUserID)
-        print(response.list[1].fileNames[0])
+                                          Order, self.testUserID, QString)
+
+        i = 1
+        for info in response.list:
+            print("====== 팩스 전송정보 [%d] ======" % i)
+            for key, value in info.__dict__.items():
+                print("    %s : %s" % (key, value))
+            i += 1
+            print("")
 
     def test_01_getURL(self):
         url = self.faxService.getURL(self.testCorpNum, self.testUserID, "BOX")
@@ -219,7 +227,7 @@ class FaxServiceTestCase(unittest.TestCase):
 
             receivers = []
             for x in range(0, 5):
-               receivers.append(FaxReceiver(receiveNum="010999888",receiveName="수신자명칭"))
+                receivers.append(FaxReceiver(receiveNum="010999888", receiveName="수신자명칭"))
 
             response = self.faxService.resendFaxRN_multi(self.testCorpNum, OrgRequestNum, SenderNum, SenderName,
                                                          receivers, ReserveDT, UserID, title, RequestNum)

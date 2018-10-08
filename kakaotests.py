@@ -393,8 +393,8 @@ class KakaoServiceTestCase(unittest.TestCase):
             print
 
     def test_search(self):
-        SDate = "20180228"
-        EDate = "20180228"
+        SDate = "20180901"
+        EDate = "20181008"
         State = ['1', '2', '3', '4', '5']
         Item = ['ATS', 'FTS', 'FMS']
         ReserveYN = ''
@@ -402,8 +402,10 @@ class KakaoServiceTestCase(unittest.TestCase):
         Page = 1
         PerPage = 10
         Order = "D"
+        QString = ""
+
         response = self.kakaoService.search(self.testCorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page,
-                                            PerPage, Order, self.testUserID)
+                                            PerPage, Order, self.testUserID, QString)
 
         print("code (응답코드) : %s " % response.code)
         print("message (응답메시지) : %s " % response.message)

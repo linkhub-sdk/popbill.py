@@ -81,7 +81,8 @@ class KakaoService(PopbillBase):
         return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
                                  RequestNum)
 
-    def sendATS_multi(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages, UserID=None,
+    def sendATS_multi(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
+                      UserID=None,
                       RequestNum=None):
         return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
                                  RequestNum)
@@ -336,7 +337,9 @@ class KakaoService(PopbillBase):
 
         return self._httpget('/KakaoTalk/Get/' + RequestNum, CorpNum, UserID)
 
-    def search(self, CorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, UserID):
+    def search(self, CorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, UserID,
+               QString=None):
+
         """
         카카오톡 전송내역 목록을 조회한다.
         - 버튼정보를 확인하는 경우 GetMessages (알림톡/친구톡 전송내역 확인) API 사용
@@ -351,6 +354,7 @@ class KakaoService(PopbillBase):
         :param PerPage: 페이지당 목록개수
         :param Order: 정렬방향, [D-내림차순, A-오름차순]
         :param UserID: 팝빌 회원아이디
+        :param QString : 조회 검색어, 수신자명 기재
         :return: 알림톡/친구톡 전송내역 및 전송상태 및 검색결과 조회
         """
 
@@ -370,6 +374,9 @@ class KakaoService(PopbillBase):
         uri += '&Page=' + str(Page)
         uri += '&PerPage=' + str(PerPage)
         uri += '&Order=' + Order
+
+        if QString is not None:
+            uri += '&QString=' + QString
 
         return self._httpget(uri, CorpNum, UserID)
 

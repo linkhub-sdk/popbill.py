@@ -37,8 +37,8 @@ class MessageServiceTestCase(unittest.TestCase):
         print(autoDenyList[5].number)
 
     def test_getMessage(self):
-        SDate = "20160601"
-        EDate = "20160831"
+        SDate = "20180901"
+        EDate = "20181008"
         State = ['1', '2', '3', '4']
         Item = ['SMS', 'LMS', 'MMS']
         ReserveYN = '0'
@@ -46,11 +46,17 @@ class MessageServiceTestCase(unittest.TestCase):
         Page = 1
         PerPage = 10
         Order = "D"
+        QString = ""
 
         info = self.messageService.search(self.testCorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page,
-                                          PerPage, Order, self.testUserID)
-        for i in range(1, 2):
-            print(info.list[i].receiveNum)
+                                          PerPage, Order, self.testUserID, QString)
+        i = 1
+        for info in info.list:
+            print("====== 문자전송 정보 [%d] ======" % i)
+            for key, value in info.__dict__.items():
+                print("%s : %s" % (key, value))
+            i += 1
+            print
 
     def test_01_getBalance(self):
         balance = self.messageService.getBalance(self.testCorpNum)
