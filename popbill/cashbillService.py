@@ -345,7 +345,8 @@ class CashbillService(PopbillBase):
         if QString is not None:
             uri += '&QString=' + QString
 
-        uri += '&TradeOpt=' + ','.join(TradeOpt)
+        if TradeOpt is not None:
+            uri += '&TradeOpt=' + ','.join(TradeOpt)
 
         return self._httpget(uri, CorpNum, UserID)
 

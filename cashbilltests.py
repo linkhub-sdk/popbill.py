@@ -46,7 +46,6 @@ class CashbillServiceTestCase(unittest.TestCase):
         QString = ""
         TradeOpt = ["N", "B", "T"]
 
-
         try:
             result = self.cashbillService.search(self.testCorpNum, DType, SDate, EDate, State, TradeType, TradeUsage,
                                                  TaxationType, Page, PerPage, Order, self.testUserID, QString, TradeOpt)
