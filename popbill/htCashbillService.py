@@ -42,7 +42,7 @@ class HTCashbillService(PopbillBase):
         """ 수집 요청
             args
                 CorpNum : 팝빌회원 사업자번호
-                Type : 현금영수증 유형, SELL-매출, BUY-매입,
+                Type : 문서형태, SELL-매출, BUY-매입,
                 SDate : 시작일자, 표시형식(yyyyMMdd)
                 EDate : 종료일자, 표시형식(yyyyMMdd)
                 UserID : 팝빌회원 아이디
@@ -53,7 +53,7 @@ class HTCashbillService(PopbillBase):
         """
 
         if Type == None or Type == '':
-            raise PopbillException(-99999999, "현금영수증 유형이 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서형태이 입력되지 않았습니다.")
 
         if SDate == None or SDate == '':
             raise PopbillException(-99999999, "시작일자가 입력되지 않았습니다.")
@@ -101,7 +101,7 @@ class HTCashbillService(PopbillBase):
             args
                 CorpNum : 팝빌회원 사업자번호
                 JobID : 작업아이디
-                TradeType : 현금영수증 유형 배열, N-일반 현금영수증, C-취소 현금영수증
+                TradeType : 문서형태 배열, N-일반 현금영수증, C-취소 현금영수증
                 TradeUsage : 거래구분 배열, P-소등공제용, C-지출증빙용
                 Page : 페이지 번호
                 PerPage : 페이지당 목록 개수, 최대 1000개
@@ -129,7 +129,7 @@ class HTCashbillService(PopbillBase):
             args
                 CorpNum : 팝빌회원 사업자번호
                 JobID : 작업아이디
-                TradeType : 현금영수증 유형 배열, N-일반 현금영수증, C-취소 현금영수증
+                TradeType : 문서형태 배열, N-일반 현금영수증, C-취소 현금영수증
                 TradeUsage : 거래구분 배열, P-소등공제용, C-지출증빙용
                 UserID : 팝빌회원 아이디
             return
