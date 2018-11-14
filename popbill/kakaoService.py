@@ -41,6 +41,46 @@ class KakaoService(PopbillBase):
             result = self._httpget('/KakaoTalk/?TG=' + ToGo, CorpNum, UserID)
         return result.url
 
+    def getPlusFriendMgtURL(self, CorpNum, UserID):
+        """
+        플러스친구 계정관리 팝업 URL
+        :param CorpNum: 팝빌회원 사업자번호
+        :param UserID: 팝빌회원 아이디
+        :return: 팝빌 URL
+        """
+        result = self._httpget('/KakaoTalk/?TG=PLUSFRIEND', CorpNum, UserID)
+        return result.url
+
+    def getSenderNumberMgtURL(self, CorpNum, UserID):
+        """
+        발신번호 관리 팝업 URL
+        :param CorpNum: 팝빌회원 사업자번호
+        :param UserID: 팝빌회원 아이디
+        :return: 팝빌 URL
+        """
+        result = self._httpget('/Message/?TG=SENDER', CorpNum, UserID)
+        return result.url
+
+    def getATSTemplateMgtURL(self, CorpNum, UserID):
+        """
+        알림톡 템플릿관리 팝업 URL
+        :param CorpNum: 팝빌회원 사업자번호
+        :param UserID: 팝빌회원 아이디
+        :return: 팝빌 URL
+        """
+        result = self._httpget('/KakaoTalk/?TG=TEMPLATE', CorpNum, UserID)
+        return result.url
+
+    def getSentListURL(self, CorpNum, UserID):
+        """
+        카카오톡 전송내역 팝업 URL
+        :param CorpNum: 팝빌회원 사업자번호
+        :param UserID: 팝빌회원 아이디
+        :return: 팝빌 URL
+        """
+        result = self._httpget('/KakaoTalk/?TG=BOX', CorpNum, UserID)
+        return result.url
+
     def listPlusFriendID(self, CorpNum, UserID=None):
         """
         플러스친구 목록 확인

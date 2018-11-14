@@ -482,6 +482,23 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         print response.code
         print response.message
 
+    def test_getAccessURL(self):
+        response = self.taxinvoiceService.getAccessURL(self.testCorpNum, self.testUserID)
+        print response
+
+    def test_getChargeURL(self):
+        response = self.taxinvoiceService.getChargeURL(self.testCorpNum, self.testUserID)
+        print response
+
+    def test_getSealURL(self):
+        response = self.taxinvoiceService.getSealURL(self.testCorpNum, self.testUserID)
+        print response
+
+    def test_getTaxCertURL(self):
+        response = self.taxinvoiceService.getTaxCertURL(self.testCorpNum, self.testUserID)
+        print response
+
+
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TaxinvoiceServiceTestCase)

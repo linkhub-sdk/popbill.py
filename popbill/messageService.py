@@ -483,6 +483,32 @@ class MessageService(PopbillBase):
 
         return result.url
 
+    def getSentListURL(self, CorpNum, UserID):
+        """ 발신번호 관리 팝업 URL
+            args
+                CorpNum : 회원 사업자번호
+                UserID  : 회원 팝빌아이디
+            return
+                30초 보안 토큰을 포함한 url
+            raise
+                PopbillException
+        """
+        result = self._httpget('/Message/?TG=BOX', CorpNum, UserID)
+        return result.url
+
+    def getSenderNumerMgtURL(self, CorpNum, UserID):
+        """ 문자 전송내역 팝업 URL
+            args
+                CorpNum : 회원 사업자번호
+                UserID  : 회원 팝빌아이디
+            return
+                30초 보안 토큰을 포함한 url
+            raise
+                PopbillException
+        """
+        result = self._httpget('/Message/?TG=SENDER', CorpNum, UserID)
+        return result.url
+
     def getSenderNumberList(self, CorpNum, UserID=None):
         """ 문자 발신번호 목록 확인
             args

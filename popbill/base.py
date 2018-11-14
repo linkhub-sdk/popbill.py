@@ -10,45 +10,48 @@
 # Updated : 2018-08-09
 # Thanks for your interest.
 from io import BytesIO
-import datetime
 import json
 import zlib
 from time import time as stime
 from json import JSONEncoder
 from collections import namedtuple
+
 try:
     import http.client as httpclient
 except ImportError:
     import httplib as httpclient
-import mimetypes
 
 import linkhub
 from linkhub import LinkhubException
 
-ServiceID_REAL = 'POPBILL';
-ServiceID_TEST = 'POPBILL_TEST';
-ServiceURL_REAL = 'popbill.linkhub.co.kr';
-ServiceURL_TEST = 'popbill-test.linkhub.co.kr';
-APIVersion = '1.0';
+ServiceID_REAL = 'POPBILL'
+ServiceID_TEST = 'POPBILL_TEST'
+ServiceURL_REAL = 'popbill.linkhub.co.kr'
+ServiceURL_TEST = 'popbill-test.linkhub.co.kr'
+APIVersion = '1.0'
+
 
 def __with_metaclass(meta, *bases):
     class metaclass(meta):
         def __new__(cls, name, this_bases, d):
             return meta(name, bases, d)
+
     return type.__new__(metaclass, 'temporary_class', (), {})
 
 
 class Singleton(type):
     _instances = {}
+
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
-class PopbillBase(__with_metaclass(Singleton,object)):
+
+class PopbillBase(__with_metaclass(Singleton, object)):
     IsTest = False
 
-    def __init__(self,LinkID,SecretKey,timeOut = 15):
+    def __init__(self, LinkID, SecretKey, timeOut=15):
         """ 생성자.
             args
                 LinkID : 링크허브에서 발급받은 LinkID
@@ -62,20 +65,19 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         self.__connectedAt = stime()
         self.__timeOut = timeOut
 
-
     def _getConn(self):
         if stime() - self.__connectedAt >= self.__timeOut or self.__conn == None:
-            self.__conn = httpclient.HTTPSConnection(ServiceURL_TEST if self.IsTest else ServiceURL_REAL);
+            self.__conn = httpclient.HTTPSConnection(ServiceURL_TEST if self.IsTest else ServiceURL_REAL)
             self.__connectedAt = stime()
             return self.__conn
         else:
             return self.__conn
 
-    def _addScope(self,newScope):
+    def _addScope(self, newScope):
         self.__scopes.append(newScope)
 
     # 파트너 포인트 충전 팝업 URL 추가 - 2017/08/29
-    def getPartnerURL(self,CorpNum,TOGO):
+    def getPartnerURL(self, CorpNum, TOGO):
         """ 팝빌 회원 잔여포인트 확인
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -88,9 +90,9 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         try:
             return linkhub.getPartnerURL(self._getToken(CorpNum), TOGO)
         except LinkhubException as LE:
-                raise PopbillException(LE.code,LE.message)
+            raise PopbillException(LE.code, LE.message)
 
-    def getBalance(self,CorpNum):
+    def getBalance(self, CorpNum):
         """ 팝빌 회원 잔여포인트 확인
             args
                 CorpNum : 확인하고자 하는 회원 사업자번호
@@ -102,9 +104,9 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         try:
             return linkhub.getBalance(self._getToken(CorpNum))
         except LinkhubException as LE:
-                raise PopbillException(LE.code,LE.message)
+            raise PopbillException(LE.code, LE.message)
 
-    def getPartnerBalance(self,CorpNum):
+    def getPartnerBalance(self, CorpNum):
         """ 팝빌 파트너 잔여포인트 확인
             args
                 CorpNum : 확인하고자 하는 회원 사업자번호
@@ -116,9 +118,9 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         try:
             return linkhub.getPartnerBalance(self._getToken(CorpNum))
         except LinkhubException as LE:
-                raise PopbillException(LE.code,LE.message)
+            raise PopbillException(LE.code, LE.message)
 
-    def getPopbillURL(self,CorpNum,UserID,ToGo):
+    def getPopbillURL(self, CorpNum, UserID, ToGo):
         """ 팝빌 관련 URL을 확인.
             args
                 CorpNum : 회원 사업자번호
@@ -132,10 +134,36 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         if ToGo == None or ToGo == '':
             raise PopbillException(-99999999, "TOGO값이 입력되지 않았습니다.")
 
-        result = self._httpget('/?TG=' + ToGo , CorpNum,UserID)
+        result = self._httpget('/?TG=' + ToGo, CorpNum, UserID)
         return result.url
 
-    def checkIsMember(self,CorpNum):
+    def getAccessURL(self, CorpNum, UserID):
+        """ 팝빌 로그인 URL
+            args
+                CorpNum : 회원 사업자번호
+                UserID  : 회원 팝빌아이디
+            return
+                30초 보안 토큰을 포함한 url
+            raise
+                PopbillException
+        """
+        result = self._httpget('/?TG=LOGIN', CorpNum, UserID)
+        return result.url
+
+    def getChargeURL(self, CorpNum, UserID):
+        """ 팝빌 연동회원 포인트 충전 URL
+            args
+                CorpNum : 회원 사업자번호
+                UserID  : 회원 팝빌아이디
+            return
+                30초 보안 토큰을 포함한 url
+            raise
+                PopbillException
+        """
+        result = self._httpget('/?TG=CHRG', CorpNum, UserID)
+        return result.url
+
+    def checkIsMember(self, CorpNum):
         """ 회원가입여부 확인
             args
                 CorpNum : 회원 사업자번호
@@ -147,9 +175,9 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         if CorpNum == None or CorpNum == '':
             raise PopbillException(-99999999, "사업자번호가 입력되지 않았습니다.")
 
-        return self._httpget('/Join?CorpNum=' + CorpNum + '&LID=' + self.__linkID,None,None)
+        return self._httpget('/Join?CorpNum=' + CorpNum + '&LID=' + self.__linkID, None, None)
 
-    def joinMember(self,JoinInfo):
+    def joinMember(self, JoinInfo):
         """ 팝빌 회원가입
             args
                 JoinInfo : 회원가입정보. Reference JoinForm class
@@ -160,7 +188,7 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         """
         JoinInfo.LinkID = self.__linkID
         postData = self._stringtify(JoinInfo)
-        return self._httppost('/Join',postData)
+        return self._httppost('/Join', postData)
 
     def checkID(self, checkID):
         """ 아이디 중복확인
@@ -176,7 +204,7 @@ class PopbillBase(__with_metaclass(Singleton,object)):
 
         return self._httpget('/IDCheck?ID=' + checkID)
 
-    def listContact(self, CorpNum, UserID = None) :
+    def listContact(self, CorpNum, UserID=None):
         """ 담당자 목록 확인
             args
                 CorpNum : 회원 사업자번호
@@ -186,9 +214,9 @@ class PopbillBase(__with_metaclass(Singleton,object)):
             raise
                 PopbillException
         """
-        return self._httpget('/IDs',CorpNum, UserID)
+        return self._httpget('/IDs', CorpNum, UserID)
 
-    def updateContact(self, CorpNum, ContactInfo, UserID = None) :
+    def updateContact(self, CorpNum, ContactInfo, UserID=None):
         """ 담당자 정보 수정
             args
                 CorpNum : 회원 사업자번호
@@ -200,9 +228,9 @@ class PopbillBase(__with_metaclass(Singleton,object)):
                 PopbillException
         """
         postData = self._stringtify(ContactInfo)
-        return self._httppost('/IDs',postData,CorpNum, UserID)
+        return self._httppost('/IDs', postData, CorpNum, UserID)
 
-    def getCorpInfo(self, CorpNum, UserID = None) :
+    def getCorpInfo(self, CorpNum, UserID=None):
         """ 회사정보 확인
             args
                 CorpNum : 회원 사업자번호
@@ -214,7 +242,7 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         """
         return self._httpget('/CorpInfo', CorpNum, UserID)
 
-    def updateCorpInfo(self, CorpNum, CorpInfo, UserID = None) :
+    def updateCorpInfo(self, CorpNum, CorpInfo, UserID=None):
         """ 담당자 정보 수정
             args
                 CorpNum : 회원 사업자번호
@@ -228,7 +256,7 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         postData = self._stringtify(CorpInfo)
         return self._httppost('/CorpInfo', postData, CorpNum, UserID)
 
-    def registContact(self, CorpNum, ContactInfo, UserID = None) :
+    def registContact(self, CorpNum, ContactInfo, UserID=None):
         """ 담당자 추가
             args
                 CorpNum : 회원 사업자번호
@@ -242,21 +270,22 @@ class PopbillBase(__with_metaclass(Singleton,object)):
         postData = self._stringtify(ContactInfo)
         return self._httppost('/IDs/New', postData, CorpNum, UserID)
 
-    def _getToken(self,CorpNum):
+    def _getToken(self, CorpNum):
 
         try:
             token = self.__tokenCache[CorpNum]
-        except KeyError :
+        except KeyError:
             token = None
 
         refreshToken = True
 
-        if token != None :
+        if token != None:
             refreshToken = token.expiration[:-5] < linkhub.getTime()
 
-        if refreshToken :
+        if refreshToken:
             try:
-                token = linkhub.generateToken(self.__linkID,self.__secretKey,ServiceID_TEST if self.IsTest else ServiceID_REAL ,CorpNum,self.__scopes)
+                token = linkhub.generateToken(self.__linkID, self.__secretKey,
+                                              ServiceID_TEST if self.IsTest else ServiceID_REAL, CorpNum, self.__scopes)
 
                 try:
                     del self.__tokenCache[CorpNum]
@@ -266,15 +295,15 @@ class PopbillBase(__with_metaclass(Singleton,object)):
                 self.__tokenCache[CorpNum] = token
 
             except LinkhubException as LE:
-                raise PopbillException(LE.code,LE.message)
+                raise PopbillException(LE.code, LE.message)
 
         return token
 
-    def _httpget(self,url,CorpNum = None,UserID = None):
+    def _httpget(self, url, CorpNum=None, UserID=None):
 
         conn = self._getConn()
 
-        headers = {"x-pb-version" : APIVersion}
+        headers = {"x-pb-version": APIVersion}
 
         if CorpNum != None:
             headers["Authorization"] = "Bearer " + self._getToken(CorpNum).session_token
@@ -284,25 +313,25 @@ class PopbillBase(__with_metaclass(Singleton,object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
-        conn.request('GET',url,'',headers)
+        conn.request('GET', url, '', headers)
 
         response = conn.getresponse()
         responseString = response.read()
 
-        if Utils.isGzip(response, responseString) :
+        if Utils.isGzip(response, responseString):
             responseString = Utils.gzipDecomp(responseString)
 
-        if response.status != 200 :
+        if response.status != 200:
             err = Utils.json2obj(responseString)
-            raise PopbillException(int(err.code),err.message)
+            raise PopbillException(int(err.code), err.message)
         else:
             return Utils.json2obj(responseString)
 
-    def _httppost(self,url,postData, CorpNum = None,UserID = None,ActionOverride = None, contentsType = None):
+    def _httppost(self, url, postData, CorpNum=None, UserID=None, ActionOverride=None, contentsType=None):
 
-        conn = self._getConn();
+        conn = self._getConn()
 
-        headers = {"x-pb-version" : APIVersion}
+        headers = {"x-pb-version": APIVersion}
 
         if contentsType != None:
             headers["Content-Type"] = contentsType
@@ -320,27 +349,27 @@ class PopbillBase(__with_metaclass(Singleton,object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
-        conn.request('POST',url,postData,headers)
+        conn.request('POST', url, postData, headers)
 
         response = conn.getresponse()
         responseString = response.read()
 
-        if Utils.isGzip(response, responseString) :
+        if Utils.isGzip(response, responseString):
             responseString = Utils.gzipDecomp(responseString)
 
-        if response.status != 200 :
+        if response.status != 200:
             err = Utils.json2obj(responseString)
-            raise PopbillException(int(err.code),err.message)
+            raise PopbillException(int(err.code), err.message)
         else:
             return Utils.json2obj(responseString)
 
-    def _httppost_files(self,url,postData,Files,CorpNum,UserID = None):
+    def _httppost_files(self, url, postData, Files, CorpNum, UserID=None):
 
-        conn = self._getConn();
+        conn = self._getConn()
 
         boundary = "--POPBILL_PYTHON--"
 
-        headers = {"x-pb-version" : APIVersion, "Content-Type" : "multipart/form-data; boundary=%s" % boundary}
+        headers = {"x-pb-version": APIVersion, "Content-Type": "multipart/form-data; boundary=%s" % boundary}
 
         if CorpNum != None:
             headers["Authorization"] = "Bearer " + self._getToken(CorpNum).session_token
@@ -350,7 +379,7 @@ class PopbillBase(__with_metaclass(Singleton,object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
-        #oraganize postData
+        # oraganize postData
         CRLF = '\r\n'
 
         buff = BytesIO()
@@ -362,69 +391,75 @@ class PopbillBase(__with_metaclass(Singleton,object)):
             buff.write(postData.encode('utf-8'))
 
         for f in Files:
-            buff.write(( CRLF + '--' + boundary + CRLF).encode('utf-8'))
-            buff.write(('Content-Disposition: form-data; name="%s"; filename="%s"' % (f.fieldName, f.fileName) + CRLF).encode('utf-8'))
+            buff.write((CRLF + '--' + boundary + CRLF).encode('utf-8'))
+            buff.write(
+                ('Content-Disposition: form-data; name="%s"; filename="%s"' % (f.fieldName, f.fileName) + CRLF).encode(
+                    'utf-8'))
             buff.write(('Content-Type: Application/octet-stream' + CRLF).encode('utf-8'))
             buff.write(CRLF.encode('utf-8'))
             buff.write(f.fileData)
 
-        buff.write(( CRLF + '--' + boundary + '--' + CRLF + CRLF).encode('utf-8'))
+        buff.write((CRLF + '--' + boundary + '--' + CRLF + CRLF).encode('utf-8'))
 
         multiparted = buff.getvalue()
 
-        conn.request('POST',url,multiparted,headers)
+        conn.request('POST', url, multiparted, headers)
 
         response = conn.getresponse()
         responseString = response.read()
 
-        if Utils.isGzip(response, responseString) :
+        if Utils.isGzip(response, responseString):
             responseString = Utils.gzipDecomp(responseString)
 
-        if response.status != 200 :
+        if response.status != 200:
             err = Utils.json2obj(responseString)
-            raise PopbillException(int(err.code),err.message)
+            raise PopbillException(int(err.code), err.message)
         else:
             return Utils.json2obj(responseString)
 
-    def _parse(self,jsonString):
-        return Utils.json2obj(jsonString);
+    def _parse(self, jsonString):
+        return Utils.json2obj(jsonString)
 
-    def _stringtify(self,obj):
-        return json.dumps(obj,cls=PopbillEncoder)
+    def _stringtify(self, obj):
+        return json.dumps(obj, cls=PopbillEncoder)
 
 
 class JoinForm(object):
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         self.__dict__ = kwargs
+
 
 class ContactInfo(object):
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         self.__dict__ = kwargs
+
 
 class CorpInfo(object):
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         self.__dict__ = kwargs
 
+
 class File(object):
-    def __init__(self,**kwargs):
+    def __init__(self, **kwargs):
         self.__dict__ = kwargs
 
 
 class PopbillException(Exception):
-    def __init__(self,code,message):
+    def __init__(self, code, message):
         self.code = code
         self.message = message
 
+
 class JsonObject(object):
-    def __init__(self,dic):
+    def __init__(self, dic):
         try:
             d = dic.__dict__
-        except AttributeError :
+        except AttributeError:
             d = dic._asdict()
 
         self.__dict__.update(d)
 
-    def __getattr__(self,name):
+    def __getattr__(self, name):
         return None
 
 
@@ -435,19 +470,20 @@ class PopbillEncoder(JSONEncoder):
 
 class Utils:
     @staticmethod
-    def _json_object_hook(d): return JsonObject(namedtuple('JsonObject', d.keys())(*d.values()))
+    def _json_object_hook(d):
+        return JsonObject(namedtuple('JsonObject', d.keys())(*d.values()))
 
     @staticmethod
     def json2obj(data):
-        if(type(data) is bytes): data = data.decode()
+        if (type(data) is bytes): data = data.decode()
         return json.loads(data, object_hook=Utils._json_object_hook)
 
     @staticmethod
     def isGzip(response, data):
         if (response.getheader('Content-Encoding') != None and
-            'gzip' in response.getheader('Content-Encoding') ):
+                'gzip' in response.getheader('Content-Encoding')):
             return True
-        else :
+        else:
             return False
 
     @staticmethod

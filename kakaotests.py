@@ -434,6 +434,22 @@ class KakaoServiceTestCase(unittest.TestCase):
         print(chrgInfo.chargeMethod)
         print(chrgInfo.rateSystem)
 
+    def test_getPlusFriendMgtURL(self):
+        response = self.kakaoService.getPlusFriendMgtURL(self.testCorpNum, self.testUserID)
+        print response
+
+    def test_getSenderNumberMgtURL(self):
+        response = self.kakaoService.getSenderNumberMgtURL(self.testCorpNum, self.testUserID)
+        print response
+
+    def test_getATSTemplateMgtURL(self):
+        response = self.kakaoService.getATSTemplateMgtURL(self.testCorpNum, self.testUserID)
+        print response
+
+    def test_getSentListURL(self):
+        response = self.kakaoService.getSentListURL(self.testCorpNum, self.testUserID)
+        print response
+
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(KakaoServiceTestCase)

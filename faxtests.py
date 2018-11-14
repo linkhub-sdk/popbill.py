@@ -235,6 +235,19 @@ class FaxServiceTestCase(unittest.TestCase):
         except PopbillException as PE:
             print(PE.message)
 
+    def test_getSenderNumberMgtURL(self):
+        try:
+            response = self.faxService.getSenderNumerMgtURL(self.testCorpNum, self.testUserID)
+            print response
+        except PopbillException as PE:
+            print(PE.message)
+
+    def test_getSentListURL(self):
+        try:
+            response = self.faxService.getSentListURL(self.testCorpNum, self.testUserID)
+            print response
+        except PopbillException as PE:
+            print(PE.message)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(FaxServiceTestCase)
