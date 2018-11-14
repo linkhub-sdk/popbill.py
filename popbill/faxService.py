@@ -93,7 +93,8 @@ class FaxService(PopbillBase):
         result = self._httpget('/FAX/UnitCost', CorpNum)
         return int(result.unitCost)
 
-    def search(self, CorpNum, SDate, EDate, State, ReserveYN, SenderOnly, Page, PerPage, Order, UserID=None, QString=None):
+    def search(self, CorpNum, SDate, EDate, State, ReserveYN, SenderOnly, Page, PerPage, Order, UserID=None,
+               QString=None):
         """ 목록 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -479,6 +480,17 @@ class FaxService(PopbillBase):
         """
         return self._httpget('/FAX/SenderNumber', CorpNum, UserID)
 
+    def getPreviewURL(self, CorpNum, ReceiptNum, UserID):
+        """ 팩스 발신번호 목록 확인
+            args
+                CorpNum : 팝빌회원 사업자번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. list of SenderNumber
+            raise
+                PopbillException
+        """
+        return self._httpget('/FAX/Preview/' + ReceiptNum, CorpNum, UserID).url
 
 class FaxReceiver(object):
     def __init__(self, **kwargs):

@@ -249,6 +249,14 @@ class FaxServiceTestCase(unittest.TestCase):
         except PopbillException as PE:
             print(PE.message)
 
+    def test_getPreviewURL(self):
+        try:
+            response = self.faxService.getPreviewURL(self.testCorpNum, "018091015373100001", self.testUserID)
+            print response
+        except PopbillException as PE:
+            print(PE.message)
+
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(FaxServiceTestCase)
     unittest.TextTestRunner(verbosity=2).run(suite)
