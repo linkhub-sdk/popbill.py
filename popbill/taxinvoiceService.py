@@ -139,7 +139,7 @@ class TaxinvoiceService(PopbillBase):
 
     def registIssue(self, CorpNum, taxinvoice, writeSpecification=False, forceIssue=False, dealInvoiceMgtKey=None,
                     memo=None, emailSubject=None, UserID=None):
-        """ 문서 조회
+        """ 즉시 발행
             args
                 CorpNum : 팝빌회원 사업자번호
                 taxinvoice : 세금계산서 객체
@@ -415,6 +415,26 @@ class TaxinvoiceService(PopbillBase):
             postData = ''
 
         return self._httppost('/Taxinvoice/' + MgtKeyType + "/" + MgtKey, postData, CorpNum, UserID, "CANCELISSUE")
+
+    def registRequest(self, CorpNum, taxinvoice, memo=None, UserID=None):
+        """ 즉시 요청
+            args
+                CorpNum : 팝빌회원 사업자번호
+                taxinvoice : 세금계산서 객체
+                memo : 메모
+                UsreID : 팝빌회원 아이디
+            return
+                검색결과 정보
+            raise
+                PopbillException
+        """
+
+        if memo != None and memo != '':
+            taxinvoice.memo = memo
+
+        postData = self._stringtify(taxinvoice)
+
+        return self._httppost('/Taxinvoice', postData, CorpNum, UserID, "REQUEST")
 
     def request(self, CorpNum, MgtKeyType, MgtKey, Memo=None, UserID=None):
         """ 역)발행요청

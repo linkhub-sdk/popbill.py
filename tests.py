@@ -498,6 +498,85 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         response = self.taxinvoiceService.getTaxCertURL(self.testCorpNum, self.testUserID)
         print response
 
+    def test_registRequest(self):
+        taxinvoice = Taxinvoice(writeDate="20181114",  # 작성일자
+                                chargeDirection="정과금",
+                                issueType="역발행",
+                                purposeType="영수",
+                                issueTiming="직접발행",
+                                taxType="과세",
+                                invoicerCorpNum='8888888888',
+                                invoicerTaxRegID='',
+                                invoicerCorpName="공급자 상호",
+                                invoicerMgtKey='',
+                                invoicerCEOName="공급자 대표자 성명",
+                                invoicerAddr="공급자 주소",
+                                invoicerBizClass="공급자 업종",
+                                invoicerBizType="공급자 업태",
+                                invoicerContactName="공급자 담당자명",
+                                invoicerEmail="test@test.com",
+                                invoicerTEL="070-7510-6766",
+                                invoicerHP='010-1111-2222',
+                                invoicerSMSSendYN=False,
+                                invoiceeType='사업자',
+                                invoiceeCorpNum='1234567890',
+                                invoiceeCorpName="공급받는자 상호",
+                                invoiceeMgtKey='20181114171941',
+                                invoiceeCEOName="공급받는자 상호",
+                                invoiceeAddr="공급받는자 주소",
+                                invoiceeBizClass="공급받는자 업종",
+                                invoiceeBizType="공급받는자 업태",
+                                invoiceeContactName1="공급받는자 담당자",
+                                invoiceeEmail1="frenchofkiss@gmail.com",
+                                invoiceeHP1="010-2222-1111",
+                                invoiceeFAX1="070-7510-6767",
+                                supplyCostTotal="100000",
+                                taxTotal="10000",
+                                totalAmount="110000",
+                                modifyCode=None,
+                                originalTaxinvoiceKey=None,
+                                serialNum='123',
+                                cash='',
+                                chkBill=None,
+                                credit='',
+                                remark1='비고1',
+                                remark2='비고2',
+                                remark3='비고3',
+                                kwon=1,
+                                ho=2,
+
+                                businessLicenseYN=False,
+                                bankBookYN=False,
+
+                                detailList=[
+                                    TaxinvoiceDetail(serialNum=1,
+                                                     purchaseDT='20150121',
+                                                     itemName="품목1",
+                                                     spec='규격',
+                                                     qty=1,
+                                                     unitCost='100000',
+                                                     supplyCost='100000',
+                                                     tax='10000',
+                                                     remark='품목비고'),
+                                    TaxinvoiceDetail(serialNum=2,
+                                                     itemName="품목2")
+                                ],
+                                addContactList=[
+                                    Contact(serialNum=1,
+                                            contactName='추가담당자 성명',
+                                            email='test1@test.com'),
+                                    Contact(serialNum=2,
+                                            contactName='추가담당자2',
+                                            email='test2@test.com')
+                                ]
+
+                                )
+
+        memo = "즉시요청"
+
+        result = self.taxinvoiceService.registRequest(self.testCorpNum, taxinvoice)
+        print(result.message)
+        self.assertEqual(result.code, 1, "등록 오류 : " + result.message)
 
 
 if __name__ == '__main__':
