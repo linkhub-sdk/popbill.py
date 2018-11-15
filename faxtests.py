@@ -237,7 +237,7 @@ class FaxServiceTestCase(unittest.TestCase):
 
     def test_getSenderNumberMgtURL(self):
         try:
-            response = self.faxService.getSenderNumerMgtURL(self.testCorpNum, self.testUserID)
+            response = self.faxService.getSenderNumberMgtURL(self.testCorpNum, self.testUserID)
             print response
         except PopbillException as PE:
             print(PE.message)

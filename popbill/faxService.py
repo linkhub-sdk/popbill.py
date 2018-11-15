@@ -67,7 +67,7 @@ class FaxService(PopbillBase):
         result = self._httpget('/FAX/?TG=BOX', CorpNum, UserID)
         return result.url
 
-    def getSenderNumerMgtURL(self, CorpNum, UserID):
+    def getSenderNumberMgtURL(self, CorpNum, UserID):
         """ 팩스 전송내역 팝업 URL
             args
                 CorpNum : 회원 사업자번호
