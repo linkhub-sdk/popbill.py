@@ -295,7 +295,7 @@ class MessageServiceTestCase(unittest.TestCase):
 
     def test_getSenderNumberMgtURL(self):
         try:
-            response = self.messageService.getSenderNumerMgtURL(self.testCorpNum, self.testUserID)
+            response = self.messageService.getSenderNumberMgtURL(self.testCorpNum, self.testUserID)
             print response
         except PopbillException as PE:
             print(PE.message)
