@@ -75,54 +75,76 @@ class KakaoServiceTestCase(unittest.TestCase):
             print
 
     def test_sendATS(self):
-        TemplateCode = "018060000159"
+        TemplateCode = "019020000163"
         Sender = "07043042992"
-        Content = "테스트 템플릿 입니다."
+        Content = "[ 팝빌 ]\n"
+        Content += "신청하신 #{템플릿코드}에 대한 심사가 완료되어 승인 처리되었습니다.\n"
+        Content += "해당 템플릿으로 전송 가능합니다.\n\n"
+        Content += "문의사항 있으시면 파트너센터로 편하게 연락주시기 바랍니다.\n\n"
+        Content += "팝빌 파트너센터 : 1600-8536\n"
+        Content += "support@linkhub.co.kr"
         AltContent = "알림톡 대체 문자"
         AltSendType = "C"
-        SndDT = "20180301111230"
-        Receiver = "01012341234"
+        SndDT = ""
+        Receiver = "010111222"
         ReceiverName = "kimhyunjin"
+
+        KakaoButtons = []
+        KakaoButtons.append(
+            KakaoButton(
+                n="웹링크",
+                t="WL",
+                u1="https://www.popbill.com",
+                u2="http://www.popbill.com"
+            )
+        )
 
         try:
             receiptNum = self.kakaoService.sendATS(self.testCorpNum, TemplateCode, Sender, Content, AltContent,
                                                    AltSendType, SndDT, Receiver, ReceiverName, self.testUserID,
-                                                   "20180809145156")
+                                                   "", KakaoButtons)
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
 
     def test_sendATS_multi(self):
-        TemplateCode = "018060000159"
-        Sender = "07043042992"
-        Content = "[테스트] 테스트 템플릿입니다."
+        TemplateCode = "019020000163"
+        Sender = "07043042991"
+        Content = "[ 팝빌 ]\n"
+        Content += "신청하신 #{템플릿코드}에 대한 심사가 완료되어 승인 처리되었습니다.\n"
+        Content += "해당 템플릿으로 전송 가능합니다.\n\n"
+        Content += "문의사항 있으시면 파트너센터로 편하게 연락주시기 바랍니다.\n\n"
+        Content += "팝빌 파트너센터 : 1600-8536\n"
+        Content += "support@linkhub.co.kr"
+
         AltContent = "알림톡 대체 문자"
         AltSendType = ""
         SndDT = ""
 
         KakaoMessages = []
-        for x in range(0, 2):
+        for x in range(0, 1):
             KakaoMessages.append(
                 KakaoReceiver(
                     rcv="07043042992",
                     rcvnm="linkhub",
-                    msg="[테스트] 테스트 템플릿입니다.",
+                    msg=Content,
                     altmsg="알림톡 우선순위 대체문자"
                 )
             )
 
-        for x in range(0, 2):
-            KakaoMessages.append(
-                KakaoReceiver(
-                    rcv="01087654321",
-                    rcvnm="popbill",
-                )
+        KakaoButtons = []
+        KakaoButtons.append(
+            KakaoButton(
+                n="웹링크",
+                t="WL",
+                u1="https://www.popbill.com",
+                u2="http://www.popbill.com"
             )
-
+        )
         try:
             receiptNum = self.kakaoService.sendATS_multi(self.testCorpNum, TemplateCode, Sender, "", "",
                                                          AltSendType, SndDT, KakaoMessages, self.testUserID,
-                                                         "20180809150123")
+                                                         "", KakaoButtons)
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -162,7 +184,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.kakaoService.sendFTS(self.testCorpNum, PlusFriendID, Sender, Content, AltContent,
                                                    AltSendType, SndDT, Receiver, ReceiverName, KakaoButtons, AdsYN,
-                                                   self.testUserID, "20180809150235")
+                                                   self.testUserID, "")
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
