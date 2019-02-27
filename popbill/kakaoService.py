@@ -121,14 +121,37 @@ class KakaoService(PopbillBase):
         return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
                                  RequestNum)
 
+    def sendATS(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, Receiver,
+                ReceiverName, UserID=None, RequestNum=None, ButtonList=None):
+
+        KakaoMessages = []
+        KakaoMessages.append(KakaoReceiver(
+            rcv=Receiver,
+            rcvnm=ReceiverName,
+            msg=Content,
+            altmsg=AltContent)
+        )
+        return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
+                                 RequestNum, ButtonList)
+
     def sendATS_multi(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
                       UserID=None,
                       RequestNum=None):
         return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
                                  RequestNum)
+    # 버튼 추가
+    def sendATS_multi(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
+                      UserID=None, RequestNum=None, ButtonList=None):
+        return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
+                                 RequestNum, ButtonList)
 
     def sendATS_same(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
                      UserID=None, RequestNum=None):
+        return self.sendATS_same(CorpNum,TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
+                    UserID, RequestNum, None)
+    # 버튼 추가
+    def sendATS_same(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
+                     UserID=None, RequestNum=None, ButtonList=None):
         """
        알림톡 대량 전송
        :param CorpNum: 팝빌회원 사업자번호
@@ -164,6 +187,8 @@ class KakaoService(PopbillBase):
             req['sndDT'] = SndDT
         if KakaoMessages is not None or KakaoMessages != '':
             req['msgs'] = KakaoMessages
+        if ButtonList is not None:
+            req['btns'] = ButtonList
         if RequestNum is not None or RequestNum != '':
             req['requestnum'] = RequestNum
 

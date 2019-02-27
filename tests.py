@@ -38,7 +38,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         print(response.message)
 
     def test_1_registIssue(self):
-        taxinvoice = Taxinvoice(writeDate="20180618",  # 작성일자
+        taxinvoice = Taxinvoice(writeDate="20190227",  # 작성일자
                                 chargeDirection="정과금",
                                 issueType="정발행",
                                 purposeType="영수",
@@ -67,7 +67,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 invoiceeBizClass="공급받는자 업종",
                                 invoiceeBizType="공급받는자 업태",
                                 invoiceeContactName1="공급받는자 담당자",
-                                invoiceeEmail1="frenchofkiss@gmail.com",
+                                invoiceeEmail1="test@test.com",
                                 invoiceeHP1="010-2222-1111",
                                 invoiceeFAX1="070-7510-6767",
 
@@ -122,7 +122,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
 
         result = self.taxinvoiceService.registIssue(self.testCorpNum, taxinvoice, writeSpecification, forceIssue,
                                                     dealInvoiceMgtKey, memo, emailSubject, self.testUserID)
-        print(result.message)
+        print(result.message+" "+result.ntsConfirmNum)
         self.assertEqual(result.code, 1, "등록 오류 : " + result.message)
 
     def test_search(self):
@@ -578,6 +578,11 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         print(result.message)
         self.assertEqual(result.code, 1, "등록 오류 : " + result.message)
 
+    def test_getViewURL(self):
+        MgtKeyType = "SELL"
+        MgtKey = "20190227-001"
+        response = self.taxinvoiceService.getViewURL(self.testCorpNum, MgtKeyType, MgtKey, self.testUserID)
+        print(response)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(TaxinvoiceServiceTestCase)

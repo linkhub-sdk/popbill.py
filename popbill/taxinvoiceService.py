@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhub.co.kr)
-# Updated : 2018-08-09
+# Updated : 2019-02-27
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase, PopbillException, File
@@ -717,6 +717,27 @@ class TaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
 
         result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=POPUP', CorpNum, UserID)
+
+        return result.url
+
+    def getViewURL(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
+        """ 세금계산서 1장의 팝빌 화면을 볼수 있는 PopUp URL 확인
+            args
+                CorpNum : 회원 사업자 번호
+                MgtKeyType : 관리번호 유형 one of ['SELL','BUY','TRUSTEE']
+                MgtKey : 파트너 관리번호
+                UserID : 팝빌 회원아이디
+            return
+                팝빌 URL as str
+            raise
+                PopbillException
+        """
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=VIEW', CorpNum, UserID)
 
         return result.url
 
