@@ -23,6 +23,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
     def setUpClass(self):
         self.taxinvoiceService = TaxinvoiceService('TESTER', 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.taxinvoiceService.IsTest = True
+        self.taxinvoiceService.IPRestrictOnOff = False
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890', 10))

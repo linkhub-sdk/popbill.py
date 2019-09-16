@@ -50,6 +50,7 @@ class Singleton(type):
 
 class PopbillBase(__with_metaclass(Singleton, object)):
     IsTest = False
+    IpRestrictOnOff = True
 
     def __init__(self, LinkID, SecretKey, timeOut=15):
         """ 생성자.
@@ -285,7 +286,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         if refreshToken:
             try:
                 token = linkhub.generateToken(self.__linkID, self.__secretKey,
-                                              ServiceID_TEST if self.IsTest else ServiceID_REAL, CorpNum, self.__scopes)
+                                              ServiceID_TEST if self.IsTest else ServiceID_REAL, CorpNum, self.__scopes, None if self.IPRestrictOnOff else "*")
 
                 try:
                     del self.__tokenCache[CorpNum]
