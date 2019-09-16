@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhub.co.kr)
-# Updated : 2018-08-09
+# Updated : 2019-09-16
 # Thanks for your interest.
 from io import BytesIO
 import json
@@ -50,7 +50,7 @@ class Singleton(type):
 
 class PopbillBase(__with_metaclass(Singleton, object)):
     IsTest = False
-    IpRestrictOnOff = True
+    IPRestrictOnOff = True
 
     def __init__(self, LinkID, SecretKey, timeOut=15):
         """ 생성자.
