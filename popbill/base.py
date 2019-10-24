@@ -341,7 +341,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         if CorpNum != None:
             headers["Authorization"] = "Bearer " + self._getToken(CorpNum).session_token
-
         if UserID != None:
             headers["x-pb-userid"] = UserID
 

@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-03-20
-# Updated : 2018-08-09
+# Updated : 2019-10-24
 # Thanks for your interest.
 from .base import PopbillBase, PopbillException, File
 
@@ -133,7 +133,7 @@ class StatementService(PopbillBase):
 
         return self._httppost('/Statement', postData, CorpNum, UserID, "FAX").receiptNum
 
-    def registIssue(self, CorpNum, statement, Memo=None, UserID=None):
+    def registIssue(self, CorpNum, statement, Memo=None, UserID=None, EmailSubect=None):
         """ 즉시발행
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -151,6 +151,9 @@ class StatementService(PopbillBase):
 
         if Memo != None or Memo != '':
             statement.memo = Memo
+
+        if EmailSubect != None or EmailSubect != '':
+            statement.emailSubject = EmailSubect
 
         postData = self._stringtify(statement)
 

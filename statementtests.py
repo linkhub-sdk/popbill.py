@@ -21,10 +21,11 @@ class StatementServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.statementService = StatementService('TESTER', 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
-        self.statementService.IsTest = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890', 10))
+        self.statementService.IsTest = True
+        self.statementService.IPRestrictOnOff = True
 
     def test_getChargeInfo(self):
         ItemCode = "126"
@@ -134,7 +135,7 @@ class StatementServiceTestCase(unittest.TestCase):
 
     def test_01_registIssue(self):
 
-        statement = Statement(writeDate="20160725",
+        statement = Statement(writeDate="20191024",
                               purposeType="영수",
                               taxType="과세",
                               formCode="",
@@ -160,7 +161,7 @@ class StatementServiceTestCase(unittest.TestCase):
                               receiverBizClass="공급받는자 업종",
                               receiverBizType="공급받는자 업태",
                               receiverContactName="공급받는자 담당자명",
-                              receiverEmail="frenchofkiss@gmail.com",
+                              receiverEmail="code@linkhub.co.kr",
                               receiverTEL="070111222",
                               receiverHP="010-111-222",
 
@@ -194,7 +195,8 @@ class StatementServiceTestCase(unittest.TestCase):
                               )
 
         Memo = "즉시발행 메모"
-        result = self.statementService.registIssue(self.testCorpNum, statement, Memo, self.testUserID)
+        EmailSubject = ""
+        result = self.statementService.registIssue(self.testCorpNum, statement, Memo, self.testUserID, EmailSubject)
         print(result.message)
 
     def test_getInfos(self):

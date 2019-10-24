@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-03-24
-# Updated : 2018-08-09
+# Updated : 2019-10-24
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -92,7 +92,7 @@ class CashbillService(PopbillBase):
                 return False
             raise PE
 
-    def registIssue(self, CorpNum, cashbill, Memo, UserID=None):
+    def registIssue(self, CorpNum, cashbill, Memo, UserID=None, EmailSubject=None):
         """ 현금영수증 즉시발행
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -110,6 +110,9 @@ class CashbillService(PopbillBase):
 
         if Memo != None or Memo != '':
             cashbill.memo = Memo
+
+        if EmailSubject != None or EmailSubject != '':
+            cashbill.emailSubject = EmailSubject
 
         postData = self._stringtify(cashbill)
 
