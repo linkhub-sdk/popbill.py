@@ -98,7 +98,7 @@ class HTTaxinvoiceService(PopbillBase):
         return self._httpget('/HomeTax/Taxinvoice/JobList', CorpNum, UserID)
 
     def search(self, CorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, Page, PerPage,
-               Order, UserID=None):
+               Order, UserID=None, SearchString=None):
         """ 수집 결과 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -134,9 +134,12 @@ class HTTaxinvoiceService(PopbillBase):
         if TaxRegIDYN != '':
             uri += '&TaxRegIDYN=' + TaxRegIDYN
 
+        if SearchString is not None:
+            uri += '&SearchString=' + SearchString
+
         return self._httpget(uri, CorpNum, UserID)
 
-    def summary(self, CorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, UserID=None):
+    def summary(self, CorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType, TaxRegIDYN, TaxRegID, UserID=None, SearchString=None ):
         """ 수집 결과 요약정보 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -165,6 +168,9 @@ class HTTaxinvoiceService(PopbillBase):
 
         if TaxRegIDYN != '':
             uri += '&TaxRegIDYN=' + TaxRegIDYN
+
+        if SearchString is not None:
+            uri += '&SearchString=' + SearchString    
 
         return self._httpget(uri, CorpNum, UserID)
 

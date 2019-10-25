@@ -22,8 +22,8 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
     def setUpClass(self):
         self.htTaxinvoiceService = HTTaxinvoiceService('TESTER', 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.htTaxinvoiceService.IsTest = True
-        self.testCorpNum = "1234567890"
-        self.testUserID = "testkorea"
+        self.testCorpNum = "6798700433"
+        self.testUserID = ""
 
     def test_getPartnerURL(self):
         url = self.htTaxinvoiceService.getPartnerURL(self.testCorpNum, "CHRG")
@@ -88,9 +88,9 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
 
     def test_requestJob(self):
         Type = "SELL"
-        DType = "W"
-        SDate = "20180101"
-        EDate = "20181008"
+        DType = "S"
+        SDate = "20190901"
+        EDate = "20191231"
         jobID = self.htTaxinvoiceService.requestJob(self.testCorpNum, Type, DType, SDate, EDate, self.testUserID)
         print("작업아이디 : " + jobID)
         self.assertIsNotNone(jobID, "수집요청 작업아이디 확인")
@@ -138,7 +138,7 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         print(tmp)
 
     def test_search(self):
-        JobID = "016072810000000013"
+        JobID = "019102514000000006"
         Type = ["N", "M"]
         TaxType = ["T", "N", "Z"]
         PurposeType = ["R", "C", "N"]
@@ -148,32 +148,37 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         Page = 1
         PerPage = 10
         Order = "D"
+        SearchString = ""
 
-        searchInfo = self.htTaxinvoiceService.search(self.testCorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType,
-                                                     TaxRegIDYN, TaxRegID, Page, PerPage, Order, self.testUserID)
-        self.assertIsNotNone(searchInfo, "수집 결과 조회")
+        try:
+            searchInfo = self.htTaxinvoiceService.search(self.testCorpNum, JobID, Type, TaxType, PurposeType, TaxRegIDType,
+                                                     TaxRegIDYN, TaxRegID, Page, PerPage, Order, self.testUserID, SearchString)
+            self.assertIsNotNone(searchInfo, "수집 결과 조회")
 
-        tmp = '\n\t======== search Response ========\n'
-        tmp += '\t code : ' + str(searchInfo.code) + '\n'
-        tmp += '\t message : ' + searchInfo.message + '\n'
-        tmp += '\t total : ' + str(searchInfo.total) + '\n'
-        tmp += '\t perPage : ' + str(searchInfo.perPage) + '\n'
-        tmp += '\t pageNum : ' + str(searchInfo.pageNum) + '\n'
-        tmp += '\t pageCount : ' + str(searchInfo.pageCount) + '\n'
+            tmp = '\n\t======== search Response ========\n'
+            tmp += '\t code : ' + str(searchInfo.code) + '\n'
+            tmp += '\t message : ' + searchInfo.message + '\n'
+            tmp += '\t total : ' + str(searchInfo.total) + '\n'
+            tmp += '\t perPage : ' + str(searchInfo.perPage) + '\n'
+            tmp += '\t pageNum : ' + str(searchInfo.pageNum) + '\n'
+            tmp += '\t pageCount : ' + str(searchInfo.pageCount) + '\n'
 
-        print(tmp)
+            print(tmp)
+        except PopbillException as e:
+            print(e.code)
 
     def test_summary(self):
-        JobID = "016072810000000013"
+        JobID = "019102514000000006"
         Type = ["N", "M"]
         TaxType = ["T", "N", "Z"]
         PurposeType = ["R", "C", "N"]
         TaxRegIDType = "S"
         TaxRegIDYN = ""
         TaxRegID = ""
+        SearchString = "123"
 
         summaryInfo = self.htTaxinvoiceService.summary(self.testCorpNum, JobID, Type, TaxType, PurposeType,
-                                                       TaxRegIDType, TaxRegIDYN, TaxRegID, self.testUserID)
+                                                       TaxRegIDType, TaxRegIDYN, TaxRegID, self.testUserID, SearchString)
         self.assertIsNotNone(summaryInfo, "수집결과 요약정보 조회")
 
         tmp = '\n\t======== Summary Response ========\n'
@@ -252,6 +257,10 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         except PopbillException as PE:
             print(PE.message)
 
+    def test_getPrintURLURL(self):
+        NTSConfirmNum = "201809194100020300000cd5"
+        url = self.htTaxinvoiceService.getPrintURL(self.testCorpNum, NTSConfirmNum)
+        print url
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(HTTaxinvoiceServiceTestCase)
