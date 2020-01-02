@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-07-16
-# Updated : 2016-07-27
+# Updated : 2020-01-02
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -53,7 +53,7 @@ class HTTaxinvoiceService(PopbillBase):
                 PopbillException
         """
         if Type == None or Type == '':
-            raise PopbillException(-99999999, "현금영수증 유형이 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "전자세금계산서 유형이 입력되지 않았습니다.")
 
         if SDate == None or SDate == '':
             raise PopbillException(-99999999, "시작일자가 입력되지 않았습니다.")
@@ -170,7 +170,7 @@ class HTTaxinvoiceService(PopbillBase):
             uri += '&TaxRegIDYN=' + TaxRegIDYN
 
         if SearchString is not None:
-            uri += '&SearchString=' + SearchString    
+            uri += '&SearchString=' + SearchString
 
         return self._httpget(uri, CorpNum, UserID)
 
