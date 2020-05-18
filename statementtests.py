@@ -26,7 +26,7 @@ class StatementServiceTestCase(unittest.TestCase):
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890', 10))
         self.statementService.IsTest = True
         self.statementService.IPRestrictOnOff = True
-
+    
     def test_getChargeInfo(self):
         ItemCode = "126"
         chrgInfo = self.statementService.getChargeInfo(self.testCorpNum, ItemCode, self.testUserID)
@@ -426,6 +426,11 @@ class StatementServiceTestCase(unittest.TestCase):
     def test_023_getPopUpURL(self):
         url = self.statementService.getPopUpURL(self.testCorpNum, 121, "20150325-01", self.testUserID)
         print("popup url : " + url)
+        self.assertEqual(url[:5], "https", "https로 시작 ")
+
+    def test_023_getViewURL(self):
+        url = self.statementService.getViewURL(self.testCorpNum, 121, "20150325-01", self.testUserID)
+        print("view url : " + url)
         self.assertEqual(url[:5], "https", "https로 시작 ")
 
     def test_024_getPrintURL(self):
