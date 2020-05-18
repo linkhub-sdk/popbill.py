@@ -617,7 +617,7 @@ class StatementService(PopbillBase):
         return result.url
 
     def getViewURL(self, CorpNum, ItemCode, MgtKey, UserID=None):
-        """ 공급자용 보기 팝업 URL 확인
+        """ 전자명세서 보기 팝업 URL 확인 (메뉴/버튼 제외)
             args
                 CorpNum : 팝빌회원 사업자번호
                 ItemCode : 명세서 종류 코드
