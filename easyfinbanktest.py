@@ -26,6 +26,101 @@ class EasyFinBankServiceTestCase(unittest.TestCase):
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
 
+    def test_registBankAccount(self):
+
+        infoObj = BankAccountInfo(
+            BankCode="",
+            AccountNumber="",
+            AccountPWD="",
+            AccountType="",
+            IdentityNumber="",
+            AccountName="",
+            BankID="",
+            FastID="",
+            FastPWD="",
+            UsePeriod="1",
+            Memo="Memo",
+        )
+
+        try:
+            response = self.easyFinBankService.registBankAccount(self.testCorpNum, infoObj, self.testUserID)
+            print(response.code)
+            print(response.message)
+            self.assertIsNotNone(response, "Regist")
+        except Exception as ex:
+            print(ex.code)
+            print(ex.message)
+
+    def test_updateBankAccount(self):
+
+        infoObj = BankAccountInfo(
+            BankCode="",
+            AccountNumber="",
+            AccountPWD="",
+            AccountName="",
+            BankID="",
+            FastID="",
+            FastPWD="",
+            Memo="",
+        )
+
+        try:
+            response = self.easyFinBankService.updateBankAccount(self.testCorpNum, infoObj, self.testUserID)
+            print(response.code)
+            print(response.message)
+            self.assertIsNotNone(response, "update")
+        except Exception as ex:
+            print(ex.code)
+            print(ex.message)
+
+    def test_getBankAccountInfo(self):
+
+        BankCode = ""
+
+        AccountNumber = ""
+
+        try:
+            response = self.easyFinBankService.getBankAccountInfo(self.testCorpNum, BankCode, AccountNumber, self.testUserID)
+            print(response.baseDate)
+            print(response.bankCode)
+            print(response.accountNumber)
+            self.assertIsNotNone(response, "getBankAccountInfo")
+        except Exception as ex:
+            print(ex.code)
+            print(ex.message)
+
+    def test_closeBankAccount(self):
+
+        BankCode = ""
+
+        AccountNumber = ""
+
+        CloseType = ""
+
+        try:
+            response = self.easyFinBankService.closeBankAccount(self.testCorpNum, BankCode, AccountNumber, CloseType, self.testUserID)
+            print(response.code)
+            print(response.message)
+            self.assertIsNotNone(response, "closeBankAccount")
+        except Exception as ex:
+            print(ex.code)
+            print(ex.message)
+
+    def test_revokeCloseBankAccount(self):
+
+        BankCode = ""
+
+        AccountNumber = ""
+
+        try:
+            response = self.easyFinBankService.revokeCloseBankAccount(self.testCorpNum, BankCode, AccountNumber, self.testUserID)
+            print(response.code)
+            print(response.message)
+            self.assertIsNotNone(response, "revokeCloseBankAccount")
+        except Exception as ex:
+            print(ex.code)
+            print(ex.message)
+
     def test_getChargeInfo(self):
         chrgInfo = self.easyFinBankService.getChargeInfo(self.testCorpNum, self.testUserID)
         print(chrgInfo.unitCost)
@@ -154,3 +249,7 @@ class EasyFinBankServiceTestCase(unittest.TestCase):
         flatRateInfo = self.easyFinBankService.getFlatRateState(self.testCorpNum, BankCode, AccountNumber, self.testUserID)
 
         print(flatRateInfo.referenceID)
+
+if __name__ == '__main__':
+    suite = unittest.TestLoader().loadTestsFromTestCase(EasyFinBankServiceTestCase)
+    unittest.TextTestRunner(verbosity=2).run(suite)

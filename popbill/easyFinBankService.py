@@ -5,7 +5,7 @@
 #
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
-# Written : 2020-01-02
+# Written : 2020-06-01
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -23,6 +23,42 @@ class EasyFinBankService(PopbillBase):
         super(self.__class__, self).__init__(LinkID, SecretKey)
         self._addScope("180")
 
+    def registBankAccount(self, CorpNum, AccountInfo, UserID=None):
+
+        uri = "/EasyFin/Bank/BankAccount/Regist"
+        uri += "?UsePeriod="+AccountInfo.UsePeriod
+
+        postData = self._stringtify(AccountInfo)
+
+        return self._httppost(uri, postData, CorpNum, UserID)
+
+    def updateBankAccount(self, CorpNum, AccountInfo, UserID=None):
+
+        uri = "/EasyFin/Bank/BankAccount/"+AccountInfo.BankCode+"/"+AccountInfo.AccountNumber+"/Update"
+
+        postData = self._stringtify(AccountInfo)
+
+        return self._httppost(uri, postData, CorpNum, UserID)
+
+
+    def closeBankAccount(self, CorpNum, BankCode, AccountNumber, CloseType, UserID=None):
+
+        uri = "/EasyFin/Bank/BankAccount/Close"
+        uri += '?BankCode=' + BankCode
+        uri += '&AccountNumber=' + AccountNumber
+        uri += '&CloseType=' + CloseType
+
+        return self._httppost(uri, '', CorpNum, UserID)
+        
+    def revokeCloseBankAccount(self, CorpNum, BankCode, AccountNumber, CloseType, UserID=None):
+
+        uri = "/EasyFin/Bank/BankAccount/RevokeClose"
+        uri += '?BankCode=' + BankCode
+        uri += '&AccountNumber=' + AccountNumber
+
+        return self._httppost(uri, '', CorpNum, UserID)
+
+
     def getBankAccountMgtURL(self, CorpNum, UserID=None):
         """ 계좌 관리 팝업 URL
             args
@@ -35,6 +71,11 @@ class EasyFinBankService(PopbillBase):
         """
         return self._httpget('/EasyFin/Bank?TG=BankAccount', CorpNum, UserID).url
 
+    def getBankAccountInfo(self, CorpNum, BankCode, AccountNumber, UserID=None):
+
+        uri = "/EasyFin/Bank/BankAccount/" + BankCode + "/"+ AccountNumber
+
+        return self._httpget(uri, CorpNum, UserID)
 
     def listBankAccount(self, CorpNum, UserID=None):
         """ 계좌 목록 확인
@@ -235,3 +276,7 @@ class EasyFinBankService(PopbillBase):
         """
 
         return self._httpget('/EasyFin/Bank/ChargeInfo', CorpNum, UserID)
+
+class BankAccountInfo(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
