@@ -5,7 +5,7 @@
 #
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
-# Written : 2020-06-01
+# Written : 2020-06-04
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -49,8 +49,8 @@ class EasyFinBankService(PopbillBase):
         uri += '&CloseType=' + CloseType
 
         return self._httppost(uri, '', CorpNum, UserID)
-        
-    def revokeCloseBankAccount(self, CorpNum, BankCode, AccountNumber, CloseType, UserID=None):
+
+    def revokeCloseBankAccount(self, CorpNum, BankCode, AccountNumber, UserID=None):
 
         uri = "/EasyFin/Bank/BankAccount/RevokeClose"
         uri += '?BankCode=' + BankCode
