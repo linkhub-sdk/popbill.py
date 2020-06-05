@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhub.co.kr)
-# Updated : 2019-02-27
+# Updated : 2019-06-05
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase, PopbillException, File
@@ -1064,6 +1064,17 @@ class TaxinvoiceService(PopbillBase):
                 PopbillException
         """
         result = self._httpget('/?TG=CERT', CorpNum, UserID)
+        return result.url
+
+    def getPDFURL(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
+
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "관리번호 형태가 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=PDF', CorpNum, UserID)
+
         return result.url
 
 

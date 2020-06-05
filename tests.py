@@ -23,7 +23,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
     def setUpClass(self):
         self.taxinvoiceService = TaxinvoiceService('TESTER', 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.taxinvoiceService.IsTest = True
-        self.taxinvoiceService.IPRestrictOnOff = False
+        self.taxinvoiceService.IPRestrictOnOff = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890', 10))
@@ -583,6 +583,16 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         MgtKeyType = "SELL"
         MgtKey = "20190227-001"
         response = self.taxinvoiceService.getViewURL(self.testCorpNum, MgtKeyType, MgtKey, self.testUserID)
+        print(response)
+
+    def test_getPDFURL(self):
+        MgtKeyType = "SELL"
+        MgtKey = "20190227-001"
+        try:
+            response = self.taxinvoiceService.getPDFURL(self.testCorpNum, MgtKeyType, MgtKey, self.testUserID)
+        except PopbillException as ex :
+            print(ex.code)
+            print(ex.message)
         print(response)
 
 if __name__ == '__main__':
