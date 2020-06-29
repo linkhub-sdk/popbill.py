@@ -15,3 +15,5 @@ venv
 venv-2.5
 env-2.5
 .ftpconfig
+/.metadata/
+/.metadata/

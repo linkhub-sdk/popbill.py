@@ -9,7 +9,7 @@ __all__ = ["PopbillException", "JoinForm", "ContactInfo", "CorpInfo",
            "HTTaxinvoiceService", "HTCashbillService",
            "ClosedownService",
            "KakaoService", "KakaoReceiver", "KakaoButton",
-           "EasyFinBankService", "BankAccountInfo"]
+           "EasyFinBankService", "BankAccountInfo", "AccountCheckService"]
 
 from .base import PopbillException, JoinForm, ContactInfo, CorpInfo
 from .taxinvoiceService import *
@@ -22,3 +22,4 @@ from .htCashbillService import *
 from .closedownService import *
 from .kakaoService import *
 from .easyFinBankService import *
+from .accountCheckService import *
