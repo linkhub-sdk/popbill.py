@@ -24,15 +24,20 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         self.taxinvoiceService = TaxinvoiceService('TESTER', 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
         self.taxinvoiceService.IsTest = True
         self.taxinvoiceService.IPRestrictOnOff = True
+        self.taxinvoiceService.UseStaticIP = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890', 10))
 
     def test_attachStmt(self):
-        response = self.taxinvoiceService.attachStatement(self.testCorpNum, "SELL", "chzovl6d5u", "121", "fbrdavxpsn",
-                                                          self.testUserID)
-        print(response.message)
+        try:
+            response = self.taxinvoiceService.attachStatement(self.testCorpNum, "SELL", "chzovl6d5u", "121", "fbrdavxpsn",self.testUserID)
+            print(response.message)
+        except PopbillException as PE:
+            print(PE.code)
+            print(PE.message)
 
+    
     def test_detachStmt(self):
         response = self.taxinvoiceService.detachStatement(self.testCorpNum, "SELL", "chzovl6d5u", "121", "fbrdavxpsn",
                                                           self.testUserID)
@@ -214,6 +219,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
 
     def test_getBalance(self):
         balance = self.taxinvoiceService.getBalance(self.testCorpNum)
+        print(balance)
         self.assertGreaterEqual(balance, 0, '잔액 0 이상.')
         balance = self.taxinvoiceService.getBalance(self.testCorpNum)
         self.assertGreaterEqual(balance, 0, '잔액 0 이상.')
