@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-03-20
-# Updated : 2020-05-18
+# Updated : 2020-07-27
 # Thanks for your interest.
 from .base import PopbillBase, PopbillException, File
 
@@ -80,20 +80,20 @@ class StatementService(PopbillBase):
         return float(result.unitCost)
 
     def checkMgtKeyInUse(self, CorpNum, ItemCode, MgtKey):
-        """ 파트너 문서관리번호 사용여부 확인.
+        """ 파트너 문서번호 사용여부 확인.
             args
                 CorpNum : 팝빌회원 사업자번호
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 문서관리번호(최대 24자리, 숫자,영문,'-','_'로 구성)
+                MgtKey : 문서번호(최대 24자리, 숫자,영문,'-','_'로 구성)
             return
                 사용 여부 by True/False
             raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -184,7 +184,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 Statement : 등록할 전자명세서 object. made with Statement(...)
                 UserID : 팝빌회원 아이디
             return
@@ -196,7 +196,7 @@ class StatementService(PopbillBase):
         if Statement == None:
             raise PopbillException(-99999999, "등록할 전자명세서 정보가 입력되지 않았습니다.")
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -211,7 +211,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 Memo : 처리메모
                 EmailSubject : 발행메일 제목(미기재시 기본양식으로 전송)
                 UserID : 팝빌회원 아이디
@@ -221,7 +221,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -244,7 +244,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 Memo : 처리메모
                 UserID : 팝빌회원 아이디
             return
@@ -254,7 +254,7 @@ class StatementService(PopbillBase):
         """
 
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -272,7 +272,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 UserID : 팝빌회원 아이디
             return
                 처리결과. consist of code and message
@@ -280,7 +280,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -333,14 +333,14 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
             return
                 문서 상태/요약정보 object
             raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -353,14 +353,14 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKeyList : 문서관리번호 목록
+                MgtKeyList : 문서번호 목록
             return
                 상태정보 목록 as List
             raise
                 PopbillException
         """
         if MgtKeyList == None or len(MgtKeyList) < 1:
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
 
         postData = self._stringtify(MgtKeyList)
 
@@ -373,14 +373,14 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
             return
                 문서 상세정보 object
             raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -393,7 +393,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 ReceiverEmail : 수신자 메일주소
                 UserID : 팝빌 회원아이디
             return
@@ -402,7 +402,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -417,7 +417,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 Sender : 발신번호
                 Receiver : 수신번호
                 Contents : 문자메시지 내용(최대 90Byte), 최대길이를 초과한경우 길이가 조정되어 전송됨
@@ -429,7 +429,7 @@ class StatementService(PopbillBase):
         """
 
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -448,7 +448,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 Sender : 발신번호
                 Receiver : 수신 팩스번호
                 UserID : 팝빌 회원아이디
@@ -458,7 +458,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -476,14 +476,14 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
             return
                 문서이력 정보 목록 as List
             raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -496,7 +496,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 FilePath : 첨부파일의 경로
                 UserID : 팝빌 회원아이디
             return
@@ -505,7 +505,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if FilePath == None or FilePath == "":
             raise PopbillException(-99999999, "파일경로가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
@@ -530,14 +530,14 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
             return
                 첨부파일 목록 as List
             raise
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -550,7 +550,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 FileID : 파일아이디, 첨부파일 목록확인(getFiles) API 응답전문의 AttachedFile 변수값
                 UserID : 팝빌회원 아이디
             return
@@ -559,7 +559,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
         if FileID == None or FileID == "":
@@ -577,7 +577,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
@@ -585,13 +585,14 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
         result = self._httpget('/Statement/' + str(ItemCode) + '/' + MgtKey + '?TG=POPUP', CorpNum, UserID)
 
         return result.url
+
 
     def getPrintURL(self, CorpNum, ItemCode, MgtKey, UserID=None):
         """ 공급자용 인쇄 URL 확인
@@ -600,7 +601,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
@@ -608,7 +609,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -623,7 +624,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
@@ -631,7 +632,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -646,7 +647,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
@@ -654,7 +655,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -669,7 +670,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKey : 파트너 문서관리번호
+                MgtKey : 파트너 문서번호
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
@@ -677,7 +678,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -692,7 +693,7 @@ class StatementService(PopbillBase):
                 ItemCode : 명세서 종류 코드
                     [121 - 거래명세서], [122 - 청구서], [123 - 견적서],
                     [124 - 발주서], [125 - 입금표], [126 - 영수증]
-                MgtKeyList : 파트너 문서관리번호 목록
+                MgtKeyList : 파트너 문서번호 목록
                 UserID : 팝빌회원 아이디
             return
                 팝빌 URL as str
@@ -700,7 +701,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKeyList == None:
-            raise PopbillException(-99999999, "관리번호 배열이 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호 배열이 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -715,9 +716,9 @@ class StatementService(PopbillBase):
             args
                 CorpNum : 팝빌회원 사업자번호
                 ItemCode : 전자명세서 종류코드, 121-명세서, 122-청구서, 123-견적서, 124-발주서 125-입금표, 126-영수증
-                MgtKey : 전자명세서 문서관리번호
+                MgtKey : 전자명세서 문서번호
                 SubItemCode : 첨부할 명세서 종류코드, 121-명세서, 122-청구서, 123-견적서, 124-발주서 125-입금표, 126-영수증
-                SubMgtKey : 첨부할 전자명세서 문서관리번호
+                SubMgtKey : 첨부할 전자명세서 문서번호
                 UserID : 팝빌회원 아이디
             return
                 처리결과. consist of code and message
@@ -725,7 +726,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 
@@ -740,9 +741,9 @@ class StatementService(PopbillBase):
             args
                 CorpNum : 팝빌회원 사업자번호
                 ItemCode : 전자명세서 종류코드, 121-명세서, 122-청구서, 123-견적서, 124-발주서 125-입금표, 126-영수증
-                MgtKey : 전자명세서 문서관리번호
+                MgtKey : 전자명세서 문서번호
                 SubItemCode : 첨부해제할 명세서 종류코드, 121-명세서, 122-청구서, 123-견적서, 124-발주서 125-입금표, 126-영수증
-                SubMgtKey : 첨부해제할 전자명세서 문서관리번호
+                SubMgtKey : 첨부해제할 전자명세서 문서번호
                 UserID : 팝빌회원 아이디
             return
                 처리결과. consist of code and message
@@ -750,7 +751,7 @@ class StatementService(PopbillBase):
                 PopbillException
         """
         if MgtKey == None or MgtKey == "":
-            raise PopbillException(-99999999, "관리번호가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
         if ItemCode == None or ItemCode == "":
             raise PopbillException(-99999999, "명세서 종류 코드가 입력되지 않았습니다.")
 

@@ -37,7 +37,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
             print(PE.code)
             print(PE.message)
 
-    
+
     def test_detachStmt(self):
         response = self.taxinvoiceService.detachStatement(self.testCorpNum, "SELL", "chzovl6d5u", "121", "fbrdavxpsn",
                                                           self.testUserID)
@@ -134,12 +134,15 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
     def test_search(self):
         MgtKeyType = "SELL"
         DType = "W"
-        SDate = "20171101"
-        EDate = "20171231"
+        SDate = "20200701"
+        EDate = "20200731"
         State = ["3**", "6**"]
         Type = ["N", "M"]
         TaxType = ["T", "N", "Z"]
         IssueType = ["N", "R", "T"]
+        RegType = ["P","H"]
+        CloseDownState = ["N","0","1","2","3"]
+        MgtKey = ""
         LateOnly = ""
         TaxRegIDYN = ""
         TaxRegIDType = "S"
@@ -153,7 +156,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         response = self.taxinvoiceService.search(self.testCorpNum, MgtKeyType, DType, SDate, EDate, State, Type,
                                                  TaxType,
                                                  LateOnly, TaxRegIDYN, TaxRegIDType, TaxRegID, Page, PerPage, Order,
-                                                 self.testUserID, QString, InterOPYN, IssueType)
+                                                 self.testUserID, QString, InterOPYN, IssueType, RegType, CloseDownState, MgtKey)
 
         print (response.total)
 
