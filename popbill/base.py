@@ -15,6 +15,7 @@ import zlib
 from time import time as stime
 from json import JSONEncoder
 from collections import namedtuple
+from threading import Lock
 
 try:
     import http.client as httpclient
@@ -71,6 +72,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         self.__conn = None
         self.__connectedAt = stime()
         self.__timeOut = timeOut
+        self.__lock = Lock()
 
     def _getConn(self):
         if stime() - self.__connectedAt >= self.__timeOut or self.__conn == None:
@@ -327,10 +329,11 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
-        conn.request('GET', url, '', headers)
+        with self.__lock:
+            conn.request('GET', url, '', headers)
 
-        response = conn.getresponse()
-        responseString = response.read()
+            response = conn.getresponse()
+            responseString = response.read()
 
         if Utils.isGzip(response, responseString):
             responseString = Utils.gzipDecomp(responseString)
@@ -362,10 +365,11 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
-        conn.request('POST', url, postData, headers)
+        with self.__lock:
+            conn.request('POST', url, postData, headers)
 
-        response = conn.getresponse()
-        responseString = response.read()
+            response = conn.getresponse()
+            responseString = response.read()
 
         if Utils.isGzip(response, responseString):
             responseString = Utils.gzipDecomp(responseString)
@@ -416,10 +420,11 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         multiparted = buff.getvalue()
 
-        conn.request('POST', url, multiparted, headers)
+        with self.__lock:
+            conn.request('POST', url, multiparted, headers)
 
-        response = conn.getresponse()
-        responseString = response.read()
+            response = conn.getresponse()
+            responseString = response.read()
 
         if Utils.isGzip(response, responseString):
             responseString = Utils.gzipDecomp(responseString)
