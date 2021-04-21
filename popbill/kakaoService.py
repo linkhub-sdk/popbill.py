@@ -99,6 +99,17 @@ class KakaoService(PopbillBase):
         """
         return self._httpget('/Message/SenderNumber', CorpNum, UserID)
 
+    def getATSTemplate(self, CorpNum, templateCode, UserID=None):
+        """
+        알림톡 템플릿 정보 확인
+        :param CorpNum: 팝빌회원 사업자번호
+        :param templateCode: 알림톡 템플릿 코드
+        :param UserID: 팝빌회원 아이디
+        :return: templateCode (템플릿 코드), templateName (템플릿 이름), template (템플릿 내용), plusFriendID (채널 이름)
+        """
+        result = self._httpget('/KakaoTalk/GetATSTemplate/' + templateCode, CorpNum, UserID)
+        return result
+
     def listATSTemplate(self, CorpNum, UserID=None):
         """
         알림톡 템플릿 목록 확인
