@@ -50,6 +50,23 @@ class EasyFinBankService(PopbillBase):
 
         return self._httppost(uri, '', CorpNum, UserID)
 
+    def deleteBankAccount(self, CorpNum, AccountInfo, UserID=None):
+        """ 종량제 이용 계좌삭제
+            args
+                CorpNum : 팝빌회원 사업자번호
+                AccoutnInfo : 삭제할 계좌 정보
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        uri = "/EasyFin/Bank/BankAccount/Delete"
+
+        postData = self._stringtify(AccountInfo)
+
+        return self._httppost(uri, postData, CorpNum, UserID)
+
     def revokeCloseBankAccount(self, CorpNum, BankCode, AccountNumber, UserID=None):
 
         uri = "/EasyFin/Bank/BankAccount/RevokeClose"
