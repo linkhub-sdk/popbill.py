@@ -151,6 +151,32 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         result = self._httpget('/?TG=' + ToGo, CorpNum, UserID)
         return result.url
 
+    def getPaymentURL(self, CorpNum, UserID=None):
+        """ 포인트 결재내역 URL
+            args
+                CorpNum : 회원 사업자번호
+                UserID  : 회원 팝빌아이디
+            return
+                30초 보안 토큰을 포함한 url
+            raise
+                PopbillException
+        """
+        result = self._httpget('/?TG=PAYMENT', CorpNum, UserID)
+        return result.url
+
+    def getUseHistoryURL(self, CorpNum, UserID=None):
+        """ 포인트 사용내역 URL
+            args
+                CorpNum : 회원 사업자번호
+                UserID  : 회원 팝빌아이디
+            return
+                30초 보안 토큰을 포함한 url
+            raise
+                PopbillException
+        """
+        result = self._httpget('/?TG=USEHISTORY', CorpNum, UserID)
+        return result.url
+
     def getAccessURL(self, CorpNum, UserID):
         """ 팝빌 로그인 URL
             args
