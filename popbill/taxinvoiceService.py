@@ -1135,7 +1135,7 @@ class TaxinvoiceService(PopbillBase):
 
         return self._httpBulkPost('/Taxinvoice', btx, SubmitID , CorpNum, UserID, 'BULKISSUE')
 
-    def GetBulkResult(self, CorpNum, SubmitID, UserID=None):
+    def getBulkResult(self, CorpNum, SubmitID, UserID=None):
         """ 초대량 접수결과 확인
             args
                 CorpNum : 회원 사업자번호
@@ -1151,7 +1151,7 @@ class TaxinvoiceService(PopbillBase):
 
         return self._httpget('/Taxinvoice/BULK/' + SubmitID + '/State', CorpNum, UserID)
 
-    def GetSendToNTSConfig(self, CorpNum):
+    def getSendToNTSConfig(self, CorpNum):
         """ 연동회원 국세청 전송 옵션 확인
             args
                 CorpNum : 회원 사업자번호
