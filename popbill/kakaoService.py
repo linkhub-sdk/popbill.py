@@ -107,6 +107,9 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: templateCode (템플릿 코드), templateName (템플릿 이름), template (템플릿 내용), plusFriendID (채널 이름)
         """
+        if templateCode == None or templateCode == '':
+            raise PopbillException(-99999999, "템플릿 코드가 입력되지 않았습니다.")
+
         result = self._httpget('/KakaoTalk/GetATSTemplate/' + templateCode, CorpNum, UserID)
         return result
 
