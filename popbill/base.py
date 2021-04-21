@@ -7,14 +7,17 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhub.co.kr)
-# Updated : 2020-07-16
+# Updated : 2021-04-21
 # Thanks for your interest.
 from io import BytesIO
 import json
 import zlib
+import base64
+
 from time import time as stime
 from json import JSONEncoder
 from collections import namedtuple
+from hashlib import sha1
 
 try:
     import http.client as httpclient
@@ -351,6 +354,40 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             headers["Content-Type"] = contentsType
         else:
             headers["Content-Type"] = "application/json; charset=utf8"
+
+        if CorpNum != None:
+            headers["Authorization"] = "Bearer " + self._getToken(CorpNum).session_token
+        if UserID != None:
+            headers["x-pb-userid"] = UserID
+
+        if ActionOverride != None:
+            headers["X-HTTP-Method-Override"] = ActionOverride
+
+        headers["Accept-Encoding"] = "gzip,deflate"
+
+        conn.request('POST', url, postData, headers)
+
+        response = conn.getresponse()
+        responseString = response.read()
+
+        if Utils.isGzip(response, responseString):
+            responseString = Utils.gzipDecomp(responseString)
+
+        if response.status != 200:
+            err = Utils.json2obj(responseString)
+            raise PopbillException(int(err.code), err.message)
+        else:
+            return Utils.json2obj(responseString)
+
+    def _httpBulkPost(self, url, postData, SubmitID, CorpNum=None, UserID=None, ActionOverride=None):
+        conn = self._getConn()
+
+        headers = {"x-pb-version": APIVersion}
+
+        headers["Content-Type"] = "application/json; charset=utf8"
+
+        headers["x-pb-message-digest"] = base64.b64encode(sha1(postData).digest()).decode('utf-8')
+        headers["x-pb-submit-id"] = SubmitID
 
         if CorpNum != None:
             headers["Authorization"] = "Bearer " + self._getToken(CorpNum).session_token

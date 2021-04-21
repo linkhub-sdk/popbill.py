@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (pallet027@gmail.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhub.co.kr)
-# Updated : 2020-07-27
+# Updated : 2021-04-21
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase, PopbillException, File
@@ -150,7 +150,7 @@ class TaxinvoiceService(PopbillBase):
                 emailSubject : 메일제목, 미기재시 기본제목으로 전송
                 UsreID : 팝빌회원 아이디
             return
-                검색결과 정보
+                처리결과. consist of code and message
             raise
                 PopbillException
         """
@@ -762,6 +762,27 @@ class TaxinvoiceService(PopbillBase):
 
         return result.url
 
+    def getOldPrintURL(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
+        """ 구버전 양식 공급자용 인쇄 URL 확인
+            args
+                CorpNum : 회원 사업자 번호
+                MgtKeyType : 문서번호 유형 one of ['SELL','BUY','TRUSTEE']
+                MgtKey : 파트너 문서번호
+                UserID : 팝빌 회원아이디
+            return
+                팝빌 URL as str
+            raise
+                PopbillException
+        """
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "문서번호 유형이 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
+
+        result = self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?TG=PRINTOLD', CorpNum, UserID)
+
+        return result.url
+
     def getPDFURL(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
 
         if MgtKeyType not in self.__MgtKeyTypes:
@@ -1087,7 +1108,50 @@ class TaxinvoiceService(PopbillBase):
         result = self._httpget('/?TG=CERT', CorpNum, UserID)
         return result.url
 
-    
+    def bulkSubmit(self, CorpNum, SubmitID, taxinvoiceList, forceIssue=False, UserID=None):
+        """ 초대량 발행 접수
+            args
+                CorpNum : 회원 사업자번호
+                SubmitID : 제출아이디
+                taxinvoiceList : 세금계산서 객체정보 목록
+                forceIssue : 지연발행 강제여부
+                UserID : 회원 팝빌아이디
+            return
+                처리결과. consist of code,message and receiptID
+            raise
+                PopbillException
+        """
+        if SubmitID == None or SubmitID == "":
+            raise PopbillException(-99999999, "제출아이디가 입력되지 않았습니다.")
+        if taxinvoiceList == None:
+            raise PopbillException(-99999999, "세금계산서 정보가 입력되지 않았습니다.")
+
+        tx = BulkTaxinvoiceSubmit(forceIssue = forceIssue,
+                                invoices = taxinvoiceList)
+
+        postData = self._stringtify(tx)
+
+        btx = postData.encode('utf-8')
+
+        return self._httpBulkPost('/Taxinvoice', btx, SubmitID , CorpNum, UserID, 'BULKISSUE')
+
+    def GetBulkResult(self, CorpNum, SubmitID, UserID=None):
+        """ 초대량 접수결과 확인
+            args
+                CorpNum : 회원 사업자번호
+                SubmitID : 초대량 발행 접수시 기재한 제출아이디
+                UserID : 회원 팝빌아이디
+            return
+                접수결과 Object
+            raise
+                PopbillException
+        """
+        if SubmitID == None or SubmitID == "":
+            raise PopbillException(-99999999, "제출아이디가 입력되지 않았습니다.")
+
+        return self._httpget('/Taxinvoice/BULK/' + SubmitID + '/State', CorpNum, UserID)
+
+
 class Taxinvoice(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
@@ -1099,5 +1163,9 @@ class TaxinvoiceDetail(object):
 
 
 class Contact(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+class BulkTaxinvoiceSubmit():
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
