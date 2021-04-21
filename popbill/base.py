@@ -244,6 +244,20 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         return self._httpget('/IDCheck?ID=' + checkID)
 
+    def getContactInfo(self, CorpNum, ContactID, UserID=None):
+        """ 담당자 정보 확인
+            args
+                CorpNum : 회원 사업자번호
+                ContactID : 확인할 담당자 아이디
+                UserID : 회원 아이디
+        """
+        if ContactID == None or ContactID == '':
+            raise PopbillException(-99999999, "담당자 아이디가 입력되지 않았습니다.")
+
+        postData = "{'id':" + "'" + ContactID + "'}"
+
+        return self._httppost('/Contact', postData, CorpNum, UserID)
+
     def listContact(self, CorpNum, UserID=None):
         """ 담당자 목록 확인
             args
