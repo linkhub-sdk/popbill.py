@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-03-24
-# Updated : 2020-07-27
+# Updated : 2021-04-21
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -507,6 +507,24 @@ class CashbillService(PopbillBase):
             raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
 
         result = self._httpget('/Cashbill/' + MgtKey + '?TG=POPUP', CorpNum, UserID)
+
+        return result.url
+
+    def getViewURL(self, CorpNum, MgtKey, UserID=None):
+        """ 현금영수증 1장의 팝빌 화면을 볼수있는 팝업 URL 확인(메뉴/버튼 제외)
+            args
+                CorpNum : 팝빌회원 사업자번호
+                MgtKey : 문서번호
+                UserID : 팝빌회원 아이디
+            return
+                팝빌 URL as str
+            raise
+                PopbillException
+        """
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
+
+        result = self._httpget('/Cashbill/' + MgtKey + '?TG=VIEW', CorpNum, UserID)
 
         return result.url
 
