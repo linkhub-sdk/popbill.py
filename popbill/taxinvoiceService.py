@@ -1151,6 +1151,17 @@ class TaxinvoiceService(PopbillBase):
 
         return self._httpget('/Taxinvoice/BULK/' + SubmitID + '/State', CorpNum, UserID)
 
+    def GetSendToNTSConfig(self, CorpNum):
+        """ 연동회원 국세청 전송 옵션 확인
+            args
+                CorpNum : 회원 사업자번호
+            return
+                확인결과. Object
+            raise
+                PopbillException
+        """
+        return self._httpget('/Taxinvoice/SendToNTSConfig', CorpNum)
+
 
 class Taxinvoice(object):
     def __init__(self, **kwargs):
