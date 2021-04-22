@@ -7,7 +7,7 @@ except ImportError:
 
 import sys
 
-version = '1.20.0'
+from popbill import __version__
 
 if sys.version_info <= (2, 5):
     error = "ERROR: popbill requires Python Version 2.6 or above...exiting."
@@ -15,13 +15,13 @@ if sys.version_info <= (2, 5):
     sys.exit(1)
 
 setup(name = "popbill",
-      version = version,
+      version = __version__,
       description = "Popbill API SDK Library",
       long_description = "Popbill API SDK. Consist of Taxinvice Service. http://www.popbill.com",
       author = "Kim Seongjun",
       author_email = "pallet027@gmail.com",
       url = "https://github.com/linkhub-sdk/Popbill.py",
-      download_url = "https://github.com/linkhub-sdk/Popbill.py/archive/"+version+".tar.gz",
+      download_url = "https://github.com/linkhub-sdk/Popbill.py/archive/"+__version__+".tar.gz",
       packages = ["popbill"],
       install_requires=[
           'linkhub',
