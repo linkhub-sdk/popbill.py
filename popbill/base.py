@@ -565,7 +565,7 @@ class Utils:
 
     @staticmethod
     def json2obj(data):
-        if (type(data) is bytes): data = data.decode()
+        if (type(data) is bytes): data = data.decode('utf-8')
         return json.loads(data, object_hook=Utils._json_object_hook)
 
     @staticmethod
