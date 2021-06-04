@@ -1160,7 +1160,7 @@ class TaxinvoiceService(PopbillBase):
             raise
                 PopbillException
         """
-        return self._httpget('/Taxinvoice/SendToNTSConfig', CorpNum)
+        return self._httpget('/Taxinvoice/SendToNTSConfig', CorpNum).sendToNTS
 
 
 class Taxinvoice(object):
