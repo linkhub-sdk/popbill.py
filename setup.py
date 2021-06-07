@@ -21,7 +21,7 @@ setup(name = "popbill",
       author = "Kim Seongjun",
       author_email = "pallet027@gmail.com",
       url = "https://github.com/linkhub-sdk/Popbill.py",
-      download_url = "https://github.com/linkhub-sdk/Popbill.py/archive/"+__version__+".tar.gz",
+      download_url = "https://github.com/linkhub-sdk/Popbill.py/archive/"+version+".tar.gz",
       packages = ["popbill"],
       install_requires=[
           'linkhub',
