@@ -1,4 +1,4 @@
-__version__ = '1.21.3'
+__version__ = '1.21.4'
 Version = __version__  # for backward compatibility
 __all__ = ["PopbillException", "JoinForm", "ContactInfo", "CorpInfo",
            "TaxinvoiceService", "Taxinvoice", "TaxinvoiceDetail", "Contact",
