@@ -1,7 +1,7 @@
 ####
 popbill.py
 ####
-popbill 1.21.4
+popbill 1.22.0
 
 팝빌 API for Python.
 
