@@ -33,6 +33,9 @@ ServiceID_TEST = 'POPBILL_TEST'
 ServiceURL_REAL = 'popbill.linkhub.co.kr'
 ServiceURL_TEST = 'popbill-test.linkhub.co.kr'
 
+ServiceURL_Static_REAL = 'static-popbill.linkhub.co.kr'
+ServiceURL_Static_TEST = 'static-popbill-test.linkhub.co.kr'
+
 ServiceURL_GA_REAL = 'ga-popbill.linkhub.co.kr'
 ServiceURL_GA_TEST = 'ga-popbill-test.linkhub.co.kr'
 
@@ -60,6 +63,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
     IsTest = False
     IPRestrictOnOff = True
     UseStaticIP = False
+    UseGAIP = False
 
     def __init__(self, LinkID, SecretKey, timeOut=15):
         """ 생성자.
@@ -77,8 +81,10 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
     def _getConn(self):
         if stime() - self.__connectedAt >= self.__timeOut or self.__conn == None:
-            if self.UseStaticIP :
+            if self.UseGAIP :
                 self.__conn = httpclient.HTTPSConnection(ServiceURL_GA_TEST if self.IsTest else ServiceURL_GA_REAL)
+            elif self.UseStaticIP :
+                self.__conn = httpclient.HTTPSConnection(ServiceURL_Static_TEST if self.IsTest else ServiceURL_Static_REAL)
             else :
                 self.__conn = httpclient.HTTPSConnection(ServiceURL_TEST if self.IsTest else ServiceURL_REAL)
 
@@ -102,7 +108,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
                 PopbillException
         """
         try:
-            return linkhub.getPartnerURL(self._getToken(CorpNum), TOGO, self.UseStaticIP)
+            return linkhub.getPartnerURL(self._getToken(CorpNum), TOGO, self.UseStaticIP, self.UseGAIP)
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -116,7 +122,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
                 PopbillException
         """
         try:
-            return linkhub.getBalance(self._getToken(CorpNum), self.UseStaticIP)
+            return linkhub.getBalance(self._getToken(CorpNum), self.UseStaticIP, self.UseGAIP)
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -130,7 +136,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
                 PopbillException
         """
         try:
-            return linkhub.getPartnerBalance(self._getToken(CorpNum), self.UseStaticIP)
+            return linkhub.getPartnerBalance(self._getToken(CorpNum), self.UseStaticIP, self.UseGAIP)
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -334,7 +340,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         refreshToken = True
 
         if token != None:
-            refreshToken = token.expiration[:-5] < linkhub.getTime(self.UseStaticIP)
+            refreshToken = token.expiration[:-5] < linkhub.getTime(self.UseStaticIP, self.UseGAIP)
 
         if refreshToken:
             try:
@@ -342,7 +348,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
                                               ServiceID_TEST if self.IsTest else ServiceID_REAL,
                                               CorpNum, self.__scopes,
                                               None if self.IPRestrictOnOff else "*",
-                                              self.UseStaticIP)
+                                              self.UseStaticIP, self.UseGAIP)
 
                 try:
                     del self.__tokenCache[CorpNum]
