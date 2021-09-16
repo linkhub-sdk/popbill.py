@@ -64,6 +64,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
     IPRestrictOnOff = True
     UseStaticIP = False
     UseGAIP = False
+    UseLocalTimeYN = True
 
     def __init__(self, LinkID, SecretKey, timeOut=15):
         """ 생성자.
@@ -340,7 +341,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         refreshToken = True
 
         if token != None:
-            refreshToken = token.expiration[:-5] < linkhub.getTime(self.UseStaticIP, self.UseGAIP)
+            refreshToken = token.expiration[:-5] < linkhub.getTime(self.UseStaticIP, self.UseLocalTimeYN, self.UseGAIP)
 
         if refreshToken:
             try:
@@ -348,7 +349,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
                                               ServiceID_TEST if self.IsTest else ServiceID_REAL,
                                               CorpNum, self.__scopes,
                                               None if self.IPRestrictOnOff else "*",
-                                              self.UseStaticIP, self.UseGAIP)
+                                              self.UseStaticIP, self.UseLocalTimeYN, self.UseGAIP)
 
                 try:
                     del self.__tokenCache[CorpNum]
