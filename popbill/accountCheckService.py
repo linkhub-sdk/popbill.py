@@ -6,10 +6,12 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2020-06-24
-# Updated : 2020-06-29
+# Updated : 2021-12-03
 # Thanks for your interest.
 
 from .base import PopbillBase,PopbillException
+from urllib import parse
+import re
 
 class AccountCheckService(PopbillBase):
     """ 팝빌 예금주조회 API Service Implementation. """
@@ -23,8 +25,9 @@ class AccountCheckService(PopbillBase):
 
         super(self.__class__,self).__init__(LinkID,SecretKey)
         self._addScope("182")
+        self._addScope("183")
 
-    def getChargeInfo(self, CorpNum, UserID = None):
+    def getChargeInfo(self, CorpNum, UserID = None, SerivceType = None):
         """ 과금정보 확인
             args
                 CorpNum : 회원 사업자번호
@@ -34,9 +37,13 @@ class AccountCheckService(PopbillBase):
             raise
                 PopbillException
         """
-        return self._httpget('/EasyFin/AccountCheck/ChargeInfo', CorpNum, UserID)
+        url = '/EasyFin/AccountCheck/ChargeInfo'
+        if SerivceType != None and SerivceType != "":
+            url = '/EasyFin/AccountCheck/ChargeInfo?serviceType=' + parse.quote(SerivceType)
 
-    def getUnitCost(self, CorpNum, UserID = None):
+        return self._httpget(url, CorpNum, UserID)
+
+    def getUnitCost(self, CorpNum, UserID = None, SerivceType = None):
         """ 예금주조회 단가 확인.
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -45,15 +52,58 @@ class AccountCheckService(PopbillBase):
             raise
                 PopbillException
         """
-
-        result = self._httpget('/EasyFin/AccountCheck/UnitCost', CorpNum, UserID)
+        url = '/EasyFin/AccountCheck/UnitCost'
+        if SerivceType != None and SerivceType != "":
+            url = '/EasyFin/AccountCheck/UnitCost?serviceType=' + parse.quote(SerivceType)
+            
+        result = self._httpget(url, CorpNum, UserID)
 
         return float(result.unitCost)
 
     def checkAccountInfo(self, CorpNum, BankCode, AccountNumber, UserID = None):
 
+        if BankCode == None or BankCode == "" :
+            raise PopbillException(-99999999,"은행코드가 입력되지 않았습니다.")
+
+        if len(BankCode) != 4 :
+            raise PopbillException(-99999999,"은행코드가 올바르지 않습니다.")
+
+        if AccountNumber == None or AccountNumber == "" :
+            raise PopbillException(-99999999,"계좌번호가 입력되지 않았습니다.")
+
         uri = "/EasyFin/AccountCheck"
         uri += "?c="+BankCode
         uri += "&n="+AccountNumber
+
+        return self._httppost(uri, "", CorpNum, UserID)
+
+    def checkDepositorInfo(self, CorpNum, BankCode, AccountNumber, IdentityNumType, IdentityNum, UserID = None):
+
+        if BankCode == None or BankCode == "" :
+            raise PopbillException(-99999999,"은행코드가 입력되지 않았습니다.")
+
+        if len(BankCode) != 4 :
+            raise PopbillException(-99999999,"은행코드가 올바르지 않습니다.")
+
+        if AccountNumber == None or AccountNumber == "" :
+            raise PopbillException(-99999999,"계좌번호가 입력되지 않았습니다.")
+
+        if IdentityNumType == None or IdentityNumType == "" :
+            raise PopbillException(-99999999,"등록번호 유형이 입력되지 않았습니다.")
+
+        if not re.compile('^[PB]$').match(IdentityNumType) :
+            raise PopbillException(-99999999,"올바른 등록번호 유형이 아닙니다.")
+
+        if IdentityNum == None or IdentityNum == "" :
+            raise PopbillException(-99999999,"등록번호가 입력되지 않았습니다.")
+
+        if not re.compile('^\d+$').match(IdentityNum) :
+            raise PopbillException(-99999999,"등록번호는 숫자만 입력 가능합니다.")
+
+        uri = "/EasyFin/DepositorCheck"
+        uri += "?c="+BankCode
+        uri += "&n="+AccountNumber
+        uri += "&t="+IdentityNumType
+        uri += "&p="+IdentityNum
 
         return self._httppost(uri, "", CorpNum, UserID)

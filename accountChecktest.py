@@ -24,7 +24,57 @@ class AccountCheckServiceTestCase(unittest.TestCase):
 
     def test_getChrgInfo(self):
         try:
+            chrgInfo = self.accountCheckService.getChargeInfo(self.testCorpNum)
+            print(chrgInfo.rateSystem)
+            print(chrgInfo.chargeMethod)
+            print(chrgInfo.unitCost)
+        except Exception as e:
+            print(e.code)
+            print(e.message)
+
+    def test_getChrgInfo_UserId(self):
+        try:
             chrgInfo = self.accountCheckService.getChargeInfo(self.testCorpNum, self.testUserID)
+            print(chrgInfo.rateSystem)
+            print(chrgInfo.chargeMethod)
+            print(chrgInfo.unitCost)
+        except Exception as e:
+            print(e.code)
+            print(e.message)
+
+    def test_getChrgInfo_UserId_null(self):
+        try:
+            chrgInfo = self.accountCheckService.getChargeInfo(self.testCorpNum, "")
+            print(chrgInfo.rateSystem)
+            print(chrgInfo.chargeMethod)
+            print(chrgInfo.unitCost)
+        except Exception as e:
+            print(e.code)
+            print(e.message)
+
+    def test_getChrgInfo_serviceType_성명(self):
+        try:
+            chrgInfo = self.accountCheckService.getChargeInfo(self.testCorpNum, self.testUserID, "성명")
+            print(chrgInfo.rateSystem)
+            print(chrgInfo.chargeMethod)
+            print(chrgInfo.unitCost)
+        except Exception as e:
+            print(e.code)
+            print(e.message)
+
+    def test_getChrgInfo_serviceType_실명(self):
+        try:
+            chrgInfo = self.accountCheckService.getChargeInfo(self.testCorpNum, self.testUserID, "실명")
+            print(chrgInfo.rateSystem)
+            print(chrgInfo.chargeMethod)
+            print(chrgInfo.unitCost)
+        except Exception as e:
+            print(e.code)
+            print(e.message)
+
+    def test_getChrgInfo_serviceType_exception(self):
+        try:
+            chrgInfo = self.accountCheckService.getChargeInfo(self.testCorpNum, self.testUserID, "temp")
             print(chrgInfo.rateSystem)
             print(chrgInfo.chargeMethod)
             print(chrgInfo.unitCost)
@@ -40,9 +90,49 @@ class AccountCheckServiceTestCase(unittest.TestCase):
             print(e.code)
             print(e.message)
 
+    def test_getUnitCost_UserId(self):
+        try:
+            unitCost = self.accountCheckService.getUnitCost(self.testCorpNum,self.testUserID)
+            print(unitCost)
+        except Exception as e:
+            print(e.code)
+            print(e.message)
+
+    def test_getUnitCost_UserId_null(self):
+        try:
+            unitCost = self.accountCheckService.getUnitCost(self.testCorpNum,"")
+            print(unitCost)
+        except Exception as e:
+            print(e.code)
+            print(e.message)
+
+    def test_getUnitCost_serviceType_성명(self):
+        try:
+            unitCost = self.accountCheckService.getUnitCost(self.testCorpNum, self.testUserID, "성명")
+            print(unitCost)
+        except Exception as e:
+            print(e.code)
+            print(e.message)        
+
+    def test_getUnitCost_serviceType_실명(self):
+        try:
+            unitCost = self.accountCheckService.getUnitCost(self.testCorpNum, self.testUserID, "실명")
+            print(unitCost)
+        except Exception as e:
+            print(e.code)
+            print(e.message)        
+
+    def test_getUnitCost_serviceType_exception(self):
+        try:
+            unitCost = self.accountCheckService.getUnitCost(self.testCorpNum, self.testUserID, "temp")
+            print(unitCost)
+        except Exception as e:
+            print(e.code)
+            print(e.message)        
+
     def test_checkAccount(self):
         try:
-            accountInfo = self.accountCheckService.checkAccountInfo(self.testCorpNum, "0081", "620199909856")
+            accountInfo = self.accountCheckService.checkAccountInfo(self.testCorpNum, "0004", "1234567890")
             print(accountInfo.resultCode)
             print(accountInfo.resultMessage)
             print(accountInfo.bankCode)
@@ -53,6 +143,20 @@ class AccountCheckServiceTestCase(unittest.TestCase):
             print(e.code)
             print(e.message)
 
+    def test_checkDepositorInfo(self):
+        try:
+            depositorInfo = self.accountCheckService.checkDepositorInfo(self.testCorpNum, "0004", "1234567890","B","1234567890")
+            print(depositorInfo.resultCode)
+            print(depositorInfo.resultMessage)
+            print(depositorInfo.bankCode)
+            print(depositorInfo.accountNumber)
+            print(depositorInfo.accountName)
+            print(depositorInfo.identityNumType)
+            print(depositorInfo.identityNum)
+            print(depositorInfo.checkDate)
+        except Exception as e:
+            print(e.code)
+            print(e.message)
 
 
 if __name__ == '__main__':
