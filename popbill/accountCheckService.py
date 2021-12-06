@@ -6,11 +6,14 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2020-06-24
-# Updated : 2021-12-03
+# Updated : 2021-12-06
 # Thanks for your interest.
 
 from .base import PopbillBase,PopbillException
-from urllib import parse
+try:
+    from urllib import parse as parse
+except ImportError:
+    import urllib as parse
 import re
 
 class AccountCheckService(PopbillBase):
@@ -27,7 +30,7 @@ class AccountCheckService(PopbillBase):
         self._addScope("182")
         self._addScope("183")
 
-    def getChargeInfo(self, CorpNum, UserID = None, SerivceType = None):
+    def getChargeInfo(self, CorpNum, UserID = None, ServiceType = None):
         """ 과금정보 확인
             args
                 CorpNum : 회원 사업자번호
@@ -38,12 +41,12 @@ class AccountCheckService(PopbillBase):
                 PopbillException
         """
         url = '/EasyFin/AccountCheck/ChargeInfo'
-        if SerivceType != None and SerivceType != "":
-            url = '/EasyFin/AccountCheck/ChargeInfo?serviceType=' + parse.quote(SerivceType)
+        if ServiceType != None and ServiceType != "":
+            url = '/EasyFin/AccountCheck/ChargeInfo?serviceType=' + parse.quote(ServiceType)
 
         return self._httpget(url, CorpNum, UserID)
 
-    def getUnitCost(self, CorpNum, UserID = None, SerivceType = None):
+    def getUnitCost(self, CorpNum, UserID = None, ServiceType = None):
         """ 예금주조회 단가 확인.
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -53,8 +56,8 @@ class AccountCheckService(PopbillBase):
                 PopbillException
         """
         url = '/EasyFin/AccountCheck/UnitCost'
-        if SerivceType != None and SerivceType != "":
-            url = '/EasyFin/AccountCheck/UnitCost?serviceType=' + parse.quote(SerivceType)
+        if ServiceType != None and ServiceType != "":
+            url = '/EasyFin/AccountCheck/UnitCost?serviceType=' + parse.quote(ServiceType)
             
         result = self._httpget(url, CorpNum, UserID)
 
