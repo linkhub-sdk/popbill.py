@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-03-24
-# Updated : 2021-04-21
+# Updated : 2021-12-22
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -305,7 +305,7 @@ class CashbillService(PopbillBase):
         return self._httppost('/Cashbill/' + MgtKey, '', CorpNum, UserID, "DELETE")
 
     def search(self, CorpNum, DType, SDate, EDate, State, TradeType, TradeUsage, TaxationType, Page, PerPage, Order,
-               UserID=None, QString=None, TradeOpt=None):
+               UserID=None, QString=None, TradeOpt=None, FranchiseTaxRegID=None):
         """ 목록 조회
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -322,6 +322,7 @@ class CashbillService(PopbillBase):
                 UserID : 팝빌 회원아이디
                 QString : 현금영수증 식별번호, 미기재시 전체조회
                 TradeOpt : 거래유형, N-일반, B-도서공연, T-대중교통
+                FranchiseTaxRegID : 가맹점 종사업장 번호
         """
 
         if DType == None or DType == '':
@@ -350,6 +351,8 @@ class CashbillService(PopbillBase):
 
         if TradeOpt is not None:
             uri += '&TradeOpt=' + ','.join(TradeOpt)
+
+        uri += '&FranchiseTaxRegID=' + FranchiseTaxRegID
 
         return self._httpget(uri, CorpNum, UserID)
 
