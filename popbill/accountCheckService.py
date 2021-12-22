@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2020-06-24
-# Updated : 2021-12-06
+# Updated : 2021-12-22
 # Thanks for your interest.
 
 from .base import PopbillBase,PopbillException
@@ -58,7 +58,7 @@ class AccountCheckService(PopbillBase):
         url = '/EasyFin/AccountCheck/UnitCost'
         if ServiceType != None and ServiceType != "":
             url = '/EasyFin/AccountCheck/UnitCost?serviceType=' + parse.quote(ServiceType)
-            
+
         result = self._httpget(url, CorpNum, UserID)
 
         return float(result.unitCost)
@@ -66,10 +66,10 @@ class AccountCheckService(PopbillBase):
     def checkAccountInfo(self, CorpNum, BankCode, AccountNumber, UserID = None):
 
         if BankCode == None or BankCode == "" :
-            raise PopbillException(-99999999,"은행코드가 입력되지 않았습니다.")
+            raise PopbillException(-99999999,"기관코드가 입력되지 않았습니다.")
 
         if len(BankCode) != 4 :
-            raise PopbillException(-99999999,"은행코드가 올바르지 않습니다.")
+            raise PopbillException(-99999999,"기관코드가 유효하지 않습니다.")
 
         if AccountNumber == None or AccountNumber == "" :
             raise PopbillException(-99999999,"계좌번호가 입력되지 않았습니다.")
@@ -83,10 +83,10 @@ class AccountCheckService(PopbillBase):
     def checkDepositorInfo(self, CorpNum, BankCode, AccountNumber, IdentityNumType, IdentityNum, UserID = None):
 
         if BankCode == None or BankCode == "" :
-            raise PopbillException(-99999999,"은행코드가 입력되지 않았습니다.")
+            raise PopbillException(-99999999,"기관코드가 입력되지 않았습니다.")
 
         if len(BankCode) != 4 :
-            raise PopbillException(-99999999,"은행코드가 올바르지 않습니다.")
+            raise PopbillException(-99999999,"기관코드가 유효하지 않습니다.")
 
         if AccountNumber == None or AccountNumber == "" :
             raise PopbillException(-99999999,"계좌번호가 입력되지 않았습니다.")
@@ -95,7 +95,7 @@ class AccountCheckService(PopbillBase):
             raise PopbillException(-99999999,"등록번호 유형이 입력되지 않았습니다.")
 
         if not re.compile('^[PB]$').match(IdentityNumType) :
-            raise PopbillException(-99999999,"올바른 등록번호 유형이 아닙니다.")
+            raise PopbillException(-99999999,"등록번호 유형이 유효하지 않습니다.")
 
         if IdentityNum == None or IdentityNum == "" :
             raise PopbillException(-99999999,"등록번호가 입력되지 않았습니다.")
