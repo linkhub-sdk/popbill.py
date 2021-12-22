@@ -351,8 +351,8 @@ class CashbillService(PopbillBase):
 
         if TradeOpt is not None:
             uri += '&TradeOpt=' + ','.join(TradeOpt)
-
-        uri += '&FranchiseTaxRegID=' + FranchiseTaxRegID
+        if FranchiseTaxRegID is not None:
+            uri += '&FranchiseTaxRegID=' + FranchiseTaxRegID
 
         return self._httpget(uri, CorpNum, UserID)
 
