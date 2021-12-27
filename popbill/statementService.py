@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
 # Written : 2015-03-20
-# Updated : 2020-07-27
+# Updated : 2021-12-22
 # Thanks for your interest.
 from .base import PopbillBase, PopbillException, File
 
@@ -501,7 +501,7 @@ class StatementService(PopbillBase):
         """
         result = self._httpget('/?TG=SEAL', CorpNum, UserID)
         return result.url
-        
+
     def attachFile(self, CorpNum, ItemCode, MgtKey, FilePath, UserID=None):
         """ 파일 첨부
             args
