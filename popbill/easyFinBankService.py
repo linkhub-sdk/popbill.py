@@ -5,7 +5,7 @@
 #
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhub.co.kr)
-# Written : 2021-08-17
+# Written : 2021-12-27
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -65,7 +65,7 @@ class EasyFinBankService(PopbillBase):
         """ 정액제 해지요청
             args
                 CorpNum : 팝빌회원 사업자번호
-                BankCode : 은행코드
+                BankCode : 기관코드
                 AccountNumber : 계좌번호
                 CloseType : 해지타입(일반/중도)
                 UserID : 팝빌회원 아이디
@@ -86,7 +86,7 @@ class EasyFinBankService(PopbillBase):
         """ 정액제 해지요청 취소
             args
                 CorpNum : 팝빌회원 사업자번호
-                BankCode : 은행코드
+                BankCode : 기관코드
                 AccountNumber : 계좌번호
                 UserID : 팝빌회원 아이디
             return
@@ -105,7 +105,7 @@ class EasyFinBankService(PopbillBase):
         """ 종량제 이용 계좌삭제
             args
                 CorpNum : 팝빌회원 사업자번호
-                BankCode : 은행코드
+                BankCode : 기관코드
                 AccountNumber : 계좌번호
                 UserID : 팝빌회원 아이디
             return
@@ -155,7 +155,7 @@ class EasyFinBankService(PopbillBase):
         """ 수집 요청
             args
                 CorpNum : 팝빌회원 사업자번호
-                BankCode : 은행코드
+                BankCode : 기관코드
                 AccountNumber : 계좌번호
                 SDate : 시작일자, 표시형식(yyyyMMdd)
                 EDate : 종료일자, 표시형식(yyyyMMdd)
@@ -166,7 +166,7 @@ class EasyFinBankService(PopbillBase):
                 PopbillException
         """
         if BankCode == None or BankCode == '':
-            raise PopbillException(-99999999, "은행코드가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "기관코드가 입력되지 않았습니다.")
 
         if AccountNumber == None or AccountNumber == '':
             raise PopbillException(-99999999, "계좌번호가 입력되지 않았습니다.")
@@ -306,7 +306,7 @@ class EasyFinBankService(PopbillBase):
         """ 정액제 서비스 상태 확인
             args
                 CorpNum : 팝빌회원 사업자번호
-                BankCode : 은행코드
+                BankCode : 기관코드
                 AccountNumber : 계좌번호
                 UserID : 팝빌회원 아이디
             return
@@ -316,7 +316,7 @@ class EasyFinBankService(PopbillBase):
         """
 
         if BankCode == None or BankCode == '':
-            raise PopbillException(-99999999, "은행코드가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "기관코드가 입력되지 않았습니다.")
 
         if AccountNumber == None or AccountNumber == '':
             raise PopbillException(-99999999, "계좌번호가 입력되지 않았습니다.")
