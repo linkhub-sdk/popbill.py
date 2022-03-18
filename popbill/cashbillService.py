@@ -118,6 +118,47 @@ class CashbillService(PopbillBase):
 
         return self._httppost('/Cashbill', postData, CorpNum, UserID, "ISSUE")
 
+    def bulkSubmit(self, CorpNum, SubmitID, cashbillList, UserID=None):
+        """ 초대량 발행 접수
+            args
+                CorpNum : 회원 사업자번호
+                SubmitID : 제출아이디
+                cashbillList : 현금영수증 객체정보 목록
+                UserID : 회원 팝빌아이디
+            return
+                처리결과. consist of code,message and receiptID
+            raise
+                PopbillException
+        """
+        if SubmitID == None or SubmitID == "":
+            raise PopbillException(-99999999, "제출아이디가 입력되지 않았습니다.")
+        if cashbillList == None:
+            raise PopbillException(-99999999, "현금영수증 정보가 입력되지 않았습니다.")
+
+        cb = BulkCashbillSubmit(cashbills = cashbillList)
+
+        postData = self._stringtify(cb)
+
+        bcb = postData.encode('utf-8')
+
+        return self._httpBulkPost('/Cashbill', bcb, SubmitID , CorpNum, UserID, 'BULKISSUE')
+
+    def getBulkResult(self, CorpNum, SubmitID, UserID=None):
+        """ 초대량 접수결과 확인
+            args
+                CorpNum : 회원 사업자번호
+                SubmitID : 초대량 발행 접수시 기재한 제출아이디
+                UserID : 회원 팝빌아이디
+            return
+                접수결과 Object
+            raise
+                PopbillException
+        """
+        if SubmitID == None or SubmitID == "":
+            raise PopbillException(-99999999, "제출아이디가 입력되지 않았습니다.")
+
+        return self._httpget('/Cashbill/BULK/' + SubmitID + '/State', CorpNum, UserID)
+
     def register(self, CorpNum, cashbill, UserID=None):
         """ 현금영수증 등록
             args
@@ -660,5 +701,9 @@ class CashbillService(PopbillBase):
 
 
 class Cashbill(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+class BulkCashbillSubmit(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
