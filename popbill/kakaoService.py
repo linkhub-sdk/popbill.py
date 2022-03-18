@@ -4,7 +4,7 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Kim Hyunjin (code@linkhub.co.kr)
+# Author : Kim Hyunjin (code@linkhubcorp.com)
 # Written : 2018-02-26
 # Updated : 2018-08-09
 # Thanks for your interest.

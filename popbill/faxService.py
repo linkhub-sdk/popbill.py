@@ -4,9 +4,9 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Kim Seongjun (pallet027@gmail.com)
+# Author : Kim Seongjun (code@linkhubcorp.com)
 # Written : 2015-01-21
-# Contributor : Jeong Yohan (code@linkhub.co.kr)
+# Contributor : Jeong Yohan (code@linkhubcorp.com)
 # Updated : 2021-04-22
 # Thanks for your interest.
 from datetime import datetime
