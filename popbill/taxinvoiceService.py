@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (code@linkhubcorp.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2021-04-21
+# Updated : 2022-07-15
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase, PopbillException, File
@@ -235,6 +235,22 @@ class TaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
 
         return self._httpget('/Taxinvoice/' + MgtKeyType + "/" + MgtKey + "?Detail", CorpNum)
+
+    def getDetailInfoByItemKey(self, CorpNum, ItemKey):
+        """ 상세정보 확인
+            args
+                CorpNum : 회원 사업자 번호
+                ItemKey : ItemKey
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+
+        if ItemKey == None or ItemKey == "":
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
+
+        return self._httpget('/Taxinvoice/' + ItemKey, CorpNum)
 
     def delete(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
         """ 삭제

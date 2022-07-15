@@ -29,6 +29,11 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890', 10))
 
+    def test_getDetailByItemKey(self):
+        info = self.taxinvoiceService.getDetailInfoByItemKey(self.testCorpNum, "022071418252400001")
+        print(info.invoicerCorpNum)
+
+
     def test_attachStmt(self):
         try:
             response = self.taxinvoiceService.attachStatement(self.testCorpNum, "SELL", "chzovl6d5u", "121", "fbrdavxpsn",self.testUserID)
