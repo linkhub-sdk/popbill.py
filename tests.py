@@ -31,7 +31,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
 
     def test_getDetailByItemKey(self):
         info = self.taxinvoiceService.getDetailInfoByItemKey(self.testCorpNum, "022071418252400001")
-        print(info.invoicerCorpNum)
+        print(info.detailList)
 
 
     def test_attachStmt(self):
@@ -459,6 +459,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
 
     def test_getDetailInfo(self):
         info = self.taxinvoiceService.getDetailInfo(self.testCorpNum, "SELL", "123456789012")
+        print(info.detailList[0])
         self.assertIsNotNone(info.invoicerMgtKey, "아이템키 확인")
         self.assertIsNone(info.trusteeCorpNum, "빈값 확인")
 

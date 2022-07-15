@@ -250,7 +250,7 @@ class TaxinvoiceService(PopbillBase):
         if ItemKey == None or ItemKey == "":
             raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
 
-        return self._httpget('/Taxinvoice/' + ItemKey, CorpNum)
+        return self._httpget('/Taxinvoice/' + ItemKey+"?Detail", CorpNum)
 
     def delete(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
         """ 삭제
