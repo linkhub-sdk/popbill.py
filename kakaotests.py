@@ -84,7 +84,7 @@ class KakaoServiceTestCase(unittest.TestCase):
 
     def test_sendATS(self):
         TemplateCode = "019020000163"
-        Sender = "07043042992"
+        Sender = ""
         Content = "[ 팝빌 ]\n"
         Content += "신청하신 #{템플릿코드}에 대한 심사가 완료되어 승인 처리되었습니다.\n"
         Content += "해당 템플릿으로 전송 가능합니다.\n\n"
@@ -94,8 +94,8 @@ class KakaoServiceTestCase(unittest.TestCase):
         AltContent = "알림톡 대체 문자"
         AltSendType = "C"
         SndDT = ""
-        Receiver = "010111222"
-        ReceiverName = "kimhyunjin"
+        Receiver = ""
+        ReceiverName = ""
 
         KakaoButtons = []
         KakaoButtons.append(
@@ -117,7 +117,7 @@ class KakaoServiceTestCase(unittest.TestCase):
 
     def test_sendATS_multi(self):
         TemplateCode = "019020000163"
-        Sender = "07043042991"
+        Sender = ""
         Content = "[ 팝빌 ]\n"
         Content += "신청하신 #{템플릿코드}에 대한 심사가 완료되어 승인 처리되었습니다.\n"
         Content += "해당 템플릿으로 전송 가능합니다.\n\n"
@@ -133,7 +133,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         for x in range(0, 1):
             KakaoMessages.append(
                 KakaoReceiver(
-                    rcv="07043042992",
+                    rcv="",
                     rcvnm="linkhub",
                     msg=Content,
                     altmsg="알림톡 우선순위 대체문자"
@@ -159,13 +159,13 @@ class KakaoServiceTestCase(unittest.TestCase):
 
     def test_sendFTS(self):
         PlusFriendID = "@팝빌"
-        Sender = "07043042992"
+        Sender = ""
         Content = "친구톡 내용"
         AltContent = "대체문자 내용"
         AltSendType = "A"
         SndDT = ""
-        Receiver = "07043042992"
-        ReceiverName = "kimhyunjin"
+        Receiver = ""
+        ReceiverName = ""
 
         KakaoButtons = []
         for x in range(0, 1):
@@ -199,7 +199,7 @@ class KakaoServiceTestCase(unittest.TestCase):
 
     def test_sendFTS_multi(self):
         PlusFriendID = "@팝빌"
-        Sender = "07043042992"
+        Sender = ""
         Content = "친구톡 내용"
         AltContent = "대체문자 내용"
         AltSendType = "A"
@@ -209,8 +209,8 @@ class KakaoServiceTestCase(unittest.TestCase):
         for x in range(0, 2):
             KakaoMessages.append(
                 KakaoReceiver(
-                    rcv="07043042992",
-                    rcvnm="kimhyunjin",
+                    rcv="",
+                    rcvnm="",
                     msg="친구톡 우선순위 내용",
                     altmsg="대체문자 우선순위 내용"
                 )
@@ -239,14 +239,14 @@ class KakaoServiceTestCase(unittest.TestCase):
 
     def test_sendFMS(self):
         PlusFriendID = "@팝빌"
-        Sender = "07043042992"
+        Sender = ""
         Content = "플러스친구 내용"
         AltContent = "플러스친구등록이 안되어있습니다. 대체문자로 전송됩니다."
         AltSendType = "A"
         SndDT = "20180301003000"
         FilePath = "FMSImage.jpg"
         ImageURL = "http://www.linkhub.co.kr"
-        Receiver = "07043042992"
+        Receiver = ""
         ReceiverName = None
 
         KakaoButtons = []
@@ -292,7 +292,7 @@ class KakaoServiceTestCase(unittest.TestCase):
 
     def test_sendFMS_multi(self):
         PlusFriendID = "@팝빌"
-        Sender = "07043042992"
+        Sender = ""
         Content = "친구톡 내용"
         AltContent = "대체문자 내용"
         AltSendType = "A"
@@ -304,8 +304,8 @@ class KakaoServiceTestCase(unittest.TestCase):
         for x in range(0, 2):
             KakaoMessages.append(
                 KakaoReceiver(
-                    rcv="07043042992",
-                    rcvnm="kimhyunjin",
+                    rcv="",
+                    rcvnm="",
                     msg="친구톡 우선순위 내용",
                     altmsg="대체문자 우선순위 내용"
                 )
@@ -314,8 +314,8 @@ class KakaoServiceTestCase(unittest.TestCase):
         for x in range(0, 2):
             KakaoMessages.append(
                 KakaoReceiver(
-                    rcv="07043042992",
-                    rcvnm="kimhyunjin",
+                    rcv="",
+                    rcvnm="",
                 )
             )
 

@@ -80,9 +80,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 invoicerBizClass="공급자 업종",
                                 invoicerBizType="공급자 업태",
                                 invoicerContactName="공급자 담당자명",
-                                invoicerEmail="test@test.com",
-                                invoicerTEL="070-7510-6766",
-                                invoicerHP='010-1111-2222',
+                                invoicerEmail="",
+                                invoicerTEL="",
+                                invoicerHP='',
                                 invoicerSMSSendYN=False,
 
                                 invoiceeType='사업자',
@@ -94,9 +94,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 invoiceeBizClass="공급받는자 업종",
                                 invoiceeBizType="공급받는자 업태",
                                 invoiceeContactName1="공급받는자 담당자",
-                                invoiceeEmail1="test@test.com",
-                                invoiceeHP1="010-2222-1111",
-                                invoiceeFAX1="070-7510-6767",
+                                invoiceeEmail1="",
+                                invoiceeHP1="",
+                                invoiceeFAX1="",
 
                                 supplyCostTotal="100000",
                                 taxTotal="10000",
@@ -133,10 +133,10 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 addContactList=[
                                     Contact(serialNum=1,
                                             contactName='추가담당자 성명',
-                                            email='test1@test.com'),
+                                            email=''),
                                     Contact(serialNum=2,
                                             contactName='추가담당자2',
-                                            email='test2@test.com')
+                                            email='')
                                 ]
 
                                 )
@@ -275,10 +275,8 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                              ID="testUserID",
                              PWD="testPassword",
                              ContactName="담당자성명",
-                             ContactTEL="070-7510-6766",
-                             ContactHP="010-2222-3333",
-                             ContactFAX="070-7510-6767",
-                             ContactEmail="test@test.com")
+                             ContactTEL="",
+                             ContactEmail="")
         self.assertRaises(PopbillException, self.taxinvoiceService.joinMember, newMember)
 
     def test_getURL(self):
@@ -320,9 +318,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 invoicerBizClass="공급자 업종",
                                 invoicerBizType="공급자 업태",
                                 invoicerContactName="공급자 담당자명",
-                                invoicerEmail="test@test.com",
-                                invoicerTEL="070-7510-6766",
-                                invoicerHP='010-1111-2222',
+                                invoicerEmail="",
+                                invoicerTEL="",
+                                invoicerHP='',
                                 invoicerSMSSendYN=False,
 
                                 invoiceeType='사업자',
@@ -334,9 +332,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 invoiceeBizClass="공급받는자 업종",
                                 invoiceeBizType="공급받는자 업태",
                                 invoiceeContactName1="공급받는자 담당자",
-                                invoiceeEmail1="test@test.com",
-                                invoiceeHP1="010-2222-1111",
-                                invoiceeFAX1="070-7510-6767",
+                                invoiceeEmail1="",
+                                invoiceeHP1="",
+                                invoiceeFAX1="",
 
                                 supplyCostTotal="100000",
                                 taxTotal="10000",
@@ -373,10 +371,10 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 addContactList=[
                                     Contact(serialNum=1,
                                             contactName='추가담당자 성명',
-                                            email='test1@test.com'),
+                                            email=''),
                                     Contact(serialNum=2,
                                             contactName='추가담당자2',
-                                            email='test2@test.com')
+                                            email='')
                                 ]
 
                                 )
@@ -415,9 +413,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 invoiceeBizClass="공급받는자 업종",
                                 invoiceeBizType="공급받는자 업태",
                                 invoiceeContactName1="공급받는자 담당자",
-                                invoiceeEmail1="test@test.com",
-                                invoiceeHP1="010-2222-1111",
-                                invoiceeFAX1="070-7510-6767",
+                                invoiceeEmail1="",
+                                invoiceeHP1="",
+                                invoiceeFAX1="",
 
                                 supplyCostTotal="100000",
                                 taxTotal="10000",
@@ -546,9 +544,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 invoicerBizClass="공급자 업종",
                                 invoicerBizType="공급자 업태",
                                 invoicerContactName="공급자 담당자명",
-                                invoicerEmail="test@test.com",
-                                invoicerTEL="070-7510-6766",
-                                invoicerHP='010-1111-2222',
+                                invoicerEmail="",
+                                invoicerTEL="",
+                                invoicerHP='',
                                 invoicerSMSSendYN=False,
                                 invoiceeType='사업자',
                                 invoiceeCorpNum='1234567890',
@@ -559,9 +557,9 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                                 invoiceeBizClass="공급받는자 업종",
                                 invoiceeBizType="공급받는자 업태",
                                 invoiceeContactName1="공급받는자 담당자",
-                                invoiceeEmail1="frenchofkiss@gmail.com",
-                                invoiceeHP1="010-2222-1111",
-                                invoiceeFAX1="070-7510-6767",
+                                invoiceeEmail1="",
+                                invoiceeHP1="",
+                                invoiceeFAX1="",
                                 supplyCostTotal="100000",
                                 taxTotal="10000",
                                 totalAmount="110000",

@@ -82,9 +82,9 @@ class StatementServiceTestCase(unittest.TestCase):
                               senderBizClass="업종",
                               senderBizType="업태",
                               senderContactName="공급자 담당자명",
-                              senderEmail="test@test.com",
-                              senderTEL="070-7510-3710",
-                              senderHP="010-000-222",
+                              senderEmail=",
+                              senderTEL="",
+                              senderHP="",
 
                               receiverCorpNum="8888888888",
                               receiverCorpName="공급받는자 상호",
@@ -94,9 +94,9 @@ class StatementServiceTestCase(unittest.TestCase):
                               receiverBizClass="공급받는자 업종",
                               receiverBizType="공급받는자 업태",
                               receiverContactName="공급받는자 담당자명",
-                              receiverEmail="frenchofkiss@gmail.com",
-                              receiverTEL="070111222",
-                              receiverHP="010-111-222",
+                              receiverEmail="",
+                              receiverTEL="",
+                              receiverHP="",
 
                               supplyCostTotal="20000",
                               taxTotal="2000",
@@ -149,9 +149,9 @@ class StatementServiceTestCase(unittest.TestCase):
                               senderBizClass="업종",
                               senderBizType="업태",
                               senderContactName="공급자 담당자명",
-                              senderEmail="test@test.com",
-                              senderTEL="070-7510-3710",
-                              senderHP="010-000-222",
+                              senderEmail="",
+                              senderTEL="",
+                              senderHP="",
 
                               receiverCorpNum="8888888888",
                               receiverCorpName="공급받는자 상호",
@@ -161,9 +161,9 @@ class StatementServiceTestCase(unittest.TestCase):
                               receiverBizClass="공급받는자 업종",
                               receiverBizType="공급받는자 업태",
                               receiverContactName="공급받는자 담당자명",
-                              receiverEmail="code@linkhub.co.kr",
-                              receiverTEL="070111222",
-                              receiverHP="010-111-222",
+                              receiverEmail="",
+                              receiverTEL="",
+                              receiverHP="",
 
                               supplyCostTotal="20000",
                               taxTotal="2000",
@@ -261,9 +261,9 @@ class StatementServiceTestCase(unittest.TestCase):
                               senderBizClass="업종",
                               senderBizType="업태",
                               senderContactName="공급자 담당자명",
-                              senderEmail="test@test.com",
-                              senderTEL="070-7510-3710",
-                              senderHP="010-000-222",
+                              senderEmail="",
+                              senderTEL="",
+                              senderHP="",
 
                               receiverCorpNum="8888888888",
                               receiverCorpName="공급받는자 상호",
@@ -274,9 +274,9 @@ class StatementServiceTestCase(unittest.TestCase):
                               receiverBizType="공급받는자 업태",
                               receiverContactName="공급받는자 담당자명",
 
-                              receiverEmail="test@test.com",
-                              receiverTEL="070111222",
-                              receiverHP="010-111-222",
+                              receiverEmail="",
+                              receiverTEL="",
+                              receiverHP="",
 
                               supplyCostTotal="20000",
                               taxTotal="2000",
@@ -326,9 +326,9 @@ class StatementServiceTestCase(unittest.TestCase):
                               senderBizClass="업종",
                               senderBizType="업태",
                               senderContactName="공급자 담당자명",
-                              senderEmail="test@test.com",
-                              senderTEL="070-7510-3710",
-                              senderHP="010-000-222",
+                              senderEmail="",
+                              senderTEL="",
+                              senderHP="",
 
                               receiverCorpNum="8888888888",
                               receiverCorpName="공급받는자 상호",
@@ -339,9 +339,9 @@ class StatementServiceTestCase(unittest.TestCase):
                               receiverBizType="공급받는자 업태",
                               receiverContactName="공급받는자 담당자명",
 
-                              receiverEmail="test@test.com",
-                              receiverTEL="070111222",
-                              receiverHP="010-111-222",
+                              receiverEmail="",
+                              receiverTEL="",
+                              receiverHP="",
 
                               supplyCostTotal="20000",
                               taxTotal="2000",
@@ -395,17 +395,17 @@ class StatementServiceTestCase(unittest.TestCase):
 
     def test_07_sendEmail(self):
 
-        result = self.statementService.sendEmail(self.testCorpNum, 121, "20150325-01", "test@test.com")
+        result = self.statementService.sendEmail(self.testCorpNum, 121, "20150325-01", "")
         self.assertEqual(result.code, 1, "이메일 재전송 오류 : " + result.message)
 
     def test_08_sendSMS(self):
 
-        result = self.statementService.sendSMS(self.testCorpNum, 121, "20150325-01", "07075103710", "010111222",
+        result = self.statementService.sendSMS(self.testCorpNum, 121, "20150325-01", "", "",
                                                "문자메시지 테스트")
         self.assertEqual(result.code, 1, "알림문자 전송 오류 : " + result.message)
 
     def test_09_sendFax(self):
-        result = self.statementService.sendFAX(self.testCorpNum, 121, "20150325-01", "07075103710", "010111222")
+        result = self.statementService.sendFAX(self.testCorpNum, 121, "20150325-01", "", "")
         self.assertEqual(result.code, 1, "알림문자 전송 오류 : " + result.message)
 
     def test_10_getLogs(self):

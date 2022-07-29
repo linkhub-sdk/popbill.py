@@ -80,7 +80,7 @@ class FaxServiceTestCase(unittest.TestCase):
 
         receiptNum = self.faxService.sendFax_multi(
             self.testCorpNum,
-            "070-4304-2991",
+            "",
             receivers,
             filepath,
             None,
@@ -106,7 +106,7 @@ class FaxServiceTestCase(unittest.TestCase):
         reserveDT = '20150325200000'
         receiptNum = self.faxService.sendFax_multi(
             self.testCorpNum,
-            "070-7510-3711",
+            "",
             receivers,
             filepath,
             reserveDT
@@ -120,7 +120,7 @@ class FaxServiceTestCase(unittest.TestCase):
             print(PE.message)
 
     def test_05_sendFax(self):
-        receiptNum = self.faxService.sendFax(self.testCorpNum, '07043042992', '070111222', '수신자명', 'test2.jpeg', None,
+        receiptNum = self.faxService.sendFax(self.testCorpNum, '', '', '수신자명', 'test2.jpeg', None,
                                              None, None, False, "팩스 타이틀", "20180809161520")
 
         print(receiptNum)
@@ -129,7 +129,7 @@ class FaxServiceTestCase(unittest.TestCase):
 
     def test_06_resendFaxMulti(self):
         receiptNum = "018080916153500001"
-        senderNum = "070-4304-2991"
+        senderNum = ""
         senderName = "발신자명16"
 
         receivers = None
@@ -235,7 +235,7 @@ class FaxServiceTestCase(unittest.TestCase):
 
             receivers = []
             for x in range(0, 5):
-                receivers.append(FaxReceiver(receiveNum="010999888", receiveName="수신자명칭"))
+                receivers.append(FaxReceiver(receiveNum="", receiveName="수신자명칭"))
 
             response = self.faxService.resendFaxRN_multi(self.testCorpNum, OrgRequestNum, SenderNum, SenderName,
                                                          receivers, ReserveDT, UserID, title, RequestNum)

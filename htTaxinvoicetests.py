@@ -39,10 +39,8 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
             id="testkorea_0726",
             pwd="popbill",
             personName="정씨네",
-            tel="010-1234-1234",
-            hp="010-4324-5117",
-            fax="070-7510-3710",
-            email="code@linkhub.co.kr",
+            tel="",
+            email="",
             searchAllAllowYN=True,
             mgrYN=False
         )
@@ -56,10 +54,8 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
     def test_updateContact(self):
         contactInfo = ContactInfo(
             personName="담당자 성명_0728",
-            tel="010-8888-8888",
-            hp="010-8888-8888",
-            fax="02-6442-9700",
-            email="weicome@linkhub.co.kr",
+            tel="",
+            email="",
             searchAllAllowYN=True,
             mgtYN=False
         )
