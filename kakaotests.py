@@ -83,7 +83,7 @@ class KakaoServiceTestCase(unittest.TestCase):
             print
 
     def test_sendATS(self):
-        TemplateCode = "019020000163"
+        TemplateCode = "022070000338"
         Sender = ""
         Content = "[ 팝빌 ]\n"
         Content += "신청하신 #{템플릿코드}에 대한 심사가 완료되어 승인 처리되었습니다.\n"
@@ -91,6 +91,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         Content += "문의사항 있으시면 파트너센터로 편하게 연락주시기 바랍니다.\n\n"
         Content += "팝빌 파트너센터 : 1600-8536\n"
         Content += "support@linkhub.co.kr"
+        AltSubject = "알림톡 대체 문자 제목"
         AltContent = "알림톡 대체 문자"
         AltSendType = "C"
         SndDT = ""
@@ -110,13 +111,13 @@ class KakaoServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.kakaoService.sendATS(self.testCorpNum, TemplateCode, Sender, Content, AltContent,
                                                    AltSendType, SndDT, Receiver, ReceiverName, self.testUserID,
-                                                   "", KakaoButtons)
+                                                   "", KakaoButtons, AltSubject)
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
 
     def test_sendATS_multi(self):
-        TemplateCode = "019020000163"
+        TemplateCode = "022070000338"
         Sender = ""
         Content = "[ 팝빌 ]\n"
         Content += "신청하신 #{템플릿코드}에 대한 심사가 완료되어 승인 처리되었습니다.\n"
@@ -124,9 +125,9 @@ class KakaoServiceTestCase(unittest.TestCase):
         Content += "문의사항 있으시면 파트너센터로 편하게 연락주시기 바랍니다.\n\n"
         Content += "팝빌 파트너센터 : 1600-8536\n"
         Content += "support@linkhub.co.kr"
-
+        AltSubject = "알림톡 대체 문자 제목"
         AltContent = "알림톡 대체 문자"
-        AltSendType = ""
+        AltSendType = "C"
         SndDT = ""
 
         KakaoMessages = []
@@ -152,7 +153,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.kakaoService.sendATS_multi(self.testCorpNum, TemplateCode, Sender, "", "",
                                                          AltSendType, SndDT, KakaoMessages, self.testUserID,
-                                                         "", KakaoButtons)
+                                                         "", KakaoButtons, AltSubject)
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -161,7 +162,10 @@ class KakaoServiceTestCase(unittest.TestCase):
         PlusFriendID = "@팝빌"
         Sender = ""
         Content = "친구톡 내용"
-        AltContent = "대체문자 내용"
+        AltSubject = "친구톡 대체문자 제목"
+        AltContent = "대체문자 내용입니다. 대체문자 제목 테스트를 위해 장문으로 작성하여야 합니다.\n"
+        AltContent += "LMS 로 전송을 해야지만 제목이 같이 전송됩니다.\n"
+        AltContent += "확인부탁드립니다."
         AltSendType = "A"
         SndDT = ""
         Receiver = ""
@@ -192,7 +196,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.kakaoService.sendFTS(self.testCorpNum, PlusFriendID, Sender, Content, AltContent,
                                                    AltSendType, SndDT, Receiver, ReceiverName, KakaoButtons, AdsYN,
-                                                   self.testUserID, "")
+                                                   self.testUserID, "", AltSubject)
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -201,7 +205,10 @@ class KakaoServiceTestCase(unittest.TestCase):
         PlusFriendID = "@팝빌"
         Sender = ""
         Content = "친구톡 내용"
-        AltContent = "대체문자 내용"
+        AltSubject = "친구톡 대체문자 제목"
+        AltContent = "대체문자 내용입니다. 대체문자 제목 테스트를 위해 장문으로 작성하여야 합니다.\n"
+        AltContent += "LMS 로 전송을 해야지만 제목이 같이 전송됩니다.\n"
+        AltContent += "확인부탁드립니다."
         AltSendType = "A"
         SndDT = ""
 
@@ -212,6 +219,7 @@ class KakaoServiceTestCase(unittest.TestCase):
                     rcv="",
                     rcvnm="",
                     msg="친구톡 우선순위 내용",
+                    altsjt="대체문자 우선순위 제목",
                     altmsg="대체문자 우선순위 내용"
                 )
             )
@@ -232,7 +240,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.kakaoService.sendFTS_same(self.testCorpNum, PlusFriendID, Sender, "", "",
                                                         AltSendType, SndDT, KakaoMessages, KakaoButtons, AdsYN,
-                                                        self.testUserID, "20180809150622")
+                                                        self.testUserID, "20180809150622", AltSubject)
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -241,9 +249,12 @@ class KakaoServiceTestCase(unittest.TestCase):
         PlusFriendID = "@팝빌"
         Sender = ""
         Content = "플러스친구 내용"
-        AltContent = "플러스친구등록이 안되어있습니다. 대체문자로 전송됩니다."
+        AltSubject = "친구톡 이미지 대체문자 제목"
+        AltContent = "대체문자 내용입니다. 대체문자 제목 테스트를 위해 장문으로 작성하여야 합니다.\n"
+        AltContent += "LMS 로 전송을 해야지만 제목이 같이 전송됩니다.\n"
+        AltContent += "확인부탁드립니다."
         AltSendType = "A"
-        SndDT = "20180301003000"
+        SndDT = ""
         FilePath = "FMSImage.jpg"
         ImageURL = "http://www.linkhub.co.kr"
         Receiver = ""
@@ -285,7 +296,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.kakaoService.sendFMS(self.testCorpNum, PlusFriendID, Sender, Content, AltContent,
                                                    AltSendType, SndDT, FilePath, ImageURL, Receiver, ReceiverName,
-                                                   KakaoButtons, AdsYN, self.testUserID, "20180809150651")
+                                                   KakaoButtons, AdsYN, self.testUserID, "20220729-01", AltSubject)
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -294,7 +305,10 @@ class KakaoServiceTestCase(unittest.TestCase):
         PlusFriendID = "@팝빌"
         Sender = ""
         Content = "친구톡 내용"
-        AltContent = "대체문자 내용"
+        AltSubject = "친구톡 이미지 대체문자 제목"
+        AltContent = "대체문자 내용입니다. 대체문자 제목 테스트를 위해 장문으로 작성하여야 합니다.\n"
+        AltContent += "LMS 로 전송을 해야지만 제목이 같이 전송됩니다.\n"
+        AltContent += "확인부탁드립니다."
         AltSendType = "A"
         SndDT = "20180810151226"
         FilePath = "FMSImage.jpg"
@@ -307,6 +321,7 @@ class KakaoServiceTestCase(unittest.TestCase):
                     rcv="",
                     rcvnm="",
                     msg="친구톡 우선순위 내용",
+                    altsjt="대체문자 우선순위 제목",
                     altmsg="대체문자 우선순위 내용"
                 )
             )
@@ -335,7 +350,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         try:
             receiptNum = self.kakaoService.sendFMS_multi(self.testCorpNum, PlusFriendID, Sender, Content, AltContent,
                                                          AltSendType, SndDT, FilePath, ImageURL, KakaoMessages,
-                                                         KakaoButtons, AdsYN, self.testUserID, "20180809151234")
+                                                         KakaoButtons, AdsYN, self.testUserID, "20180809151234", AltSubject)
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -360,6 +375,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         print("templateCode (템플릿코드): %s " % response.templateCode)
         print("plusFriendID (플러스친구 아이디): %s " % response.plusFriendID)
         print("sendNum (발신번호): %s " % response.sendNum)
+        print("altSubject ([동보] 대체문자 제목): %s " % response.altSubject)
         print("altContent ([동보] 대체문자 내용): %s " % response.altContent)
         print("altSendType (대체문자 유형): %s " % response.sndDT)
         print("reserveDT (예약일시): %s " % response.reserveDT)
@@ -395,6 +411,7 @@ class KakaoServiceTestCase(unittest.TestCase):
         print("templateCode (템플릿코드): %s " % response.templateCode)
         print("plusFriendID (플러스친구 아이디): %s " % response.plusFriendID)
         print("sendNum (발신번호): %s " % response.sendNum)
+        print("altSubject ([동보] 대체문자 제목): %s " % response.altSubject)
         print("altContent ([동보] 대체문자 내용): %s " % response.altContent)
         print("altSendType (대체문자 유형): %s " % response.sndDT)
         print("reserveDT (예약일시): %s " % response.reserveDT)
