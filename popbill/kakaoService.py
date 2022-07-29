@@ -32,7 +32,7 @@ class KakaoService(PopbillBase):
         """
         :param CorpNum: 팝빌회원 사업자번호
         :param UserID: 팝빌회원 아이디
-        :param ToGo: [PLUSFRIEND-플러스친구계정관리, SENDER-발신번호관리, TEMPLATE-알림톡템플릿관리, BOX-카카오톡전송내용]
+        :param ToGo: [PLUSFRIEND-카카오톡채널관리, SENDER-발신번호관리, TEMPLATE-알림톡템플릿관리, BOX-카카오톡전송내용]
         :return: 팝빌 URL
         """
         if ToGo == None or ToGo == '':
@@ -46,7 +46,7 @@ class KakaoService(PopbillBase):
 
     def getPlusFriendMgtURL(self, CorpNum, UserID):
         """
-        플러스친구 계정관리 팝업 URL
+        카카오톡 채널 관리 팝업 URL
         :param CorpNum: 팝빌회원 사업자번호
         :param UserID: 팝빌회원 아이디
         :return: 팝빌 URL
@@ -86,10 +86,10 @@ class KakaoService(PopbillBase):
 
     def listPlusFriendID(self, CorpNum, UserID=None):
         """
-        플러스친구 목록 확인
+        카카오톡 채널 목록 확인
         :param CorpNum: 팝빌회원 사업자번호
         :param UserID: 팝빌회원 아이디
-        :return: 플러스친구 list
+        :return: 카카오톡 채널 list
         """
         return self._httpget('/KakaoTalk/ListPlusFriendID', CorpNum, UserID)
 
@@ -244,7 +244,7 @@ class KakaoService(PopbillBase):
         if Content is not None or Content != '':
             req['content'] = Content
         if AltSubject is not None or AltSubject != '':
-            req['altSubject'] = AltSubject    
+            req['altSubject'] = AltSubject
         if AltContent is not None or AltContent != '':
             req['altContent'] = AltContent
         if AltSendType is not None or AltSendType != '':
@@ -314,7 +314,7 @@ class KakaoService(PopbillBase):
         """
         친구톡 텍스트 대량 전송
         :param CorpNum: 팝빌회원 사업자번호
-        :param PlusFriendID: 플러스친구 아이디
+        :param PlusFriendID: 검색용 아이디
         :param Sender: 발신번호
         :param Content: [동보] 친구톡 내용
         :param AltContent: [동보] 대체문자 내용
@@ -329,7 +329,7 @@ class KakaoService(PopbillBase):
         :return: receiptNum (접수번호)
         """
         if PlusFriendID is None or PlusFriendID == '':
-            raise PopbillException(-99999999, "플러스친구 아이디가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "검색용 아이디가 입력되지 않았습니다.")
         if Sender is None or Sender == '':
             raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
 
@@ -415,7 +415,7 @@ class KakaoService(PopbillBase):
         """
         친구톡 이미지 대량 전송
         :param CorpNum: 팝빌회원 사업자번호
-        :param PlusFriendID: 플러스친구 아이디
+        :param PlusFriendID: 검색용 아이디
         :param Sender: 발신번호
         :param Content: [동보] 친구톡 내용
         :param AltContent: [동보] 대체문자 내용
@@ -432,7 +432,7 @@ class KakaoService(PopbillBase):
         :return: receiptNum (접수번호)
         """
         if PlusFriendID is None or PlusFriendID == '':
-            raise PopbillException(-99999999, "플러스친구 아이디가 입력되지 않았습니다.")
+            raise PopbillException(-99999999, "검색용 아이디가 입력되지 않았습니다.")
         if Sender is None or Sender == '':
             raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
 

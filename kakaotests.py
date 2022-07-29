@@ -46,7 +46,7 @@ class KakaoServiceTestCase(unittest.TestCase):
 
         i = 1
         for info in response:
-            print("====== 플러시친구 목록 확인 [%d] ======" % i)
+            print("====== 카카오톡 채널 목록 확인 [%d] ======" % i)
             for key, value in info.__dict__.items():
                 print("%s : %s" % (key, value))
             i += 1
@@ -248,7 +248,7 @@ class KakaoServiceTestCase(unittest.TestCase):
     def test_sendFMS(self):
         PlusFriendID = "@팝빌"
         Sender = ""
-        Content = "플러스친구 내용"
+        Content = "친구톡 내용"
         AltSubject = "친구톡 이미지 대체문자 제목"
         AltContent = "대체문자 내용입니다. 대체문자 제목 테스트를 위해 장문으로 작성하여야 합니다.\n"
         AltContent += "LMS 로 전송을 해야지만 제목이 같이 전송됩니다.\n"
@@ -373,7 +373,7 @@ class KakaoServiceTestCase(unittest.TestCase):
 
         print("contentType (카카오톡 유형): %s " % response.contentType)
         print("templateCode (템플릿코드): %s " % response.templateCode)
-        print("plusFriendID (플러스친구 아이디): %s " % response.plusFriendID)
+        print("plusFriendID (채널 검색용 아이디): %s " % response.plusFriendID)
         print("sendNum (발신번호): %s " % response.sendNum)
         print("altSubject ([동보] 대체문자 제목): %s " % response.altSubject)
         print("altContent ([동보] 대체문자 내용): %s " % response.altContent)
@@ -409,7 +409,7 @@ class KakaoServiceTestCase(unittest.TestCase):
 
         print("contentType (카카오톡 유형): %s " % response.contentType)
         print("templateCode (템플릿코드): %s " % response.templateCode)
-        print("plusFriendID (플러스친구 아이디): %s " % response.plusFriendID)
+        print("plusFriendID (채널 검색용 아이디): %s " % response.plusFriendID)
         print("sendNum (발신번호): %s " % response.sendNum)
         print("altSubject ([동보] 대체문자 제목): %s " % response.altSubject)
         print("altContent ([동보] 대체문자 내용): %s " % response.altContent)
