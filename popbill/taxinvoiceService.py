@@ -255,6 +255,24 @@ class TaxinvoiceService(PopbillBase):
 
         return self._httpget('/Taxinvoice/' + ItemKey+"?Detail", CorpNum)
 
+    def getXML(self, CorpNum, MgtKeyType, MgtKey):
+        """ 상세정보 확인 (XML)
+            args
+                CorpNum : 회원 사업자 번호
+                MgtKeyType : 문서번호 유형 one of ['SELL','BUY','TRUSTEE']
+                MgtKey : 파트너 문서번호
+            return
+                전자세금계산서 XML.
+            raise
+                PopbillException
+        """
+        if MgtKeyType not in self.__MgtKeyTypes:
+            raise PopbillException(-99999999, "문서번호 유형이 올바르지 않습니다.")
+        if MgtKey == None or MgtKey == "":
+            raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
+
+        return self._httpget('/Taxinvoice/' + MgtKeyType + '/' + MgtKey + '?XML', CorpNum)
+
     def delete(self, CorpNum, MgtKeyType, MgtKey, UserID=None):
         """ 삭제
             args
