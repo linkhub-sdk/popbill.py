@@ -52,6 +52,14 @@ class KakaoServiceTestCase(unittest.TestCase):
             i += 1
             print
 
+    def test_checkSenderNumber(self):
+        try:
+            SenderNumber = ""
+            response = self.kakaoService.checkSenderNumber(self.testCorpNum, SenderNumber)
+            print(response)
+        except PopbillException as PE:
+            print(PE.message)
+
     def test_getSenderNumberList(self):
         response = self.kakaoService.getSenderNumberList(self.testCorpNum, self.testUserID)
 

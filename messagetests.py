@@ -36,6 +36,14 @@ class MessageServiceTestCase(unittest.TestCase):
         autoDenyList = self.messageService.getAutoDenyList(self.testCorpNum, self.testUserID)
         print(autoDenyList[5].number)
 
+    def test_checkSenderNumber(self):
+        try:
+            SenderNumber = ""
+            response = self.messageService.checkSenderNumber(self.testCorpNum, SenderNumber)
+            print(response)
+        except PopbillException as PE:
+            print(PE.message)
+
     def test_getMessage(self):
         SDate = "20180901"
         EDate = "20181008"

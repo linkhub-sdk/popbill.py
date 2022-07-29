@@ -93,6 +93,22 @@ class KakaoService(PopbillBase):
         """
         return self._httpget('/KakaoTalk/ListPlusFriendID', CorpNum, UserID)
 
+    def checkSenderNumber(self, CorpNum, SenderNumber, UserID=None):
+        """ 발신번호 등록여부 확인
+            args
+                CorpNum : 회원 사업자번호
+                SenderNumber : 확인할 발신번호
+                UserID  : 회원 팝빌아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        if SenderNumber == None or SenderNumber == '':
+            raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
+
+        return self._httpget('/KakaoTalk/CheckSenderNumber/' + SenderNumber, CorpNum, UserID)
+
     def getSenderNumberList(self, CorpNum, UserID=None):
         """
         발신번호 목록 확인

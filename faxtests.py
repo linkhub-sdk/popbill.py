@@ -62,6 +62,14 @@ class FaxServiceTestCase(unittest.TestCase):
         unitCost = self.faxService.getUnitCost(self.testCorpNum)
         self.assertGreaterEqual(unitCost, 0, "단가는 0 이상.")
 
+    def test_checkSenderNumber(self):
+        try:
+            SenderNumber = ""
+            response = self.faxService.checkSenderNumber(self.testCorpNum, SenderNumber)
+            print(response)
+        except PopbillException as PE:
+            print(PE.message)
+
     def test_03_sendFaxMulti(self):
         receivers = []
 
