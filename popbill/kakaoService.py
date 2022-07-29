@@ -124,7 +124,8 @@ class KakaoService(PopbillBase):
         :param CorpNum: 팝빌회원 사업자번호
         :param templateCode: 알림톡 템플릿 코드
         :param UserID: 팝빌회원 아이디
-        :return: templateCode (템플릿 코드), templateName (템플릿 이름), template (템플릿 내용), plusFriendID (채널 이름)
+        :return: templateCode (템플릿 코드), templateName (템플릿 이름), template (템플릿 내용), plusFriendID (채널 이름),
+                 secureYN (보안템플릿 여부),  state (템플릿 상태), stateDT (템플릿 상태 일시)
         """
         if templateCode == None or templateCode == '':
             raise PopbillException(-99999999, "템플릿 코드가 입력되지 않았습니다.")
