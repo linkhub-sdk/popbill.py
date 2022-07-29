@@ -1127,6 +1127,18 @@ class TaxinvoiceService(PopbillBase):
         result = self._httpget('/?TG=CERT', CorpNum, UserID)
         return result.url
 
+    def getTaxCertInfo(self, CorpNum, UserID=None):
+        """공동인증서 정보확인
+            args
+                CorpNum : 회원 사업자번호
+                UserID  : 회원 팝빌아이디
+            return
+                공동인증서 정보.
+            raise
+                PopbillException
+        """
+        return self._httpget('/Taxinvoice/Certificate', CorpNum)
+
     def bulkSubmit(self, CorpNum, SubmitID, taxinvoiceList, forceIssue=False, UserID=None):
         """ 초대량 발행 접수
             args

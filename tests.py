@@ -29,6 +29,14 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
         self.testUserID = "testkorea"
         self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890', 10))
 
+    def test_getTaxCertInfo(self):
+        try:
+            TaxinvoiceCertificate = self.taxinvoiceService.getTaxCertInfo(self.testCorpNum)
+            print(TaxinvoiceCertificate.issuerName)
+        except PopbillException as PE:
+            print(PE.code)
+            print(PE.message)
+
     def test_getDetailByItemKey(self):
         info = self.taxinvoiceService.getDetailInfoByItemKey(self.testCorpNum, "022071418252400001")
         print(info.detailList)
