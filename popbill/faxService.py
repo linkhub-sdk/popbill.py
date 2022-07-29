@@ -11,7 +11,10 @@
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase, PopbillException, File
-
+try:
+    from urllib import parse as parse
+except ImportError:
+    import urllib as parse
 
 class FaxService(PopbillBase):
     """ 팝빌 팩스 API Service Implementation. """
@@ -131,7 +134,7 @@ class FaxService(PopbillBase):
         uri += '&Order=' + Order
 
         if QString is not None:
-            uri += '&QString=' + QString
+            uri += '&QString=' + parse.quote(QString)
 
         return self._httpget(uri, CorpNum, UserID)
 

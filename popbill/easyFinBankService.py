@@ -9,6 +9,10 @@
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
+try:
+    from urllib import parse as parse
+except ImportError:
+    import urllib as parse
 
 class EasyFinBankService(PopbillBase):
     """ 팝빌 계좌조회 API Service Implementation. """
@@ -237,7 +241,7 @@ class EasyFinBankService(PopbillBase):
         uri += '?TradeType=' + ','.join(TradeType)
 
         if SearchString is not None:
-            uri += '&SearchString=' + SearchString
+            uri += '&SearchString=' + parse.quote(SearchString)
 
         uri += '&Page=' + str(Page)
         uri += '&PerPage=' + str(PerPage)
@@ -265,7 +269,7 @@ class EasyFinBankService(PopbillBase):
         uri += '?TradeType=' + ','.join(TradeType)
 
         if SearchString is not None:
-            uri += '&SearchString=' + SearchString
+            uri += '&SearchString=' + parse.quote(SearchString)
 
         return self._httpget(uri, CorpNum, UserID)
 
@@ -286,7 +290,7 @@ class EasyFinBankService(PopbillBase):
 
         uri = '/EasyFin/Bank/SaveMemo'
         uri += '?TID=' + TID
-        uri += '&Memo=' + Memo
+        uri += '&Memo=' + parse.quote(Memo)
 
         return self._httppost(uri, "", CorpNum, UserID)
 

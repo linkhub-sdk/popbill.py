@@ -10,7 +10,10 @@
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
-
+try:
+    from urllib import parse as parse
+except ImportError:
+    import urllib as parse
 
 class HTTaxinvoiceService(PopbillBase):
     """ 팝빌 홈택스 전자세금계산서 연계 API Service Implementation. """
@@ -135,7 +138,7 @@ class HTTaxinvoiceService(PopbillBase):
             uri += '&TaxRegIDYN=' + TaxRegIDYN
 
         if SearchString is not None:
-            uri += '&SearchString=' + SearchString
+            uri += '&SearchString=' + parse.quote(SearchString)
 
         return self._httpget(uri, CorpNum, UserID)
 
@@ -170,7 +173,7 @@ class HTTaxinvoiceService(PopbillBase):
             uri += '&TaxRegIDYN=' + TaxRegIDYN
 
         if SearchString is not None:
-            uri += '&SearchString=' + SearchString
+            uri += '&SearchString=' + parse.quote(SearchString)
 
         return self._httpget(uri, CorpNum, UserID)
 

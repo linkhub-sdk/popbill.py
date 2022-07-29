@@ -9,7 +9,10 @@
 # Updated : 2018-08-09
 # Thanks for your interest.
 from .base import PopbillBase, PopbillException, File
-
+try:
+    from urllib import parse as parse
+except ImportError:
+    import urllib as parse
 
 class KakaoService(PopbillBase):
     """ 팝빌 카카오톡 API Service Implementation. """
@@ -455,7 +458,7 @@ class KakaoService(PopbillBase):
         uri += '&Order=' + Order
 
         if QString is not None:
-            uri += '&QString=' + QString
+            uri += '&QString=' + parse.quote(QString)
 
         return self._httpget(uri, CorpNum, UserID)
 

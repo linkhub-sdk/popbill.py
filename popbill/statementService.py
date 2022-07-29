@@ -9,7 +9,10 @@
 # Updated : 2021-12-22
 # Thanks for your interest.
 from .base import PopbillBase, PopbillException, File
-
+try:
+    from urllib import parse as parse
+except ImportError:
+    import urllib as parse
 
 class StatementService(PopbillBase):
     """ 팝빌 전자명세서 API Service Implementation. """
@@ -322,7 +325,7 @@ class StatementService(PopbillBase):
         uri += '&Order=' + Order
 
         if QString is not None:
-            uri += '&QString=' + QString
+            uri += '&QString=' + parse.quote(QString)
 
         return self._httpget(uri, CorpNum, UserID)
 

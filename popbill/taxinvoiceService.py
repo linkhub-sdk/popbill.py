@@ -11,7 +11,10 @@
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase, PopbillException, File
-
+try:
+    from urllib import parse as parse
+except ImportError:
+    import urllib as parse
 
 class TaxinvoiceService(PopbillBase):
     """ 팝빌 세금계산서 API Service Implementation."""
@@ -953,7 +956,7 @@ class TaxinvoiceService(PopbillBase):
             uri += '&TaxRegIDType=' + TaxRegIDType
 
         if QString is not None:
-            uri += '&QString=' + QString
+            uri += '&QString=' + parse.quote(QString)
 
         if MgtKey is not None:
             uri += '&MgtKey=' + MgtKey
@@ -966,7 +969,7 @@ class TaxinvoiceService(PopbillBase):
 
         if CloseDownState is not None:
             uri += '&CloseDownState=' + ','.join(CloseDownState)
-
+        print(uri)
         return self._httpget(uri, CorpNum, UserID)
 
     def attachStatement(self, CorpNum, MgtKeyType, MgtKey, ItemCode, StmtMgtKey, UserID=None):
