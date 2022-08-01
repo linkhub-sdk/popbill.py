@@ -377,6 +377,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
+        headers["User-Agent"] = "PYTHON POPBILL SDK"
+
         conn.request('GET', url, '', headers)
 
         response = conn.getresponse()
@@ -412,6 +414,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
+        headers["User-Agent"] = "PYTHON POPBILL SDK"
+
         conn.request('POST', url, postData, headers)
 
         response = conn.getresponse()
@@ -446,6 +450,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
+        headers["User-Agent"] = "PYTHON POPBILL SDK"
+
         conn.request('POST', url, postData, headers)
 
         response = conn.getresponse()
@@ -475,6 +481,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             headers["x-pb-userid"] = UserID
 
         headers["Accept-Encoding"] = "gzip,deflate"
+
+        headers["User-Agent"] = "PYTHON POPBILL SDK"
 
         # oraganize postData
         CRLF = '\r\n'
