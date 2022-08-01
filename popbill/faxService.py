@@ -27,18 +27,23 @@ class FaxService(PopbillBase):
         """
         super(self.__class__, self).__init__(LinkID, SecretKey)
         self._addScope("160")
+        self._addScope("161")
 
-    def getChargeInfo(self, CorpNum, UserID=None):
+    def getChargeInfo(self, CorpNum, UserID=None, ReceiveNumType=None):
         """ 과금정보 확인
             args
                 CorpNum : 회원 사업자번호
                 UserID : 팝빌 회원아이디
+                ReceiveNumType : 수신번호 유형
             return
                 과금정보 객체
             raise
                 PopbillException
         """
-        return self._httpget('/FAX/ChargeInfo', CorpNum, UserID)
+        url = '/FAX/ChargeInfo'
+        if ReceiveNumType != None and ReceiveNumType != "":
+            url = '/FAX/ChargeInfo?receiveNumType=' + parse.quote(ReceiveNumType)
+        return self._httpget(url, CorpNum, UserID)
 
     def getURL(self, CorpNum, UserID, ToGo):
         """ 팩스 관련 팝빌 URL
@@ -83,17 +88,20 @@ class FaxService(PopbillBase):
         result = self._httpget('/FAX/?TG=SENDER', CorpNum, UserID)
         return result.url
 
-    def getUnitCost(self, CorpNum):
+    def getUnitCost(self, CorpNum, ReceiveNumType=None):
         """ 팩스 전송 단가 확인
             args
                 CorpNum : 팝빌회원 사업자번호
+                ReceiveNumType : 수신번호 유형
             return
                 전송 단가 by float
             raise
                 PopbillException
         """
-
-        result = self._httpget('/FAX/UnitCost', CorpNum)
+        url = '/FAX/UnitCost'
+        if ReceiveNumType != None and ReceiveNumType != "":
+            url = '/FAX/UnitCost?receiveNumType=' + parse.quote(ReceiveNumType)
+        result = self._httpget(url, CorpNum)
         return int(result.unitCost)
 
     def search(self, CorpNum, SDate, EDate, State, ReserveYN, SenderOnly, Page, PerPage, Order, UserID=None,

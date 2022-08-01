@@ -26,10 +26,30 @@ class FaxServiceTestCase(unittest.TestCase):
         self.testUserID = "testkorea"
 
     def test_getChargeInfo(self):
+        chrgInfo = self.faxService.getChargeInfo(self.testCorpNum)
+        print(chrgInfo.unitCost)
+        print(chrgInfo.chargeMethod)
+        print(chrgInfo.rateSystem)
+
+    def test_getChargeInfo_UserID(self):
         chrgInfo = self.faxService.getChargeInfo(self.testCorpNum, self.testUserID)
         print(chrgInfo.unitCost)
         print(chrgInfo.chargeMethod)
         print(chrgInfo.rateSystem)
+
+    def test_getChargeInfo_ReceiveNumType(self):
+        chrgInfo = self.faxService.getChargeInfo(self.testCorpNum, self.testUserID, "지능")
+        print(chrgInfo.unitCost)
+        print(chrgInfo.chargeMethod)
+        print(chrgInfo.rateSystem)
+
+    def test_getUnitCost(self):
+        unitCost = self.faxService.getUnitCost(self.testCorpNum)
+        print(unitCost)
+
+    def test_getUnitCost_ReceiveNumType(self):
+        unitCost = self.faxService.getUnitCost(self.testCorpNum, "일반")
+        print(unitCost)
 
     def test_search(self):
         SDate = "20180920"
@@ -57,10 +77,6 @@ class FaxServiceTestCase(unittest.TestCase):
         url = self.faxService.getURL(self.testCorpNum, self.testUserID, "BOX")
         print(url)
         self.assertEqual(url[:5], "https", "https로시작")
-
-    def test_02_getUnitCost(self):
-        unitCost = self.faxService.getUnitCost(self.testCorpNum)
-        self.assertGreaterEqual(unitCost, 0, "단가는 0 이상.")
 
     def test_checkSenderNumber(self):
         try:
