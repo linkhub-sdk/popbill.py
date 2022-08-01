@@ -109,7 +109,8 @@ class MessageServiceTestCase(unittest.TestCase):
                 snd='',
                 rcv='',
                 rcvnm='수신자명',
-                msg='문자 API TEST'
+                msg='문자 API TEST',
+                interOPRefKey='20220729'+str(x)
             )
         )
 
@@ -127,7 +128,8 @@ class MessageServiceTestCase(unittest.TestCase):
                     snd='',
                     rcv='',
                     rcvnm='수신자명',
-                    msg='문자 API TEST'
+                    msg='문자 API TEST',
+                    interOPRefKey='20220729'+str(x)
                 )
             )
 
@@ -154,7 +156,8 @@ class MessageServiceTestCase(unittest.TestCase):
                 rcv='',
                 rcvnm='수신자명',
                 msg='장문 문자 API TEST',
-                sjt='장문 문자 제목'
+                sjt='장문 문자 제목',
+                interOPRefKey='20220729'+str(x)
             )
         )
         receiptNum = self.messageService.sendLMS_multi(self.testCorpNum, "", "Subject", "동보전송 메시지 내용",
@@ -182,8 +185,9 @@ class MessageServiceTestCase(unittest.TestCase):
                 snd='',
                 rcv='',
                 rcvnm='수신자명',
-                msg='장문 문자 API TEST'
-                # sjt='장문 문자 제목'
+                msg='장문 문자 API TEST',
+                # sjt='장문 문자 제목',
+                interOPRefKey='20220729'+str(x)
             )
         )
 
@@ -208,7 +212,8 @@ class MessageServiceTestCase(unittest.TestCase):
                 rcv='',
                 rcvnm='수신자명',
                 msg='장문 문자 API TEST',
-                sjt='장문 문자 제목'
+                sjt='장문 문자 제목',
+                interOPRefKey='20220729'+str(x)
             )
         )
 
@@ -254,7 +259,8 @@ class MessageServiceTestCase(unittest.TestCase):
                 rcv='',
                 rcvnm='수신자명',
                 msg='멀티 문자 API TEST',
-                sjt='멀티 문자 제목'
+                sjt='멀티 문자 제목',
+                interOPRefKey='20220729'+str(x)
             )
         )
         try:

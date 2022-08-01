@@ -561,5 +561,5 @@ class MessageService(PopbillBase):
 
 class MessageReceiver(object):
     def __init__(self, **kwargs):
-        self.__dict__ = dict.fromkeys(['snd', 'rcv', 'rcvnm', 'msg', 'sjt'])
+        self.__dict__ = dict.fromkeys(['snd', 'rcv', 'rcvnm', 'msg', 'sjt', 'interOPRefKey'])
         self.__dict__.update(kwargs)

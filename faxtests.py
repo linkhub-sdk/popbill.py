@@ -76,7 +76,7 @@ class FaxServiceTestCase(unittest.TestCase):
         filepath = ["test.jpeg", "test2.jpeg"]
 
         for x in range(0, 5):
-            receivers.append(FaxReceiver(receiveNum="070-111-222", receiveName="수신자명칭"))
+            receivers.append(FaxReceiver(receiveNum="070-111-222", receiveName="수신자명칭", interOPRefKey="20220729-"+str(x)))
 
         receiptNum = self.faxService.sendFax_multi(
             self.testCorpNum,
@@ -135,7 +135,7 @@ class FaxServiceTestCase(unittest.TestCase):
         receivers = None
 
         # for x in range(0, 5):
-        #    receivers.append(FaxReceiver(receiveNum="010999888",receiveName="수신자명칭"))
+        #    receivers.append(FaxReceiver(receiveNum="010999888",receiveName="수신자명칭",interOPRefKey='20220729'+str(x)))
 
         receiptNum = self.faxService.resendFax_multi(
             self.testCorpNum,
@@ -235,7 +235,7 @@ class FaxServiceTestCase(unittest.TestCase):
 
             receivers = []
             for x in range(0, 5):
-                receivers.append(FaxReceiver(receiveNum="", receiveName="수신자명칭"))
+                receivers.append(FaxReceiver(receiveNum="", receiveName="수신자명칭", interOPRefKey="20220729-0"+str(x)))
 
             response = self.faxService.resendFaxRN_multi(self.testCorpNum, OrgRequestNum, SenderNum, SenderName,
                                                          receivers, ReserveDT, UserID, title, RequestNum)

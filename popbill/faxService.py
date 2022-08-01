@@ -280,7 +280,7 @@ class FaxService(PopbillBase):
             req['adsYN'] = True
 
         for r in Receiver:
-            req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName})
+            req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName, "interOPRefKey" : r.interOPRefKey})
 
         if ReserveDT != None:
             req['sndDT'] = ReserveDT
@@ -387,7 +387,7 @@ class FaxService(PopbillBase):
             req['adsYN'] = True
 
         for r in Receiver:
-            req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName})
+            req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName, "interOPRefKey" : r.interOPRefKey})
 
         if ReserveDT != None:
             req['sndDT'] = ReserveDT
@@ -486,7 +486,7 @@ class FaxService(PopbillBase):
             if (type(Receiver) is FaxReceiver):
                 Receiver = [Receiver]
             for r in Receiver:
-                req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName})
+                req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName, "interOPRefKey" : r.interOPRefKey})
 
         postData = self._stringtify(req)
 
@@ -568,7 +568,7 @@ class FaxService(PopbillBase):
             if (type(Receiver) is FaxReceiver):
                 Receiver = [Receiver]
             for r in Receiver:
-                req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName})
+                req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName, "interOPRefKey" : r.interOPRefKey})
 
         postData = self._stringtify(req)
 
@@ -616,7 +616,7 @@ class FaxService(PopbillBase):
 
 class FaxReceiver(object):
     def __init__(self, **kwargs):
-        self.__dict__ = dict.fromkeys(['receiveNum', 'receiveName'])
+        self.__dict__ = dict.fromkeys(['receiveNum', 'receiveName', 'altSubject'])
         self.__dict__.update(kwargs)
 
 class FileData(object):
