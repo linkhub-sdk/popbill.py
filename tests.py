@@ -279,9 +279,30 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
                              ContactEmail="")
         self.assertRaises(PopbillException, self.taxinvoiceService.joinMember, newMember)
 
-    def test_getURL(self):
+    def test_getURL_TBOX(self):
+        url = self.taxinvoiceService.getURL(self.testCorpNum, self.testUserID, "TBOX")
+        print(url)
+
+    def test_getURL_SWBOX(self):
+        url = self.taxinvoiceService.getURL(self.testCorpNum, self.testUserID, "SWBOX")
+        print(url)
+
+    def test_getURL_PWBOX(self):
+        url = self.taxinvoiceService.getURL(self.testCorpNum, self.testUserID, "PWBOX")
+        print(url)
+
+    def test_getURL_SBOX(self):
         url = self.taxinvoiceService.getURL(self.testCorpNum, self.testUserID, "SBOX")
-        self.assertEqual(url[:5], "https", "https로시작")
+        print(url)
+
+    def test_getURL_PBOX(self):
+        url = self.taxinvoiceService.getURL(self.testCorpNum, self.testUserID, "PBOX")
+        print(url)
+
+    def test_getURL_WRITE(self):
+        url = self.taxinvoiceService.getURL(self.testCorpNum, self.testUserID, "WRITE")
+        print(url)
+
 
     def test_getUnitCost(self):
         unitCost = self.taxinvoiceService.getUnitCost(self.testCorpNum)

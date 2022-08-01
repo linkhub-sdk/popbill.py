@@ -47,7 +47,7 @@ class TaxinvoiceService(PopbillBase):
             args
                 CorpNum : 회원 사업자번호
                 UserID : 팝빌 회원아이디
-                ToGo : 세금계산서 관련 기능 지정 문자. (SBOX,PBOX)
+                ToGo : 세금계산서 관련 기능 지정 문자. (TBOX,SWBOX,PWBOX,SBOX,PBOX,WRITE)
             return
                 30초 보안 토큰을 포함한 url
             raise
