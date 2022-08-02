@@ -82,7 +82,7 @@ class EasyFinBankService(PopbillBase):
         uri = "/EasyFin/Bank/BankAccount/Close"
         uri += '?BankCode=' + BankCode
         uri += '&AccountNumber=' + AccountNumber
-        uri += '&CloseType=' + CloseType
+        uri += '&CloseType=' + parse.quote(CloseType)
 
         return self._httppost(uri, '', CorpNum, UserID)
 
