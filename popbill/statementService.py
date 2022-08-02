@@ -125,7 +125,7 @@ class StatementService(PopbillBase):
         if statement == None:
             raise PopbillException(-99999999, "전송할 전자명세서 정보가 입력되지 않았습니다.")
         if SendNum == None or SendNum == '':
-            raise PopbillException(-99999999, "팩스전송 발신번호가 올바르지 않았습니다.")
+            raise PopbillException(-99999999, "팩스전송 발신번호가 올바르지 않습니다.")
         if ReceiveNum == None or ReceiveNum == '':
             raise PopbillException(-99999999, "팩스전송 수신번호가 올바르지 않습니다.")
 

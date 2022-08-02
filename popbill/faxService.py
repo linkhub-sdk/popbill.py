@@ -624,7 +624,7 @@ class FaxService(PopbillBase):
 
 class FaxReceiver(object):
     def __init__(self, **kwargs):
-        self.__dict__ = dict.fromkeys(['receiveNum', 'receiveName', 'altSubject'])
+        self.__dict__ = dict.fromkeys(['receiveNum', 'receiveName', 'altSubject', 'interOPRefKey'])
         self.__dict__.update(kwargs)
 
 class FileData(object):

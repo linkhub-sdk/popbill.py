@@ -530,7 +530,7 @@ class KakaoService(PopbillBase):
 
         return self._httpget('/KakaoTalk/Get/' + RequestNum, CorpNum, UserID)
 
-    def search(self, CorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, UserID,
+    def search(self, CorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, UserID=None,
                QString=None):
 
         """
@@ -600,7 +600,7 @@ class KakaoService(PopbillBase):
 
 class KakaoReceiver(object):
     def __init__(self, **kwargs):
-        self.__dict__ = dict.fromkeys(['rcv', 'rcvnm', 'msg', 'altsjt', 'altmsg'])
+        self.__dict__ = dict.fromkeys(['rcv', 'rcvnm', 'msg', 'altsjt', 'altmsg', 'btns', 'interOPRefKey'])
         self.__dict__.update(kwargs)
 
 
