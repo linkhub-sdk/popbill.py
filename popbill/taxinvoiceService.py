@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (code@linkhubcorp.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2022-07-15
+# Updated : 2022-08-03
 # Thanks for your interest.
 from datetime import datetime
 from .base import PopbillBase, PopbillException, File

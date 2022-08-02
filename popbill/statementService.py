@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhubcorp.com)
 # Written : 2015-03-20
-# Updated : 2021-12-22
+# Updated : 2022-08-03
 # Thanks for your interest.
 from .base import PopbillBase, PopbillException, File
 try:

@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (code@linkhubcorp.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2021-04-21
+# Updated : 2022-08-03
 # Thanks for your interest.
 from io import BytesIO
 import json
