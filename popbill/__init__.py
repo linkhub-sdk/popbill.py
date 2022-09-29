@@ -1,4 +1,4 @@
-__version__ = '1.56.0'
+__version__ = '1.57.0'
 Version = __version__  # for backward compatibility
 __all__ = ["PopbillException", "JoinForm", "ContactInfo", "CorpInfo",
            "TaxinvoiceService", "Taxinvoice", "TaxinvoiceDetail", "Contact",
@@ -7,7 +7,7 @@ __all__ = ["PopbillException", "JoinForm", "ContactInfo", "CorpInfo",
            "CashbillService", "Cashbill",
            "MessageService", "MessageReceiver",
            "HTTaxinvoiceService", "HTCashbillService",
-           "ClosedownService",
+           "ClosedownService", "BizInfoCheckService",
            "KakaoService", "KakaoReceiver", "KakaoButton",
            "EasyFinBankService", "BankAccountInfo", "AccountCheckService"]
 
@@ -20,6 +20,7 @@ from .messageService import *
 from .htTaxinvoiceService import *
 from .htCashbillService import *
 from .closedownService import *
+from .bizInfoCheckService import *
 from .kakaoService import *
 from .easyFinBankService import *
 from .accountCheckService import *

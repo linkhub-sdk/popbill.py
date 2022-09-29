@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (code@linkhubcorp.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2022-08-03
+# Updated : 2022-09-29
 # Thanks for your interest.
 from io import BytesIO
 import json
@@ -543,11 +543,13 @@ class CorpInfo(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
 
+class BizCheckInfo(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
 
 class File(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
-
 
 class PopbillException(Exception):
     def __init__(self, code, message):
