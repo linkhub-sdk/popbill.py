@@ -35,7 +35,7 @@ class BizInfoCheckService(PopbillBase):
         """
         return self._httpget('/BizInfo/ChargeInfo', CorpNum, UserID)
 
-    def getUnitCost(self, CorpNum):
+    def getUnitCost(self, CorpNum, UserID = None):
         """ 기업정보조회 단가 확인.
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -45,7 +45,7 @@ class BizInfoCheckService(PopbillBase):
                 PopbillException
         """
 
-        result = self._httpget('/BizInfo/UnitCost', CorpNum)
+        result = self._httpget('/BizInfo/UnitCost', CorpNum, UserID)
 
         return float(result.unitCost)
 
