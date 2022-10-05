@@ -53,7 +53,7 @@ class BizInfoCheckService(PopbillBase):
         """ 기업정보조회 - 단건
             args
                 MemberCorpNum : 팝빌회원 사업자번호
-                CorpNum : 조회할 사업자번호
+                CheckCorpNum : 조회할 사업자번호
                 UserID : 팝빌회원 아이디
             return
                 기업정보정보 object
