@@ -283,7 +283,7 @@ class MessageServiceTestCase(unittest.TestCase):
         receiptNumList.append("018041717000000018")
         receiptNumList.append("018041717000000019")
         response = self.messageService.getStates(self.testCorpNum, receiptNumList, 'testkorea')
-        print(len(response));
+        print(len(response))
 
     def test_getMessagesRN(self):
         requestNum = "20180809141920"
@@ -305,6 +305,29 @@ class MessageServiceTestCase(unittest.TestCase):
             respone = self.messageService.cancelReserveRN(self.testCorpNum, requestNum)
             print(respone)
         except PopbillException as PE:
+            print(PE.message)
+
+    def test_cancelReservebyRCV(self):
+        try:
+            receiptNum = "0180910150000000"
+            receiveNum = "0102223333"
+            respone = self.messageService.cancelReservebyRCV(self.testCorpNum, receiptNum, receiveNum)
+            print(respone.code)
+            print(respone.message)
+        except PopbillException as PE:
+            print(PE.code)
+            print(PE.message)
+
+
+    def test_cancelReserveRNbyRCV(self):
+        try:
+            requestNum = "20180809144427"
+            receiveNum = "0102223333"
+            respone = self.messageService.cancelReserveRNbyRCV(self.testCorpNum, requestNum, receiveNum)
+            print(respone.code)
+            print(respone.message)
+        except PopbillException as PE:
+            print(PE.code)
             print(PE.message)
 
     def test_getSenderNumberMgtURL(self):

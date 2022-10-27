@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : John Yohan (code@linkhubcorp.com)
 # Written : 2015-03-20
-# Updated : 2022-08-03
+# Updated : 2022-10-27
 # Thanks for your interest.
 from .base import PopbillBase, PopbillException, File
 try:
@@ -428,6 +428,51 @@ class MessageService(PopbillBase):
             raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다.")
 
         return self._httpget('/Message/Cancel/' + RequestNum, CorpNum, UserID)
+
+    def cancelReservebyRCV(self, CorpNum, ReceiptNum, ReceiveNum, UserID=None):
+        """ 문자 예약전송 취소 (접수번호, 수신번호)
+            args
+                CorpNum : 팝빌회원 사업자번호
+                ReceiptNum : 전송요청시 발급받은 접수번호
+                ReceiveNum : 전송요청시 할당한 수신번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        if ReceiptNum == None or len(ReceiptNum) != 18:
+            raise PopbillException(-99999999, "접수번호가 올바르지 않습니다.")
+            
+        if ReceiveNum == None or ReceiveNum == '':
+            raise PopbillException(-99999999, "수신번호가 올바르지 않습니다.")
+
+        postData = self._stringtify(ReceiveNum)
+
+        return self._httppost('/Message/' + ReceiptNum + '/Cancel', postData, CorpNum, UserID)
+
+
+    def cancelReserveRNbyRCV(self, CorpNum, RequestNum, ReceiveNum, UserID=None):
+        """ 문자 예약전송 취소 (요청번호, 수신번호)
+            args
+                CorpNum : 팝빌회원 사업자번호
+                RequestNum : 전송요청시 할당한 전송요청번호
+                ReceiveNum : 전송요청시 할당한 수신번호
+                UserID : 팝빌회원 아이디
+            return
+                처리결과. consist of code and message
+            raise
+                PopbillException
+        """
+        if RequestNum == None or RequestNum == '':
+            raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다.")
+            
+        if ReceiveNum == None or ReceiveNum == '':
+            raise PopbillException(-99999999, "수신번호가 올바르지 않습니다.")
+
+        postData = self._stringtify(ReceiveNum)
+
+        return self._httppost('/Message/Cancel/' + RequestNum, postData, CorpNum, UserID)
 
     def search(self, CorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, UserID=None, QString=None):
         """ 문자전송 목록조회
