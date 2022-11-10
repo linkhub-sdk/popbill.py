@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhubcorp.com)
 # Written : 2015-03-24
-# Updated : 2022-08-03
+# Updated : 2022-11-09
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -179,7 +179,7 @@ class CashbillService(PopbillBase):
 
     def revokeRegistIssue(self, CorpNum, mgtKey, orgConfirmNum, orgTradeDate, smssendYN=False, memo=None, UserID=None,
                           isPartCancel=False, cancelType=None, supplyCost=None, tax=None, serviceFee=None,
-                          totalAmount=None):
+                          totalAmount=None, emailSubject=None, tradeDT=None):
         """ 취소현금영수증 즉시발행
             args
                 CorpNum : 팝빌회원 사업자번호
@@ -195,6 +195,8 @@ class CashbillService(PopbillBase):
                 tax : [취소] 세액
                 serviceFee : [취소] 봉사료
                 totalAmount : [취소] 합계금액
+                emailSubject : 안내메일 제목
+                tradeDT : 거래일시
             return
                 처리결과. consist of code and message
             raise
@@ -213,6 +215,8 @@ class CashbillService(PopbillBase):
             "tax": tax,
             "serviceFee": serviceFee,
             "totalAmount": totalAmount,
+            "emailSubject": emailSubject,
+            "tradeDT": tradeDT,
         })
 
         return self._httppost('/Cashbill', postData, CorpNum, UserID, "REVOKEISSUE")

@@ -34,8 +34,8 @@ class CashbillServiceTestCase(unittest.TestCase):
 
     def test_search(self):
         DType = "R"
-        SDate = "20180901"
-        EDate = "20181008"
+        SDate = "20221101"
+        EDate = "20221108"
         State = ["3**", "4**"]
         TradeType = ["N", "C"]
         TradeUsage = ["P", "C"]
@@ -56,7 +56,7 @@ class CashbillServiceTestCase(unittest.TestCase):
 
     def test_registIssue(self):
 
-        cashbill = Cashbill(mgtKey="20191024-07",
+        cashbill = Cashbill(mgtKey="20221109-PY-07",
                             tradeType="승인거래",
                             tradeUsage="소득공제용",
                             taxationType="과세",
@@ -76,7 +76,8 @@ class CashbillServiceTestCase(unittest.TestCase):
                             supplyCost="15000",
                             tax="5000",
                             serviceFee="0",
-                            totalAmount="20000"
+                            totalAmount="20000",
+                            tradeDT="20221109000000"
                             )
         try:
             result = self.cashbillService.registIssue(self.testCorpNum, cashbill, "발행메모", "testkorea", "")
@@ -85,7 +86,7 @@ class CashbillServiceTestCase(unittest.TestCase):
             print(PE.message)
 
     def test_getInfos(self):
-        infos = self.cashbillService.getInfos(self.testCorpNum, ["20150707-01", "20150706-01"])
+        infos = self.cashbillService.getInfos(self.testCorpNum, ["20221109-PY-07", "20150706-01"])
         for info in infos:
             print("info : %s" % info.mgtKey)
             for key, value in info.__dict__.items():
@@ -211,7 +212,7 @@ class CashbillServiceTestCase(unittest.TestCase):
     def test_06_getDetailInfo(self):
         result = self.cashbillService.getDetailInfo(self.testCorpNum, "20171114-20")
 
-        print result.cancelType
+        print(result.cancelType)
 
         self.assertEqual(result.mgtKey, "20171114-20", "getDetail오류 :" + str(result.message))
 
