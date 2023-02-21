@@ -104,8 +104,6 @@ class KakaoService(PopbillBase):
             raise
                 PopbillException
         """
-        if SenderNumber == None or SenderNumber == '':
-            raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
 
         return self._httpget('/KakaoTalk/CheckSenderNumber/' + SenderNumber, CorpNum, UserID)
 
@@ -233,8 +231,6 @@ class KakaoService(PopbillBase):
        """
         if TemplateCode is None or TemplateCode == '':
             raise PopbillException(-99999999, "알림톡 템플릿코드가 입력되지 않았습니다.")
-        if Sender is None or Sender == '':
-            raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
 
         req = {}
 
@@ -331,9 +327,7 @@ class KakaoService(PopbillBase):
         """
         if PlusFriendID is None or PlusFriendID == '':
             raise PopbillException(-99999999, "검색용 아이디가 입력되지 않았습니다.")
-        if Sender is None or Sender == '':
-            raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
-
+        
         req = {}
         if PlusFriendID is not None or PlusFriendID != '':
             req['plusFriendID'] = PlusFriendID
@@ -434,8 +428,6 @@ class KakaoService(PopbillBase):
         """
         if PlusFriendID is None or PlusFriendID == '':
             raise PopbillException(-99999999, "검색용 아이디가 입력되지 않았습니다.")
-        if Sender is None or Sender == '':
-            raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
 
         req = {}
         if PlusFriendID is not None or PlusFriendID != '':
