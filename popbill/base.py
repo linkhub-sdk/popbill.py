@@ -346,9 +346,9 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         if refreshToken:
             try:
                 token = linkhub.generateToken(self.__linkID, self.__secretKey,
-                                              ServiceID_TEST if self.IsTest else ServiceID_REAL,
+                    ServiceID_TEST if self.IsTest else ServiceID_REAL,
                                               CorpNum, self.__scopes,
-                                              None if self.IPRestrictOnOff else "*",
+                    None if self.IPRestrictOnOff else "*",
                                               self.UseStaticIP, self.UseLocalTimeYN, self.UseGAIP)
 
                 try:
@@ -362,6 +362,103 @@ class PopbillBase(__with_metaclass(Singleton, object)):
                 raise PopbillException(LE.code, LE.message)
 
         return token
+
+    def getUseHistory(self, CorpNum, SDate, EDate, Page, PerPage, Order):
+        """포인트 사용내역 확인
+        args
+            CorpNum : 회원 사업자번호 사업자번호
+            SDate : 조회 기간의 시작일자
+            EDate : 조회 기간의 종료일자
+            Page : 목록 페이지번호 (기본값 1)
+            PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
+            Order : 거래일자를 기준으로 하는 목록 정렬 방향
+        return 검색 기간의 포인트 사용 기록 반환
+        raise
+            PopbillException
+        """
+        url = "/UseHistory"
+        url += "?SDate=" + SDate if SDate != None else ""
+        url += "&EDate=" + EDate if EDate != None else ""
+        url += "&Page=" + str(Page) if Page != None else ""
+        url += "&PerPage=" + str(PerPage) if PerPage != None else ""
+        url += "&Order=" + Order if Order != None else ""
+
+        return self._httpget(url, CorpNum)
+
+    def getPaymentHistory(self, CorpNum, SDate, EDate, Page, PerPage):
+        """포인트 결제내역 확인.
+        args
+            CorpNum : 회원 사업자번호 사업자번호
+            SDate : 조회 기간의 시작일자
+            EDate : 조회 기간의 종료일자
+            Page : 목록 페이지번호 (기본값 1)
+            PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
+        return 검색 기간의 포인트 결제 내역 반환
+        raise
+            PopbillException
+        """
+        url = "/PaymentHistory?CorpNum"
+        url += CorpNum if CorpNum != None else ""
+        url += "&SDate=" + SDate if SDate != None else ""
+        url += "&EDate=" + EDate if EDate != None else ""
+        url += "&Page=" + str(Page) if Page != None else ""
+        url += "&PerPage=" + str(PerPage) if PerPage != None else ""
+
+        return self._httpget(url, CorpNum)
+
+    def getRefundHistory(self, CorpNum, Page, PerPage):
+        """환불신청 내역 확인.
+        args
+            CorpNum : 회원 사업자번호
+            Page : 목록 페이지번호 (기본값 1)
+            PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
+        return 검색 기간의 환불 신청 내역 반환
+        raise
+            PopbillException
+        """
+        url = "/RefundHistory"
+        url += "?CorpNum=" + CorpNum if CorpNum != None else ""
+        url += "&Page=" + str(Page) if Page != None else ""
+        url += "&PerPage=" + str(PerPage) if PerPage != None else ""
+
+        return self._httpget(url, CorpNum)
+
+    def refund(self, CorpNum, RefundForm):
+        """환불 신청.
+        args
+            CorpNum : 회원 사업자번호
+            RefundForm : 환불 정보, Reference RefundForm class
+        return
+        raise
+            PopbillException
+        """
+        postData = self._stringtify(RefundForm)
+
+        return self._httppost("/Refund", CorpNum, postData)
+
+    def paymentRequest(self, CorpNum, PaymentForm):
+        """무통장 입금신청.
+        args
+            CorpNum : 회원 사업자번호
+            PaymentForm: 환불 정보, Reference PaymentForm class
+        return Payment
+        raise
+            PopbillException
+        """
+        postData = self._stringtify(PaymentForm)
+
+        return self._httppost("/Refund", CorpNum, postData)
+
+    def getSettleResult(self, CorpNum, settleCode):
+        """무통장 입금신청 정보확인.
+        args
+            CorpNum : 회원 사업자번호
+            settleCode : 정산코드
+        return SettleResult
+        raise
+            PopbillException
+        """
+        return self._httpget("/Payment/" + settleCode, CorpNum)
 
     def _httpget(self, url, CorpNum=None, UserID=None):
 
@@ -568,6 +665,51 @@ class JsonObject(object):
 
     def __getattr__(self, name):
         return None
+
+
+class PaymentForm(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+
+class PaymentHistory(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+
+class PaymentHistoryResult(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+
+class PaymentResponse(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+
+class RefundForm(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+
+class RefundHistory(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+
+class RefundHistoryResult(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+
+class UseHistory(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+
+class UseHistoryResult(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
 
 
 class PopbillEncoder(JSONEncoder):
