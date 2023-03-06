@@ -23,7 +23,7 @@ class MessageService(PopbillBase):
         """생성자
             args
                 LinkID : 링크허브에서 발급받은 링크아이디(LinkID)
-                SecretKeye 링크허브에서 발급받은 비밀키(SecretKey)
+                SecretKey : 링크허브에서 발급받은 비밀키(SecretKey)
         """
         super(self.__class__, self).__init__(LinkID, SecretKey)
         self._addScope("150")
@@ -443,7 +443,7 @@ class MessageService(PopbillBase):
         """
         if ReceiptNum == None or len(ReceiptNum) != 18:
             raise PopbillException(-99999999, "접수번호가 올바르지 않습니다.")
-            
+
         if ReceiveNum == None or ReceiveNum == '':
             raise PopbillException(-99999999, "수신번호가 올바르지 않습니다.")
 
@@ -466,7 +466,7 @@ class MessageService(PopbillBase):
         """
         if RequestNum == None or RequestNum == '':
             raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다.")
-            
+
         if ReceiveNum == None or ReceiveNum == '':
             raise PopbillException(-99999999, "수신번호가 올바르지 않습니다.")
 

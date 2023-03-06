@@ -17,7 +17,7 @@ class BizInfoCheckService(PopbillBase):
         """생성자
             args
                 LinkID : 링크허브에서 발급받은 링크아이디(LinkID)
-                SecretKeye 링크허브에서 발급받은 비밀키(SecretKey)
+                SecretKey : 링크허브에서 발급받은 비밀키(SecretKey)
         """
 
         super(self.__class__,self).__init__(LinkID,SecretKey)
