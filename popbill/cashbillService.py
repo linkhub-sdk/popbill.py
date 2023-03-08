@@ -10,6 +10,7 @@
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
+from datetime import datetime
 
 
 class CashbillService(PopbillBase):
@@ -114,9 +115,17 @@ class CashbillService(PopbillBase):
         if EmailSubject != None or EmailSubject != '':
             cashbill.emailSubject = EmailSubject
 
+
+
         postData = self._stringtify(cashbill)
 
-        return self._httppost('/Cashbill', postData, CorpNum, UserID, "ISSUE")
+        response = self._httppost(
+            '/Cashbill', postData, CorpNum, UserID, "ISSUE")
+
+        if response.tradeDT != None:
+            delattr(response, "tradeDT")
+
+        return response
 
     def bulkSubmit(self, CorpNum, SubmitID, cashbillList, UserID=None):
         """ 초대량 발행 접수
@@ -157,7 +166,18 @@ class CashbillService(PopbillBase):
         if SubmitID == None or SubmitID == "":
             raise PopbillException(-99999999, "제출아이디가 입력되지 않았습니다.")
 
-        return self._httpget('/Cashbill/BULK/' + SubmitID + '/State', CorpNum, UserID)
+        response = self._httpget(
+            '/Cashbill/BULK/' + SubmitID + '/State', CorpNum, UserID)
+
+        # tradeDT 제거
+        if response.tradeDT != None:
+            delattr(response, "tradeDT")
+
+        # issueDT 추가
+        if response.issueDT == None:
+            now = datetime.now()
+            response.issueDT = now.strftime("%Y%m%d%H%M%S")
+        return response
 
     def register(self, CorpNum, cashbill, UserID=None):
         """ 현금영수증 등록
