@@ -333,14 +333,14 @@ class MessageServiceTestCase(unittest.TestCase):
     def test_getSenderNumberMgtURL(self):
         try:
             response = self.messageService.getSenderNumberMgtURL(self.testCorpNum, self.testUserID)
-            print response
+            print(response)
         except PopbillException as PE:
             print(PE.message)
 
     def test_getSentListURL(self):
         try:
             response = self.messageService.getSentListURL(self.testCorpNum, self.testUserID)
-            print response
+            print(response)
         except PopbillException as PE:
             print(PE.message)
 
@@ -356,7 +356,6 @@ class MessageServiceTestCase(unittest.TestCase):
         response = self.messageService.checkAutoDenyNumber(CorpNum)
         print(response)
         self.assertTrue(response != None)
-
 
 
 if __name__ == '__main__':

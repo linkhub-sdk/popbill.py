@@ -54,7 +54,7 @@ class KakaoServiceTestCase(unittest.TestCase):
 
     def test_checkSenderNumber(self):
         try:
-            SenderNumber = ""
+            SenderNumber = "01000000000"
             response = self.kakaoService.checkSenderNumber(self.testCorpNum, SenderNumber)
             print(response)
         except PopbillException as PE:
@@ -93,10 +93,11 @@ class KakaoServiceTestCase(unittest.TestCase):
         Content += "support@linkhub.co.kr"
         AltSubject = "알림톡 대체 문자 제목"
         AltContent = "알림톡 대체 문자"
-        AltSendType = "C"
-        SndDT = ""
-        Receiver = ""
+        AltSendType = None
+        SndDT = "20240308000000"
+        Receiver = "140000"
         ReceiverName = ""
+        RequestNum = "20230308002"
 
         KakaoButtons = []
         KakaoButtons.append(
@@ -110,8 +111,7 @@ class KakaoServiceTestCase(unittest.TestCase):
 
         try:
             receiptNum = self.kakaoService.sendATS(self.testCorpNum, TemplateCode, Sender, Content, AltContent,
-                                                   AltSendType, SndDT, Receiver, ReceiverName, self.testUserID,
-                                                   "", KakaoButtons, AltSubject)
+                                                   AltSendType, SndDT, Receiver, ReceiverName, self.testUserID, RequestNum, KakaoButtons, AltSubject)
             print("접수번호 (receiptNum) : %s" % receiptNum)
         except PopbillException as PE:
             print(PE.message)
@@ -497,6 +497,19 @@ class KakaoServiceTestCase(unittest.TestCase):
         response = self.kakaoService.getSentListURL(self.testCorpNum, self.testUserID)
         print response
 
+    def test_CancelReservebyRCV(self):
+        receiptNum = "023030815215900001"
+        receiveNum = "140000"
+        result = self.kakaoService.CancelReservebyRCV(
+            self.testCorpNum, receiptNum, receiveNum)
+        self.assertTrue(result != None)
+
+    def test_CancelReserveRNbyRCV(self):
+        requestNum = "20230308002"
+        receiveNum = "140000"
+        result = self.kakaoService.CancelReserveRNbyRCV(
+            self.testCorpNum, requestNum, receiveNum)
+        self.assertTrue(result != None)
 
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(KakaoServiceTestCase)
