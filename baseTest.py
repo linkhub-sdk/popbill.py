@@ -1,5 +1,6 @@
 import sys
 import unittest
+from unittest import main
 from popbill.base import PopbillBase, PaymentForm, RefundForm
 
 try:
@@ -78,17 +79,16 @@ class BaseTest(unittest.TestCase):
         )
         result = self.baseService.refund(
             self.testCorpNum, refundForm, self.testUserID)
-        print(result)
+        self.assertTrue(result != None)
 
     def test_RefundHistory(self):
         result = self.baseService.getRefundHistory(self.testCorpNum)
-        print(result)
+        self.assertTrue(result != None)
 
     def test_getBalance(self):
         result = self.baseService.getBalance(self.testCorpNum)
-        print(result)
+        self.assertTrue(result != None)
 
 
 if __name__ == "__main__":
-    suite = unittest.TestLoader().loadTestsFromTestCase(BaseTest)
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    main()
