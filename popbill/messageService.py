@@ -603,6 +603,20 @@ class MessageService(PopbillBase):
 
         return self._httppost('/Message/States', postData, Corpnum, UserID)
 
+    def checkAutoDenyNumber(self, CorpNum, UserID=None):
+        """문자 발송이 차단된 사용자의 번호와 등록일 조회
+
+        Args:
+            CorpNum (str): 팝빌회원 사업자 번호
+            UserID (str, optional): 팝빌회원 아이디. Defaults to None.
+
+        Returns:
+            _type_: 차단된 번호와, 차단 등록일
+        """
+        if UserID != None and UserID != "":
+            return self._httpget("/Message/AutoDenyNumberInfo", CorpNum, UserID)
+        else:
+            return self._httpget("/Message/AutoDenyNumberInfo", CorpNum)
 
 class MessageReceiver(object):
     def __init__(self, **kwargs):

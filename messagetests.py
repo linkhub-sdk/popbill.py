@@ -344,6 +344,21 @@ class MessageServiceTestCase(unittest.TestCase):
         except PopbillException as PE:
             print(PE.message)
 
+    def test_checkAutoDenyNumberWithUserID(self):
+        CorpNum = self.testCorpNum
+        UserID = self.testUserID
+        response = self.messageService.checkAutoDenyNumber(CorpNum, UserID)
+        print(response)
+        self.assertTrue(response != None)
+
+    def test_checkAutoDenyNumber(self):
+        CorpNum = self.testCorpNum
+        response = self.messageService.checkAutoDenyNumber(CorpNum)
+        print(response)
+        self.assertTrue(response != None)
+
+
+
 if __name__ == '__main__':
     suite = unittest.TestLoader().loadTestsFromTestCase(MessageServiceTestCase)
     unittest.TextTestRunner(verbosity=2).run(suite)
