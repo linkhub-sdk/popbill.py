@@ -14,6 +14,7 @@ try:
 except ImportError:
     import urllib as parse
 
+
 class KakaoService(PopbillBase):
     """ 팝빌 카카오톡 API Service Implementation. """
 
@@ -128,7 +129,8 @@ class KakaoService(PopbillBase):
         if templateCode == None or templateCode == '':
             raise PopbillException(-99999999, "템플릿 코드가 입력되지 않았습니다.")
 
-        result = self._httpget('/KakaoTalk/GetATSTemplate/' + templateCode, CorpNum, UserID)
+        result = self._httpget(
+            '/KakaoTalk/GetATSTemplate/' + templateCode, CorpNum, UserID)
         return result
 
     def listATSTemplate(self, CorpNum, UserID=None):
@@ -188,6 +190,7 @@ class KakaoService(PopbillBase):
         return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
                                  RequestNum)
     # 버튼 추가
+
     def sendATS_multi(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
                       UserID=None, RequestNum=None, ButtonList=None):
         return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
@@ -201,14 +204,14 @@ class KakaoService(PopbillBase):
 
     def sendATS_same(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
                      UserID=None, RequestNum=None):
-        return self.sendATS_same(CorpNum,TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                    UserID, RequestNum, None, None)
+        return self.sendATS_same(CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
+                                 UserID, RequestNum, None, None)
 
     # 버튼 추가
     def sendATS_same(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
                      UserID=None, RequestNum=None, ButtonList=None):
-        return self.sendATS_same(CorpNum,TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                    UserID, RequestNum, None, None)
+        return self.sendATS_same(CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
+                                 UserID, RequestNum, None, None)
 
     # 대체문자 제목 추가
     def sendATS_same(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
@@ -282,7 +285,7 @@ class KakaoService(PopbillBase):
             rcv=Receiver,
             rcvnm=ReceiverName,
             msg=Content,
-            altsjt= AltSubject,
+            altsjt=AltSubject,
             altmsg=AltContent)
         )
 
@@ -327,7 +330,7 @@ class KakaoService(PopbillBase):
         """
         if PlusFriendID is None or PlusFriendID == '':
             raise PopbillException(-99999999, "검색용 아이디가 입력되지 않았습니다.")
-        
+
         req = {}
         if PlusFriendID is not None or PlusFriendID != '':
             req['plusFriendID'] = PlusFriendID
@@ -524,7 +527,6 @@ class KakaoService(PopbillBase):
 
     def search(self, CorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, UserID=None,
                QString=None):
-
         """
         카카오톡 전송내역 목록을 조회한다.
         - 버튼정보를 확인하는 경우 GetMessages (알림톡/친구톡 전송내역 확인) API 사용
@@ -589,10 +591,56 @@ class KakaoService(PopbillBase):
         """
         return self._httpget('/KakaoTalk/ChargeInfo?Type=' + MsgType, CorpNum, UserID)
 
+    def CancelReserveRNbyRCV(self, CorpNum, requestNum, receiveNum, UserID=None):
+        """예약 메시지 전송 취소. 예약시간 기준 10분전의 건만 취소 가능
+
+        Args:
+            CorpNum (str): 연동회원 사업자번호
+            receiptNum (str): 전송시 접수 번호
+            receiveNum (str): 전송시 수신 번호
+            UserID (str): 연동회원 아이디
+
+        Raises:
+        PopbillException
+        """
+        if requestNum == None or requestNum == "":
+            raise PopbillException(-99999999, "전송요청번호가 입력되지 않았습니다.")
+        if receiveNum == None or receiveNum == "":
+            raise PopbillException(-99999999, "수신번호가 입력되지 않았습니다.")
+
+        postData = self._stringtify(receiveNum)
+
+        return self._httppost("/KakaoTalk/Cancel/" + requestNum, postData, CorpNum, UserID)
+
+    def CancelReservebyRCV(self, CorpNum, receiptNum, receiveNum, UserID=None):
+        """예약 메시지 전송 취소. 예약시간 기준 10분전의 건만 취소 가능
+
+        Args:
+            CorpNum (str): 연동회원 사업자번호
+            receiptNum (str): 전송시 접수 번호
+            receiveNum (str): 전송시 수신 번호
+            UserID (str): 연동회원 아이디
+
+        Returns:
+
+        Raises:
+        PopbillException
+        """
+
+        if receiptNum == None or receiptNum == "":
+            raise PopbillException(-99999999, "접수번호가 입력되지 않았습니다.")
+        if receiveNum == None or receiveNum == "":
+            raise PopbillException(-99999999, "수신번호가 입력되지 않았습니다.")
+
+        postData = self._stringtify(receiveNum)
+
+        return self._httppost("/KakaoTalk/" + receiptNum + "/Cancel", postData, CorpNum, UserID)
+
 
 class KakaoReceiver(object):
     def __init__(self, **kwargs):
-        self.__dict__ = dict.fromkeys(['rcv', 'rcvnm', 'msg', 'altsjt', 'altmsg', 'btns', 'interOPRefKey'])
+        self.__dict__ = dict.fromkeys(
+            ['rcv', 'rcvnm', 'msg', 'altsjt', 'altmsg', 'btns', 'interOPRefKey'])
         self.__dict__.update(kwargs)
 
 
