@@ -611,14 +611,20 @@ class MessageService(PopbillBase):
             UserID (str, optional): 팝빌회원 아이디. Defaults to None.
 
         Returns:
-            _type_: 차단된 번호와, 차단 등록일
+            AutoDenyNumberInfo: 차단된 번호와, 차단 등록일
         """
-        if UserID != None and UserID != "":
-            return self._httpget("/Message/AutoDenyNumberInfo", CorpNum, UserID)
-        else:
-            return self._httpget("/Message/AutoDenyNumberInfo", CorpNum)
+        response = self._httpget(
+            "/Message/AutoDenyNumberInfo", CorpNum, UserID)
+
+        return AutoDenyNumberInfo(**response.__dict__)
 
 class MessageReceiver(object):
     def __init__(self, **kwargs):
         self.__dict__ = dict.fromkeys(['snd', 'rcv', 'rcvnm', 'msg', 'sjt', 'interOPRefKey'])
+        self.__dict__.update(kwargs)
+
+
+class AutoDenyNumberInfo(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = dict.fromkeys(['smsdenyNumber', 'regDT'])
         self.__dict__.update(kwargs)
