@@ -55,7 +55,8 @@ class Singleton(type):
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[cls] = super(
+                Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
 
@@ -82,12 +83,15 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
     def _getConn(self):
         if stime() - self.__connectedAt >= self.__timeOut or self.__conn == None:
-            if self.UseGAIP :
-                self.__conn = httpclient.HTTPSConnection(ServiceURL_GA_TEST if self.IsTest else ServiceURL_GA_REAL)
-            elif self.UseStaticIP :
-                self.__conn = httpclient.HTTPSConnection(ServiceURL_Static_TEST if self.IsTest else ServiceURL_Static_REAL)
-            else :
-                self.__conn = httpclient.HTTPSConnection(ServiceURL_TEST if self.IsTest else ServiceURL_REAL)
+            if self.UseGAIP:
+                self.__conn = httpclient.HTTPSConnection(
+                    ServiceURL_GA_TEST if self.IsTest else ServiceURL_GA_REAL)
+            elif self.UseStaticIP:
+                self.__conn = httpclient.HTTPSConnection(
+                    ServiceURL_Static_TEST if self.IsTest else ServiceURL_Static_REAL)
+            else:
+                self.__conn = httpclient.HTTPSConnection(
+                    ServiceURL_TEST if self.IsTest else ServiceURL_REAL)
 
             self.__connectedAt = stime()
             return self.__conn
@@ -298,8 +302,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
                 UserID : 회원 아이디
             return
                 회사정보
-            raise
-                PopbillException
         """
         return self._httpget('/CorpInfo', CorpNum, UserID)
 
@@ -325,14 +327,11 @@ class PopbillBase(__with_metaclass(Singleton, object)):
                 UserID :  회원 아이디
             return
                 처리결과. consist of code and message
-            raise
-                PopbillException
         """
         postData = self._stringtify(ContactInfo)
         return self._httppost('/IDs/New', postData, CorpNum, UserID)
 
     def _getToken(self, CorpNum):
-
         try:
             token = self.__tokenCache[CorpNum]
         except KeyError:
@@ -341,14 +340,15 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         refreshToken = True
 
         if token != None:
-            refreshToken = token.expiration[:-5] < linkhub.getTime(self.UseStaticIP, self.UseLocalTimeYN, self.UseGAIP)
+            refreshToken = token.expiration[:-5] < linkhub.getTime(
+                self.UseStaticIP, self.UseLocalTimeYN, self.UseGAIP)
 
         if refreshToken:
             try:
                 token = linkhub.generateToken(self.__linkID, self.__secretKey,
-                    ServiceID_TEST if self.IsTest else ServiceID_REAL,
+                                              ServiceID_TEST if self.IsTest else ServiceID_REAL,
                                               CorpNum, self.__scopes,
-                    None if self.IPRestrictOnOff else "*",
+                                              None if self.IPRestrictOnOff else "*",
                                               self.UseStaticIP, self.UseLocalTimeYN, self.UseGAIP)
 
                 try:
@@ -363,18 +363,16 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         return token
 
-    def getUseHistory(self, CorpNum, SDate, EDate, Page, PerPage, Order):
-        """포인트 사용내역 확인
-        args
-            CorpNum : 회원 사업자번호 사업자번호
-            SDate : 조회 기간의 시작일자
-            EDate : 조회 기간의 종료일자
-            Page : 목록 페이지번호 (기본값 1)
-            PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
-            Order : 거래일자를 기준으로 하는 목록 정렬 방향
-        return 검색 기간의 포인트 사용 기록 반환
-        raise
-            PopbillException
+    def getUseHistory(self, CorpNum, SDate, EDate, Page=None, PerPage=None, Order=None):
+        """ 포인트 사용내역 확인
+            args
+                CorpNum : 회원 사업자번호 사업자번호
+                SDate : 조회 기간의 시작일자
+                EDate : 조회 기간의 종료일자
+                Page : 목록 페이지번호 (기본값 1)
+                PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
+                Order : 거래일자를 기준으로 하는 목록 정렬 방향
+            return 검색 기간의 포인트 사용 기록 반환
         """
         url = "/UseHistory"
         url += "?SDate=" + SDate if SDate != None else ""
@@ -385,7 +383,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         return self._httpget(url, CorpNum)
 
-    def getPaymentHistory(self, CorpNum, SDate, EDate, Page, PerPage):
+    def getPaymentHistory(self, CorpNum, SDate, EDate, Page=None, PerPage=None):
         """포인트 결제내역 확인.
         args
             CorpNum : 회원 사업자번호 사업자번호
@@ -406,7 +404,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         return self._httpget(url, CorpNum)
 
-    def getRefundHistory(self, CorpNum, Page, PerPage):
+    def getRefundHistory(self, CorpNum, Page=None, PerPage=None):
         """환불신청 내역 확인.
         args
             CorpNum : 회원 사업자번호
@@ -423,7 +421,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         return self._httpget(url, CorpNum)
 
-    def refund(self, CorpNum, RefundForm):
+    def refund(self, CorpNum, RefundForm, UserID=None):
         """환불 신청.
         args
             CorpNum : 회원 사업자번호
@@ -432,11 +430,14 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
+
         postData = self._stringtify(RefundForm)
+        if UserID != None:
+            return self._httppost("/Refund",  postData, CorpNum=CorpNum, UserID=UserID)
+        else:
+            return self._httppost("/Refund",  postData, CorpNum=CorpNum)
 
-        return self._httppost("/Refund", CorpNum, postData)
-
-    def paymentRequest(self, CorpNum, PaymentForm):
+    def paymentRequest(self, CorpNum, PaymentForm, UserID=None):
         """무통장 입금신청.
         args
             CorpNum : 회원 사업자번호
@@ -446,10 +447,12 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             PopbillException
         """
         postData = self._stringtify(PaymentForm)
+        if UserID != None and UserID != "" and not UserID.strip():
+            return self._httppost("/Payment",  postData, CorpNum=CorpNum, UserID=UserID)
+        else:
+            return self._httppost("/Payment",  postData, CorpNum=CorpNum)
 
-        return self._httppost("/Refund", CorpNum, postData)
-
-    def getSettleResult(self, CorpNum, settleCode):
+    def getSettleResult(self, CorpNum, settleCode, UserID=None):
         """무통장 입금신청 정보확인.
         args
             CorpNum : 회원 사업자번호
@@ -458,16 +461,19 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
-        return self._httpget("/Payment/" + settleCode, CorpNum)
+        if UserID == None:
+            return self._httpget("/Payment/" + settleCode, CorpNum=CorpNum)
+        else:
+            return self._httpget("/Payment/" + settleCode, CorpNum=CorpNum, UserID=UserID)
 
     def _httpget(self, url, CorpNum=None, UserID=None):
-
         conn = self._getConn()
 
         headers = {"x-pb-version": APIVersion}
 
         if CorpNum != None:
-            headers["Authorization"] = "Bearer " + self._getToken(CorpNum).session_token
+            headers["Authorization"] = "Bearer " + \
+                self._getToken(CorpNum).session_token
 
         if UserID != None:
             headers["x-pb-userid"] = UserID
@@ -491,7 +497,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             return Utils.json2obj(responseString)
 
     def _httppost(self, url, postData, CorpNum=None, UserID=None, ActionOverride=None, contentsType=None):
-
         conn = self._getConn()
 
         headers = {"x-pb-version": APIVersion}
@@ -502,7 +507,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             headers["Content-Type"] = "application/json; charset=utf8"
 
         if CorpNum != None:
-            headers["Authorization"] = "Bearer " + self._getToken(CorpNum).session_token
+            headers["Authorization"] = "Bearer " + \
+                self._getToken(CorpNum).session_token
         if UserID != None:
             headers["x-pb-userid"] = UserID
 
@@ -534,11 +540,13 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         headers["Content-Type"] = "application/json; charset=utf8"
 
-        headers["x-pb-message-digest"] = base64.b64encode(sha1(postData).digest()).decode('utf-8')
+        headers["x-pb-message-digest"] = base64.b64encode(
+            sha1(postData).digest()).decode('utf-8')
         headers["x-pb-submit-id"] = SubmitID
 
         if CorpNum != None:
-            headers["Authorization"] = "Bearer " + self._getToken(CorpNum).session_token
+            headers["Authorization"] = "Bearer " + \
+                self._getToken(CorpNum).session_token
         if UserID != None:
             headers["x-pb-userid"] = UserID
 
@@ -564,15 +572,16 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             return Utils.json2obj(responseString)
 
     def _httppost_files(self, url, postData, Files, CorpNum, UserID=None):
-
         conn = self._getConn()
 
         boundary = "--POPBILL_PYTHON--"
 
-        headers = {"x-pb-version": APIVersion, "Content-Type": "multipart/form-data; boundary=%s" % boundary}
+        headers = {"x-pb-version": APIVersion,
+                   "Content-Type": "multipart/form-data; boundary=%s" % boundary}
 
         if CorpNum != None:
-            headers["Authorization"] = "Bearer " + self._getToken(CorpNum).session_token
+            headers["Authorization"] = "Bearer " + \
+                self._getToken(CorpNum).session_token
 
         if UserID != None:
             headers["x-pb-userid"] = UserID
@@ -588,7 +597,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         if postData != None and postData != '':
             buff.write((CRLF + '--' + boundary + CRLF).encode('utf-8'))
-            buff.write(('Content-Disposition: form-data; name="form"' + CRLF).encode('utf-8'))
+            buff.write(
+                ('Content-Disposition: form-data; name="form"' + CRLF).encode('utf-8'))
             buff.write(CRLF.encode('utf-8'))
             buff.write(postData.encode('utf-8'))
 
@@ -597,11 +607,13 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             buff.write(
                 ('Content-Disposition: form-data; name="%s"; filename="%s"' % (f.fieldName, f.fileName) + CRLF).encode(
                     'utf-8'))
-            buff.write(('Content-Type: Application/octet-stream' + CRLF).encode('utf-8'))
+            buff.write(
+                ('Content-Type: Application/octet-stream' + CRLF).encode('utf-8'))
             buff.write(CRLF.encode('utf-8'))
             buff.write(f.fileData)
 
-        buff.write((CRLF + '--' + boundary + '--' + CRLF + CRLF).encode('utf-8'))
+        buff.write((CRLF + '--' + boundary + '--' +
+                   CRLF + CRLF).encode('utf-8'))
 
         multiparted = buff.getvalue()
 
@@ -640,13 +652,16 @@ class CorpInfo(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
 
+
 class BizCheckInfo(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
 
+
 class File(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
+
 
 class PopbillException(Exception):
     def __init__(self, code, message):
@@ -724,7 +739,8 @@ class Utils:
 
     @staticmethod
     def json2obj(data):
-        if (type(data) is bytes): data = data.decode('utf-8')
+        if (type(data) is bytes):
+            data = data.decode('utf-8')
         return json.loads(data, object_hook=Utils._json_object_hook)
 
     @staticmethod
