@@ -150,7 +150,9 @@ class CashbillService(PopbillBase):
 
         bcb = postData.encode('utf-8')
 
-        return self._httpBulkPost('/Cashbill', bcb, SubmitID , CorpNum, UserID, 'BULKISSUE')
+        response = self._httpBulkPost('/Cashbill', bcb, SubmitID , CorpNum, UserID, 'BULKISSUE')
+
+        return IssueResponse(response)
 
     def getBulkResult(self, CorpNum, SubmitID, UserID=None):
         """ 초대량 접수결과 확인
@@ -729,5 +731,9 @@ class Cashbill(object):
         self.__dict__ = kwargs
 
 class BulkCashbillSubmit(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+class IssueResponse(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
