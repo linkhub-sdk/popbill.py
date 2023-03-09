@@ -380,8 +380,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         url += "&Page=" + str(Page) if Page != None else ""
         url += "&PerPage=" + str(PerPage) if PerPage != None else ""
         url += "&Order=" + Order if Order != None else ""
-
-        return self._httpget(url, CorpNum)
+        response = self._httpget(url, CorpNum)
+        return UseHistoryResult(**response.__dict__)
 
     def getPaymentHistory(self, CorpNum, SDate, EDate, Page=None, PerPage=None):
         """포인트 결제내역 확인.
@@ -402,7 +402,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         url += "&Page=" + str(Page) if Page != None else ""
         url += "&PerPage=" + str(PerPage) if PerPage != None else ""
 
-        return self._httpget(url, CorpNum)
+        response = self._httpget(url, CorpNum)
+        return PaymentHistoryResult(**response.__dict__)
 
     def getRefundHistory(self, CorpNum, Page=None, PerPage=None):
         """환불신청 내역 확인.
@@ -419,7 +420,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         url += "&Page=" + str(Page) if Page != None else ""
         url += "&PerPage=" + str(PerPage) if PerPage != None else ""
 
-        return self._httpget(url, CorpNum)
+        response = self._httpget(url, CorpNum)
+        return RefundHistoryResult(**response.__dict__)
 
     def refund(self, CorpNum, RefundForm, UserID=None):
         """환불 신청.
@@ -432,10 +434,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         """
 
         postData = self._stringtify(RefundForm)
-        if UserID != None:
-            return self._httppost("/Refund",  postData, CorpNum=CorpNum, UserID=UserID)
-        else:
-            return self._httppost("/Refund",  postData, CorpNum=CorpNum)
+        response =  self._httppost("/Refund",  postData, CorpNum=CorpNum, UserID=UserID)
+        return Response(**response.__dict__)
 
     def paymentRequest(self, CorpNum, PaymentForm, UserID=None):
         """무통장 입금신청.
@@ -447,10 +447,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             PopbillException
         """
         postData = self._stringtify(PaymentForm)
-        if UserID != None and UserID != "" and not UserID.strip():
-            return self._httppost("/Payment",  postData, CorpNum=CorpNum, UserID=UserID)
-        else:
-            return self._httppost("/Payment",  postData, CorpNum=CorpNum)
+        response =  self._httppost("/Payment",  postData, CorpNum=CorpNum, UserID=UserID)
+        return PaymentResponse(**response.__dict__)
 
     def getSettleResult(self, CorpNum, settleCode, UserID=None):
         """무통장 입금신청 정보확인.
@@ -461,10 +459,9 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
-        if UserID == None:
-            return self._httpget("/Payment/" + settleCode, CorpNum=CorpNum)
-        else:
-            return self._httpget("/Payment/" + settleCode, CorpNum=CorpNum, UserID=UserID)
+        response = self._httpget("/Payment/" + settleCode, CorpNum=CorpNum, UserID=UserID)
+
+        return PaymentHistory(**response.__dict__)
 
     def _httpget(self, url, CorpNum=None, UserID=None):
         conn = self._getConn()
@@ -695,6 +692,7 @@ class PaymentHistory(object):
 class PaymentHistoryResult(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
+        self.__dict__["list"] = [PaymentHistory(**paymentHistory.__dict__) for paymentHistory in kwargs['list']]
 
 
 class PaymentResponse(object):
@@ -715,6 +713,7 @@ class RefundHistory(object):
 class RefundHistoryResult(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
+        self.__dict__['list'] = [RefundHistory(**refundHistory.__dict__) for refundHistory in kwargs['list']]
 
 
 class UseHistory(object):
@@ -725,12 +724,13 @@ class UseHistory(object):
 class UseHistoryResult(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
-
+class Response(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
 
 class PopbillEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
-
 
 class Utils:
     @staticmethod
@@ -754,3 +754,4 @@ class Utils:
     @staticmethod
     def gzipDecomp(data):
         return zlib.decompress(data, 16 + zlib.MAX_WBITS)
+

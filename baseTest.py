@@ -52,7 +52,7 @@ class BaseTest(unittest.TestCase):
         test_settle_code = "202303070000000052"
         result = self.baseService.getSettleResult(
             self.testCorpNum, test_settle_code)
-        print(result)
+        print(result.__dict__)
 
     def test_GetUseHistory(self):
         SDate = "20230101"
@@ -61,8 +61,8 @@ class BaseTest(unittest.TestCase):
         print(result)
 
     def test_GetPaymentHistory(self):
-        SDate = "20230101"
-        EDate = "20230102"
+        SDate = "20220101"
+        EDate = "20220601"
         result = self.baseService.getPaymentHistory(
             self.testCorpNum, SDate, EDate)
         print(result)
