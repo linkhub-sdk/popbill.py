@@ -737,3 +737,7 @@ class BulkCashbillSubmit(object):
 class IssueResponse(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
+
+class BulkCashbillIssueResult(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
