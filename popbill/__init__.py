@@ -9,9 +9,9 @@ __all__ = ["PopbillException", "JoinForm", "ContactInfo", "CorpInfo",
            "HTTaxinvoiceService", "HTCashbillService",
            "ClosedownService", "BizInfoCheckService",
            "KakaoService", "KakaoReceiver", "KakaoButton",
-           "EasyFinBankService", "BankAccountInfo", "AccountCheckService"]
+           "EasyFinBankService", "BankAccountInfo", "AccountCheckService", "Response","UseHistory","RefundHistoryResult","RefundHistory","RefundForm","PaymentHistoryResult","PaymentResponse", "PaymentForm", "PaymentHistory" ]
 
-from .base import PopbillException, JoinForm, ContactInfo, CorpInfo
+from .base import PopbillException, JoinForm, ContactInfo, CorpInfo, Response,UseHistory,RefundHistoryResult,RefundHistory,RefundForm,PaymentHistoryResult,PaymentResponse, PaymentForm, PaymentHistory
 from .taxinvoiceService import *
 from .statementService import *
 from .faxService import *
