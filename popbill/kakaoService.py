@@ -8,7 +8,7 @@
 # Written : 2018-02-26
 # Updated : 2022-08-03
 # Thanks for your interest.
-from .base import PopbillBase, PopbillException, File
+from .base import PopbillBase, PopbillException, File, Response
 try:
     from urllib import parse as parse
 except ImportError:
@@ -497,7 +497,8 @@ class KakaoService(PopbillBase):
         if RequestNum is None or RequestNum == '':
             raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다")
 
-        return self._httpget('/KakaoTalk/Cancel/' + RequestNum, CorpNum, UserID)
+        response = self._httpget('/KakaoTalk/Cancel/' + RequestNum, CorpNum, UserID)
+        return Response(**response.__dict__)
 
     def getMessages(self, CorpNum, ReceiptNum, UserID=None):
         """
@@ -610,7 +611,8 @@ class KakaoService(PopbillBase):
 
         postData = self._stringtify(receiveNum)
 
-        return self._httppost("/KakaoTalk/Cancel/" + requestNum, postData, CorpNum, UserID)
+        response = self._httppost("/KakaoTalk/Cancel/" + requestNum, postData, CorpNum, UserID)
+        return Response(**response.__dict__)
 
     def CancelReservebyRCV(self, CorpNum, receiptNum, receiveNum, UserID=None):
         """예약 메시지 전송 취소. 예약시간 기준 10분전의 건만 취소 가능

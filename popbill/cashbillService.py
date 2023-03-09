@@ -152,7 +152,7 @@ class CashbillService(PopbillBase):
 
         response = self._httpBulkPost('/Cashbill', bcb, SubmitID , CorpNum, UserID, 'BULKISSUE')
 
-        return IssueResponse(response)
+        return IssueResponse(**response.__dict__)
 
     def getBulkResult(self, CorpNum, SubmitID, UserID=None):
         """ 초대량 접수결과 확인
@@ -421,7 +421,8 @@ class CashbillService(PopbillBase):
         if FranchiseTaxRegID is not None:
             uri += '&FranchiseTaxRegID=' + FranchiseTaxRegID
 
-        return self._httpget(uri, CorpNum, UserID)
+        response = self._httpget(uri, CorpNum, UserID)
+        return CBSearchResult(**response.__dict__)
 
     def getInfo(self, CorpNum, MgtKey):
         """ 상태/요약 정보 조회
@@ -437,7 +438,8 @@ class CashbillService(PopbillBase):
         if MgtKey == None or MgtKey == "":
             raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
 
-        return self._httpget('/Cashbill/' + MgtKey, CorpNum)
+        resposne = self._httpget('/Cashbill/' + MgtKey, CorpNum)
+        return CashbillInfo(**resposne.__dict__)
 
     def getInfos(self, CorpNum, MgtKeyList):
         """ 상태정보 다량 확인, 최대 1000건
@@ -454,7 +456,8 @@ class CashbillService(PopbillBase):
 
         postData = self._stringtify(MgtKeyList)
 
-        return self._httppost('/Cashbill/States', postData, CorpNum)
+        response = self._httppost('/Cashbill/States', postData, CorpNum)
+        return [CashbillInfo(**info.__dict__) for info in response]
 
     def getDetailInfo(self, CorpNum, MgtKey):
         """ 상세정보 조회
@@ -741,3 +744,11 @@ class IssueResponse(object):
 class BulkCashbillIssueResult(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
+
+class CashbillInfo(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+class CBSearchResult(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+        self.__dict__['list'] = [CashbillInfo(**info.__dict__) for info in kwargs['list']]
