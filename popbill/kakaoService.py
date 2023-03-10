@@ -612,7 +612,7 @@ class KakaoService(PopbillBase):
         postData = self._stringtify(receiveNum)
 
         response = self._httppost("/KakaoTalk/Cancel/" + requestNum, postData, CorpNum, UserID)
-        return Response(**response.__dict__)
+        return Response(response)
 
     def CancelReservebyRCV(self, CorpNum, receiptNum, receiveNum, UserID=None):
         """예약 메시지 전송 취소. 예약시간 기준 10분전의 건만 취소 가능
@@ -635,8 +635,8 @@ class KakaoService(PopbillBase):
             raise PopbillException(-99999999, "수신번호가 입력되지 않았습니다.")
 
         postData = self._stringtify(receiveNum)
-
-        return self._httppost("/KakaoTalk/" + receiptNum + "/Cancel", postData, CorpNum, UserID)
+        resposne = self._httppost("/KakaoTalk/" + receiptNum + "/Cancel", postData, CorpNum, UserID)
+        return Response(resposne)
 
 
 class KakaoReceiver(object):
