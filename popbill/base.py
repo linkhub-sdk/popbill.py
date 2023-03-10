@@ -363,7 +363,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         return token
 
-    def getUseHistory(self, CorpNum, SDate, EDate, Page=None, PerPage=None, Order=None):
+    def getUseHistory(self, CorpNum, SDate, EDate, Page=None, PerPage=None, Order=None, UserID=None):
         """ 포인트 사용내역 확인
             args
                 CorpNum : 회원 사업자번호 사업자번호
@@ -372,6 +372,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
                 Page : 목록 페이지번호 (기본값 1)
                 PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
                 Order : 거래일자를 기준으로 하는 목록 정렬 방향
+                UserID : 팝빌 회원 아이디
             return 검색 기간의 포인트 사용 기록 반환
         """
         url = "/UseHistory"
@@ -380,10 +381,10 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         url += "&Page=" + str(Page) if Page != None else ""
         url += "&PerPage=" + str(PerPage) if PerPage != None else ""
         url += "&Order=" + Order if Order != None else ""
-        response = self._httpget(url, CorpNum)
+        response = self._httpget(url, CorpNum, UserID)
         return UseHistoryResult(**response.__dict__)
 
-    def getPaymentHistory(self, CorpNum, SDate, EDate, Page=None, PerPage=None):
+    def getPaymentHistory(self, CorpNum, SDate, EDate, Page=None, PerPage=None, UserID = None):
         """포인트 결제내역 확인.
         args
             CorpNum : 회원 사업자번호 사업자번호
@@ -391,6 +392,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             EDate : 조회 기간의 종료일자
             Page : 목록 페이지번호 (기본값 1)
             PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
+            UserID : 팝빌 회원 아이디
         return 검색 기간의 포인트 결제 내역 반환
         raise
             PopbillException
@@ -402,15 +404,16 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         url += "&Page=" + str(Page) if Page != None else ""
         url += "&PerPage=" + str(PerPage) if PerPage != None else ""
 
-        response = self._httpget(url, CorpNum)
+        response = self._httpget(url, CorpNum, UserID)
         return PaymentHistoryResult(**response.__dict__)
 
-    def getRefundHistory(self, CorpNum, Page=None, PerPage=None):
+    def getRefundHistory(self, CorpNum, Page=None, PerPage=None, UserID=None):
         """환불신청 내역 확인.
         args
             CorpNum : 회원 사업자번호
             Page : 목록 페이지번호 (기본값 1)
             PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
+            UserID : 팝빌 회원 아이디
         return 검색 기간의 환불 신청 내역 반환
         raise
             PopbillException
@@ -420,7 +423,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         url += "&Page=" + str(Page) if Page != None else ""
         url += "&PerPage=" + str(PerPage) if PerPage != None else ""
 
-        response = self._httpget(url, CorpNum)
+        response = self._httpget(url, CorpNum,UserID)
         return RefundHistoryResult(**response.__dict__)
 
     def refund(self, CorpNum, RefundForm, UserID=None):
@@ -428,7 +431,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         args
             CorpNum : 회원 사업자번호
             RefundForm : 환불 정보, Reference RefundForm class
-        return
+            UserID : 팝빌 회원 아이디
+        return Response
         raise
             PopbillException
         """
@@ -442,7 +446,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         args
             CorpNum : 회원 사업자번호
             PaymentForm: 환불 정보, Reference PaymentForm class
-        return Payment
+            UserID : 팝빌 회원 아이디
+        return PaymentResponse
         raise
             PopbillException
         """
@@ -455,7 +460,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         args
             CorpNum : 회원 사업자번호
             settleCode : 정산코드
-        return SettleResult
+            UserID : 팝빌 회원 아이디
+        return PaymentHistory
         raise
             PopbillException
         """
