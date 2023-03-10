@@ -457,7 +457,7 @@ class CashbillService(PopbillBase):
         postData = self._stringtify(MgtKeyList)
 
         response = self._httppost('/Cashbill/States', postData, CorpNum)
-        return [CashbillInfo(**info.__dict__) for info in response]
+        return [CashbillInfo(info) for info in response]
 
     def getDetailInfo(self, CorpNum, MgtKey):
         """ 상세정보 조회
