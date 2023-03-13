@@ -10,264 +10,317 @@
 # Updated : 2022-08-03
 # Thanks for your interest.
 from datetime import datetime
-from .base import PopbillBase, PopbillException, File
+
+from .base import File, PopbillBase, PopbillException
+
 try:
     from urllib import parse as parse
 except ImportError:
     import urllib as parse
 
+
 class FaxService(PopbillBase):
-    """ 팝빌 팩스 API Service Implementation. """
+    """팝빌 팩스 API Service Implementation."""
 
     def __init__(self, LinkID, SecretKey):
         """생성자
-            args
-                LinkID : 링크허브에서 발급받은 링크아이디(LinkID)
-                SecretKey : 링크허브에서 발급받은 비밀키(SecretKey)
+        args
+            LinkID : 링크허브에서 발급받은 링크아이디(LinkID)
+            SecretKey : 링크허브에서 발급받은 비밀키(SecretKey)
         """
         super(self.__class__, self).__init__(LinkID, SecretKey)
         self._addScope("160")
         self._addScope("161")
 
     def getChargeInfo(self, CorpNum, UserID=None, ReceiveNumType=None):
-        """ 과금정보 확인
-            args
-                CorpNum : 회원 사업자번호
-                UserID : 팝빌 회원아이디
-                ReceiveNumType : 수신번호 유형
-            return
-                과금정보 객체
-            raise
-                PopbillException
+        """과금정보 확인
+        args
+            CorpNum : 회원 사업자번호
+            UserID : 팝빌 회원아이디
+            ReceiveNumType : 수신번호 유형
+        return
+            과금정보 객체
+        raise
+            PopbillException
         """
-        url = '/FAX/ChargeInfo'
+        url = "/FAX/ChargeInfo"
         if ReceiveNumType != None and ReceiveNumType != "":
-            url = '/FAX/ChargeInfo?receiveNumType=' + parse.quote(ReceiveNumType)
+            url = "/FAX/ChargeInfo?receiveNumType=" + parse.quote(ReceiveNumType)
         return self._httpget(url, CorpNum, UserID)
 
     def getURL(self, CorpNum, UserID, ToGo):
-        """ 팩스 관련 팝빌 URL
-            args
-                CorpNum : 팝빌회원 사업자번호
-                UserID : 팝빌회원 아이디
-                TOGO : 팩스관련 기능 지정 문자. (BOX - 전송내역조회)
-            return
-                30초 보안 토큰을 포함한 url
-            raise
-                PopbillException
+        """팩스 관련 팝빌 URL
+        args
+            CorpNum : 팝빌회원 사업자번호
+            UserID : 팝빌회원 아이디
+            TOGO : 팩스관련 기능 지정 문자. (BOX - 전송내역조회)
+        return
+            30초 보안 토큰을 포함한 url
+        raise
+            PopbillException
         """
-        if ToGo == None or ToGo == '':
+        if ToGo == None or ToGo == "":
             raise PopbillException(-99999999, "TOGO값이 입력되지 않았습니다.")
 
-        result = self._httpget('/FAX/?TG=' + ToGo, CorpNum, UserID)
+        result = self._httpget("/FAX/?TG=" + ToGo, CorpNum, UserID)
         return result.url
 
     def getSentListURL(self, CorpNum, UserID):
-        """ 발신번호 관리 팝업 URL
-            args
-                CorpNum : 회원 사업자번호
-                UserID  : 회원 팝빌아이디
-            return
-                30초 보안 토큰을 포함한 url
-            raise
-                PopbillException
+        """발신번호 관리 팝업 URL
+        args
+            CorpNum : 회원 사업자번호
+            UserID  : 회원 팝빌아이디
+        return
+            30초 보안 토큰을 포함한 url
+        raise
+            PopbillException
         """
-        result = self._httpget('/FAX/?TG=BOX', CorpNum, UserID)
+        result = self._httpget("/FAX/?TG=BOX", CorpNum, UserID)
         return result.url
 
     def getSenderNumberMgtURL(self, CorpNum, UserID):
-        """ 팩스 전송내역 팝업 URL
-            args
-                CorpNum : 회원 사업자번호
-                UserID  : 회원 팝빌아이디
-            return
-                30초 보안 토큰을 포함한 url
-            raise
-                PopbillException
+        """팩스 전송내역 팝업 URL
+        args
+            CorpNum : 회원 사업자번호
+            UserID  : 회원 팝빌아이디
+        return
+            30초 보안 토큰을 포함한 url
+        raise
+            PopbillException
         """
-        result = self._httpget('/FAX/?TG=SENDER', CorpNum, UserID)
+        result = self._httpget("/FAX/?TG=SENDER", CorpNum, UserID)
         return result.url
 
     def getUnitCost(self, CorpNum, ReceiveNumType=None):
-        """ 팩스 전송 단가 확인
-            args
-                CorpNum : 팝빌회원 사업자번호
-                ReceiveNumType : 수신번호 유형
-            return
-                전송 단가 by float
-            raise
-                PopbillException
+        """팩스 전송 단가 확인
+        args
+            CorpNum : 팝빌회원 사업자번호
+            ReceiveNumType : 수신번호 유형
+        return
+            전송 단가 by float
+        raise
+            PopbillException
         """
-        url = '/FAX/UnitCost'
+        url = "/FAX/UnitCost"
         if ReceiveNumType != None and ReceiveNumType != "":
-            url = '/FAX/UnitCost?receiveNumType=' + parse.quote(ReceiveNumType)
+            url = "/FAX/UnitCost?receiveNumType=" + parse.quote(ReceiveNumType)
         result = self._httpget(url, CorpNum)
         return int(result.unitCost)
 
-    def search(self, CorpNum, SDate, EDate, State, ReserveYN, SenderOnly, Page, PerPage, Order, UserID=None,
-               QString=None):
-        """ 목록 조회
-            args
-                CorpNum : 팝빌회원 사업자번호
-                SDate : 시작일자, 표시형식(yyyyMMdd)
-                EDate : 종료일자, 표시형식(yyyyMMdd)
-                State : 전송상태 배열, 1-대기, 2-성공, 3-실패, 4-취소
-                ReserveYN : 예약여부, False-전체조회, True-예약전송건 조회
-                SenderOnly : 개인조회여부, False-개인조회, True-회사조회
-                Page : 페이지번호
-                PerPage : 페이지당 목록개수
-                Order : 정렬방향, D-내림차순, A-오름차순
-                UserID : 팝빌 회원아이디
-                QString : 조회 검색어, 발신자명 또는 수신자명 기재
+    def search(
+        self,
+        CorpNum,
+        SDate,
+        EDate,
+        State,
+        ReserveYN,
+        SenderOnly,
+        Page,
+        PerPage,
+        Order,
+        UserID=None,
+        QString=None,
+    ):
+        """목록 조회
+        args
+            CorpNum : 팝빌회원 사업자번호
+            SDate : 시작일자, 표시형식(yyyyMMdd)
+            EDate : 종료일자, 표시형식(yyyyMMdd)
+            State : 전송상태 배열, 1-대기, 2-성공, 3-실패, 4-취소
+            ReserveYN : 예약여부, False-전체조회, True-예약전송건 조회
+            SenderOnly : 개인조회여부, False-개인조회, True-회사조회
+            Page : 페이지번호
+            PerPage : 페이지당 목록개수
+            Order : 정렬방향, D-내림차순, A-오름차순
+            UserID : 팝빌 회원아이디
+            QString : 조회 검색어, 발신자명 또는 수신자명 기재
         """
 
-        if SDate == None or SDate == '':
+        if SDate == None or SDate == "":
             raise PopbillException(-99999999, "시작일자가 입력되지 않았습니다.")
 
-        if EDate == None or EDate == '':
+        if EDate == None or EDate == "":
             raise PopbillException(-99999999, "종료일자가 입력되지 않았습니다.")
 
-        uri = '/FAX/Search'
-        uri += '?SDate=' + SDate
-        uri += '&EDate=' + EDate
-        uri += '&State=' + ','.join(State)
+        uri = "/FAX/Search"
+        uri += "?SDate=" + SDate
+        uri += "&EDate=" + EDate
+        uri += "&State=" + ",".join(State)
 
         if ReserveYN:
-            uri += '&ReserveYN=1'
+            uri += "&ReserveYN=1"
         if SenderOnly:
-            uri += '&SenderOnly=1'
+            uri += "&SenderOnly=1"
 
-        uri += '&Page=' + str(Page)
-        uri += '&PerPage=' + str(PerPage)
-        uri += '&Order=' + Order
+        uri += "&Page=" + str(Page)
+        uri += "&PerPage=" + str(PerPage)
+        uri += "&Order=" + Order
 
         if QString is not None:
-            uri += '&QString=' + parse.quote(QString)
+            uri += "&QString=" + parse.quote(QString)
 
         return self._httpget(uri, CorpNum, UserID)
 
     def getFaxResult(self, CorpNum, ReceiptNum, UserID=None):
-        """ 팩스 전송결과 조회
-            args
-                CorpNum : 팝빌회원 사업자번호
-                ReceiptNum : 전송요청시 발급받은 접수번호
-                UserID : 팝빌회원 아이디
-            return
-                팩스전송정보 as list
-            raise
-                PopbillException
+        """팩스 전송결과 조회
+        args
+            CorpNum : 팝빌회원 사업자번호
+            ReceiptNum : 전송요청시 발급받은 접수번호
+            UserID : 팝빌회원 아이디
+        return
+            팩스전송정보 as list
+        raise
+            PopbillException
         """
 
         if ReceiptNum == None or len(ReceiptNum) != 18:
             raise PopbillException(-99999999, "접수번호가 올바르지 않습니다.")
 
-        return self._httpget('/FAX/' + ReceiptNum, CorpNum, UserID)
+        return self._httpget("/FAX/" + ReceiptNum, CorpNum, UserID)
 
     def getFaxResultRN(self, CorpNum, RequestNum, UserID=None):
-        """ 팩스 전송결과 조회
-            args
-                CorpNum : 팝빌회원 사업자번호
-                RequestNum : 전송요청시 할당한 전송요청번호
-                UserID : 팝빌회원 아이디
-            return
-                팩스전송정보 as list
-            raise
-                PopbillException
+        """팩스 전송결과 조회
+        args
+            CorpNum : 팝빌회원 사업자번호
+            RequestNum : 전송요청시 할당한 전송요청번호
+            UserID : 팝빌회원 아이디
+        return
+            팩스전송정보 as list
+        raise
+            PopbillException
         """
 
-        if RequestNum == None or RequestNum == '':
+        if RequestNum == None or RequestNum == "":
             raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다.")
 
-        return self._httpget('/FAX/Get/' + RequestNum, CorpNum, UserID)
+        return self._httpget("/FAX/Get/" + RequestNum, CorpNum, UserID)
 
     def cancelReserve(self, CorpNum, ReceiptNum, UserID=None):
-        """ 팩스 예약전송 취소
-            args
-                CorpNum : 팝빌회원 사업자번호
-                ReceiptNum : 팩스 전송요청(sendFAX)시 발급받은 접수번호
-                UserID : 팝빌회원 아이디
-            return
-                처리결과. consist of code and message
-            raise
-                PopbillException
+        """팩스 예약전송 취소
+        args
+            CorpNum : 팝빌회원 사업자번호
+            ReceiptNum : 팩스 전송요청(sendFAX)시 발급받은 접수번호
+            UserID : 팝빌회원 아이디
+        return
+            처리결과. consist of code and message
+        raise
+            PopbillException
         """
 
         if ReceiptNum == None or len(ReceiptNum) != 18:
             raise PopbillException(-99999999, "접수번호가 올바르지 않습니다.")
 
-        return self._httpget('/FAX/' + ReceiptNum + '/Cancel', CorpNum, UserID)
+        return self._httpget("/FAX/" + ReceiptNum + "/Cancel", CorpNum, UserID)
 
     def cancelReserveRN(self, CorpNum, RequestNum, UserID=None):
-        """ 팩스 예약전송 취소
-            args
-                CorpNum : 팝빌회원 사업자번호
-                RequestNum : 팩스전송요청시 할당한 전송요청번호
-                UserID : 팝빌회원 아이디
-            return
-                처리결과. consist of code and message
-            raise
-                PopbillException
+        """팩스 예약전송 취소
+        args
+            CorpNum : 팝빌회원 사업자번호
+            RequestNum : 팩스전송요청시 할당한 전송요청번호
+            UserID : 팝빌회원 아이디
+        return
+            처리결과. consist of code and message
+        raise
+            PopbillException
         """
 
-        if RequestNum == None or RequestNum == '':
+        if RequestNum == None or RequestNum == "":
             raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다.")
 
-        return self._httpget('/FAX/Cancel/' + RequestNum, CorpNum, UserID)
+        return self._httpget("/FAX/Cancel/" + RequestNum, CorpNum, UserID)
 
-    def sendFax(self, CorpNum, SenderNum, ReceiverNum, ReceiverName, FilePath, ReserveDT=None, UserID=None,
-                SenderName=None, adsYN=False, title=None, RequestNum=None):
-        """ 팩스 단건 전송
-            args
-                CorpNum : 팝빌회원 사업자번호
-                SenderNum : 발신자 번호
-                ReceiverNum : 수신자 번호
-                ReceiverName : 수신자 명
-                FilePath : 발신 파일경로
-                ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
-                UserID : 팝빌회원 아이디
-                SenderName : 발신자명 (동보전송용)
-                adsYN : 광고팩스 여부
-                title : 팩스제목
-                RequestNum : 전송요청시 할당한 전송요청번호
-            return
-                접수번호 (receiptNum)
-            raise
-                PopbillException
+    def sendFax(
+        self,
+        CorpNum,
+        SenderNum,
+        ReceiverNum,
+        ReceiverName,
+        FilePath,
+        ReserveDT=None,
+        UserID=None,
+        SenderName=None,
+        adsYN=False,
+        title=None,
+        RequestNum=None,
+    ):
+        """팩스 단건 전송
+        args
+            CorpNum : 팝빌회원 사업자번호
+            SenderNum : 발신자 번호
+            ReceiverNum : 수신자 번호
+            ReceiverName : 수신자 명
+            FilePath : 발신 파일경로
+            ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
+            UserID : 팝빌회원 아이디
+            SenderName : 발신자명 (동보전송용)
+            adsYN : 광고팩스 여부
+            title : 팩스제목
+            RequestNum : 전송요청시 할당한 전송요청번호
+        return
+            접수번호 (receiptNum)
+        raise
+            PopbillException
         """
         receivers = []
-        receivers.append(FaxReceiver(receiveNum=ReceiverNum,
-                                     receiveName=ReceiverName)
-                         )
+        receivers.append(FaxReceiver(receiveNum=ReceiverNum, receiveName=ReceiverName))
 
-        return self.sendFax_multi(CorpNum, SenderNum, receivers, FilePath, ReserveDT, UserID, SenderName, adsYN, title,
-                                  RequestNum)
+        return self.sendFax_multi(
+            CorpNum,
+            SenderNum,
+            receivers,
+            FilePath,
+            ReserveDT,
+            UserID,
+            SenderName,
+            adsYN,
+            title,
+            RequestNum,
+        )
 
-    def sendFax_multi(self, CorpNum, SenderNum, Receiver, FilePath, ReserveDT=None, UserID=None, SenderName=None,
-                      adsYN=False, title=None, RequestNum=None):
-        """ 팩스 전송
-            args
-                CorpNum : 팝빌회원 사업자번호
-                SenderNum : 발신자 번호 (동보전송용)
-                Receiver : 수신자 번호(동보전송용)
-                FilePath : 발신 파일경로
-                ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
-                UserID : 팝빌회원 아이디
-                SenderName : 발신자명 (동보전송용)
-                adsYN : 광고팩스 여부
-                title : 팩스제목
-                RequestNum : 전송요청시 할당한 전송요청번호
-            return
-                접수번호 (receiptNum)
-            raise
-                PopbillException
+    def sendFax_multi(
+        self,
+        CorpNum,
+        SenderNum,
+        Receiver,
+        FilePath,
+        ReserveDT=None,
+        UserID=None,
+        SenderName=None,
+        adsYN=False,
+        title=None,
+        RequestNum=None,
+    ):
+        """팩스 전송
+        args
+            CorpNum : 팝빌회원 사업자번호
+            SenderNum : 발신자 번호 (동보전송용)
+            Receiver : 수신자 번호(동보전송용)
+            FilePath : 발신 파일경로
+            ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
+            UserID : 팝빌회원 아이디
+            SenderName : 발신자명 (동보전송용)
+            adsYN : 광고팩스 여부
+            title : 팩스제목
+            RequestNum : 전송요청시 할당한 전송요청번호
+        return
+            접수번호 (receiptNum)
+        raise
+            PopbillException
         """
 
         if SenderNum == None or SenderNum == "":
             raise PopbillException(-99999999, "발신자 번호가 입력되지 않았습니다.")
         if Receiver == None:
             raise PopbillException(-99999999, "수신자 정보가 입력되지 않았습니다.")
-        if not (type(Receiver) is str or type(Receiver) is FaxReceiver or type(Receiver) is list):
-            raise PopbillException(-99999999, "'Receiver' argument type error. 'FaxReceiver' or List of 'FaxReceiver'.")
+        if not (
+            type(Receiver) is str
+            or type(Receiver) is FaxReceiver
+            or type(Receiver) is list
+        ):
+            raise PopbillException(
+                -99999999,
+                "'Receiver' argument type error. 'FaxReceiver' or List of 'FaxReceiver'.",
+            )
         if FilePath == None:
             raise PopbillException(-99999999, "발신 파일경로가 입력되지 않았습니다.")
         if not (type(FilePath) is str or type(FilePath) is list):
@@ -275,94 +328,133 @@ class FaxService(PopbillBase):
         if type(FilePath) is list and (len(FilePath) < 1 or len(FilePath) > 20):
             raise PopbillException(-99999999, "파일은 1개 이상, 20개 까지 전송 가능합니다.")
 
-        req = {"snd": SenderNum, "sndnm": SenderName, "fCnt": 1 if type(FilePath) is str else len(FilePath), "rcvs": [],
-               "sndDT": None}
+        req = {
+            "snd": SenderNum,
+            "sndnm": SenderName,
+            "fCnt": 1 if type(FilePath) is str else len(FilePath),
+            "rcvs": [],
+            "sndDT": None,
+        }
 
-        if (type(Receiver) is str):
+        if type(Receiver) is str:
             Receiver = FaxReceiver(receiveNum=Receiver)
 
-        if (type(Receiver) is FaxReceiver):
+        if type(Receiver) is FaxReceiver:
             Receiver = [Receiver]
 
         if adsYN:
-            req['adsYN'] = True
+            req["adsYN"] = True
 
         for r in Receiver:
-            req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName, "interOPRefKey" : r.interOPRefKey})
+            req["rcvs"].append(
+                {
+                    "rcv": r.receiveNum,
+                    "rcvnm": r.receiveName,
+                    "interOPRefKey": r.interOPRefKey,
+                }
+            )
 
         if ReserveDT != None:
-            req['sndDT'] = ReserveDT
+            req["sndDT"] = ReserveDT
 
         if title != None:
-            req['title'] = title
+            req["title"] = title
 
         if RequestNum != None:
-            req['requestNum'] = RequestNum
+            req["requestNum"] = RequestNum
 
         postData = self._stringtify(req)
 
-        if (type(FilePath) is str):
+        if type(FilePath) is str:
             FilePath = [FilePath]
 
         files = []
 
         for filePath in FilePath:
             with open(filePath, "rb") as f:
-                files.append(File(fieldName='file',
-                                  fileName=f.name,
-                                  fileData=f.read())
-                             )
-        result = self._httppost_files('/FAX', postData, files, CorpNum, UserID)
+                files.append(File(fieldName="file", fileName=f.name, fileData=f.read()))
+        result = self._httppost_files("/FAX", postData, files, CorpNum, UserID)
 
         return result.receiptNum
 
-    def sendFaxBinary(self, CorpNum, SenderNum, ReceiverNum, ReceiverName, FileDatas, ReserveDT=None, UserID=None,
-                SenderName=None, adsYN=False, title=None, RequestNum=None):
-        """ 바이너리 데이터 팩스 단건 전송
-            args
-                CorpNum : 팝빌회원 사업자번호
-                SenderNum : 발신자 번호
-                ReceiverNum : 수신자 번호
-                ReceiverName : 수신자 이름
-                FileDatas : 발신 파일 정보
-                ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
-                UserID : 팝빌회원 아이디
-                SenderName : 발신자명 (동보전송용)
-                adsYN : 광고팩스 여부
-                title : 팩스제목
-                RequestNum : 전송요청시 할당한 전송요청번호
-            return
-                접수번호 (receiptNum)
-            raise
-                PopbillException
+    def sendFaxBinary(
+        self,
+        CorpNum,
+        SenderNum,
+        ReceiverNum,
+        ReceiverName,
+        FileDatas,
+        ReserveDT=None,
+        UserID=None,
+        SenderName=None,
+        adsYN=False,
+        title=None,
+        RequestNum=None,
+    ):
+        """바이너리 데이터 팩스 단건 전송
+        args
+            CorpNum : 팝빌회원 사업자번호
+            SenderNum : 발신자 번호
+            ReceiverNum : 수신자 번호
+            ReceiverName : 수신자 이름
+            FileDatas : 발신 파일 정보
+            ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
+            UserID : 팝빌회원 아이디
+            SenderName : 발신자명 (동보전송용)
+            adsYN : 광고팩스 여부
+            title : 팩스제목
+            RequestNum : 전송요청시 할당한 전송요청번호
+        return
+            접수번호 (receiptNum)
+        raise
+            PopbillException
         """
 
         receivers = []
-        receivers.append(FaxReceiver(receiveNum=ReceiverNum,
-                                     receiveName=ReceiverName)
-                         )
+        receivers.append(FaxReceiver(receiveNum=ReceiverNum, receiveName=ReceiverName))
 
-        return self.sendFaxBinary_multi(CorpNum, SenderNum, receivers, FileDatas, ReserveDT, UserID, SenderName, adsYN, title,
-                                  RequestNum)
+        return self.sendFaxBinary_multi(
+            CorpNum,
+            SenderNum,
+            receivers,
+            FileDatas,
+            ReserveDT,
+            UserID,
+            SenderName,
+            adsYN,
+            title,
+            RequestNum,
+        )
 
-    def sendFaxBinary_multi(self, CorpNum, SenderNum, Receiver, FileDatas, ReserveDT=None, UserID=None,
-                SenderName=None, adsYN=False, title=None, RequestNum=None):
-        """ 바이너리 데이터 팩스 다건 전송
-            args
-                CorpNum : 팝빌회원 사업자번호
-                SenderNum : 발신자 번호 (동보전송용)
-                Receiver : 수신자 정보(동보전송용)
-                FileDatas : 발신 파일 정보
-                ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
-                UserID : 팝빌회원 아이디
-                SenderName : 발신자 이름 (동보전송용)
-                adsYN : 광고팩스 여부
-                title : 팩스제목
-                RequestNum : 전송요청시 할당한 전송요청번호
-            return
-                접수번호 (receiptNum)
-            raise
-                PopbillException
+    def sendFaxBinary_multi(
+        self,
+        CorpNum,
+        SenderNum,
+        Receiver,
+        FileDatas,
+        ReserveDT=None,
+        UserID=None,
+        SenderName=None,
+        adsYN=False,
+        title=None,
+        RequestNum=None,
+    ):
+        """바이너리 데이터 팩스 다건 전송
+        args
+            CorpNum : 팝빌회원 사업자번호
+            SenderNum : 발신자 번호 (동보전송용)
+            Receiver : 수신자 정보(동보전송용)
+            FileDatas : 발신 파일 정보
+            ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
+            UserID : 팝빌회원 아이디
+            SenderName : 발신자 이름 (동보전송용)
+            adsYN : 광고팩스 여부
+            title : 팩스제목
+            RequestNum : 전송요청시 할당한 전송요청번호
+        return
+            접수번호 (receiptNum)
+        raise
+            PopbillException
         """
 
         if SenderNum == None or SenderNum == "":
@@ -371,100 +463,154 @@ class FaxService(PopbillBase):
         if Receiver == None or Receiver == "":
             raise PopbillException(-99999999, "수신자 정보가 입력되지 않았습니다.")
 
-        if not (type(Receiver) is str or type(Receiver) is FaxReceiver or type(Receiver) is list):
-            raise PopbillException(-99999999, "'Receiver' argument type error. 'FaxReceiver' or List of 'FaxReceiver'.")
+        if not (
+            type(Receiver) is str
+            or type(Receiver) is FaxReceiver
+            or type(Receiver) is list
+        ):
+            raise PopbillException(
+                -99999999,
+                "'Receiver' argument type error. 'FaxReceiver' or List of 'FaxReceiver'.",
+            )
 
         if FileDatas == None:
             raise PopbillException(-99999999, "전송 파일 정보가 입력되지 않았습니다.")
 
         if not type(FileDatas) is list:
-            raise PopbillException(-99999999, "'FileDatas' argument type error. List of FileData")
+            raise PopbillException(
+                -99999999, "'FileDatas' argument type error. List of FileData"
+            )
 
-        if (len(FileDatas) < 1 or len(FileDatas) > 20):
+        if len(FileDatas) < 1 or len(FileDatas) > 20:
             raise PopbillException(-99999999, "파일은 1개 이상, 20개 까지 전송 가능합니다.")
 
-        req = {"snd": SenderNum, "sndnm": SenderName, "fCnt": len(FileDatas), "rcvs": [], "sndDT": None}
+        req = {
+            "snd": SenderNum,
+            "sndnm": SenderName,
+            "fCnt": len(FileDatas),
+            "rcvs": [],
+            "sndDT": None,
+        }
 
-        if (type(Receiver) is str):
+        if type(Receiver) is str:
             Receiver = FaxReceiver(receiveNum=Receiver)
 
-        if (type(Receiver) is FaxReceiver):
+        if type(Receiver) is FaxReceiver:
             Receiver = [Receiver]
 
         if adsYN:
-            req['adsYN'] = True
+            req["adsYN"] = True
 
         for r in Receiver:
-            req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName, "interOPRefKey" : r.interOPRefKey})
+            req["rcvs"].append(
+                {
+                    "rcv": r.receiveNum,
+                    "rcvnm": r.receiveName,
+                    "interOPRefKey": r.interOPRefKey,
+                }
+            )
 
         if ReserveDT != None:
-            req['sndDT'] = ReserveDT
+            req["sndDT"] = ReserveDT
 
         if title != None:
-            req['title'] = title
+            req["title"] = title
 
         if RequestNum != None:
-            req['requestNum'] = RequestNum
+            req["requestNum"] = RequestNum
 
         postData = self._stringtify(req)
 
         files = []
         for file in FileDatas:
-            files.append(File(fieldName='file',
-                              fileName=file.fileName,
-                              fileData=file.fileData)
-                        )
+            files.append(
+                File(
+                    fieldName="file",
+                    fileName=file.fileName,
+                    fileData=file.fileData,
+                )
+            )
 
-        result = self._httppost_files('/FAX', postData, files, CorpNum, UserID)
+        result = self._httppost_files("/FAX", postData, files, CorpNum, UserID)
 
         return result.receiptNum
 
-    def resendFax(self, CorpNum, ReceiptNum, SenderNum, SenderName, ReceiverNum, ReceiverName, ReserveDT=None,
-                  UserID=None, title=None, RequestNum=None):
-        """ 팩스 단건 전송
-            args
-                CorpNum : 팝빌회원 사업자번호
-                ReceiptNum : 팩스 접수번호
-                SenderNum : 발신자 번호
-                SenderName : 발신자명
-                ReceiverNum : 수신번호
-                ReceiverName : 수신자명
-                ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
-                UserID : 팝빌회원 아이디
-                title : 팩스제목
-                RequestNum : 전송요청시 할당한 전송요청번호
-            return
-                접수번호 (receiptNum)
-            raise
-                PopbillException
+    def resendFax(
+        self,
+        CorpNum,
+        ReceiptNum,
+        SenderNum,
+        SenderName,
+        ReceiverNum,
+        ReceiverName,
+        ReserveDT=None,
+        UserID=None,
+        title=None,
+        RequestNum=None,
+    ):
+        """팩스 단건 전송
+        args
+            CorpNum : 팝빌회원 사업자번호
+            ReceiptNum : 팩스 접수번호
+            SenderNum : 발신자 번호
+            SenderName : 발신자명
+            ReceiverNum : 수신번호
+            ReceiverName : 수신자명
+            ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
+            UserID : 팝빌회원 아이디
+            title : 팩스제목
+            RequestNum : 전송요청시 할당한 전송요청번호
+        return
+            접수번호 (receiptNum)
+        raise
+            PopbillException
         """
         receivers = None
 
         if ReceiverNum != "" or ReceiverName != "":
             receivers = []
-            receivers.append(FaxReceiver(receiveNum=ReceiverNum,
-                                         receiveName=ReceiverName)
-                             )
-        return self.resendFax_multi(CorpNum, ReceiptNum, SenderNum, SenderName, receivers, ReserveDT, UserID, title,
-                                    RequestNum)
+            receivers.append(
+                FaxReceiver(receiveNum=ReceiverNum, receiveName=ReceiverName)
+            )
+        return self.resendFax_multi(
+            CorpNum,
+            ReceiptNum,
+            SenderNum,
+            SenderName,
+            receivers,
+            ReserveDT,
+            UserID,
+            title,
+            RequestNum,
+        )
 
-    def resendFax_multi(self, CorpNum, ReceiptNum, SenderNum, SenderName, Receiver, ReserveDT=None, UserID=None,
-                        title=None, RequestNum=None):
-        """ 팩스 전송
-            args
-                CorpNum : 팝빌회원 사업자번호
-                ReceiptNum : 팩스 접수번호
-                SenderNum : 발신자 번호
-                SenderName : 발신자명
-                Receiver : 수신자정보 배열
-                ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
-                UserID : 팝빌회원 아이디
-                title : 팩스제목
-                RequestNum : 전송요청시 할당한 전송요청번호
-            return
-                접수번호 (receiptNum)
-            raise
-                PopbillException
+    def resendFax_multi(
+        self,
+        CorpNum,
+        ReceiptNum,
+        SenderNum,
+        SenderName,
+        Receiver,
+        ReserveDT=None,
+        UserID=None,
+        title=None,
+        RequestNum=None,
+    ):
+        """팩스 전송
+        args
+            CorpNum : 팝빌회원 사업자번호
+            ReceiptNum : 팩스 접수번호
+            SenderNum : 발신자 번호
+            SenderName : 발신자명
+            Receiver : 수신자정보 배열
+            ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
+            UserID : 팝빌회원 아이디
+            title : 팩스제목
+            RequestNum : 전송요청시 할당한 전송요청번호
+        return
+            접수번호 (receiptNum)
+        raise
+            PopbillException
         """
 
         req = {}
@@ -473,80 +619,118 @@ class FaxService(PopbillBase):
             raise PopbillException(-99999999, "접수번호가 올바르지 않습니다.")
 
         if SenderNum != "":
-            req['snd'] = SenderNum
+            req["snd"] = SenderNum
 
         if SenderName != "":
-            req['sndnm'] = SenderName
+            req["sndnm"] = SenderName
 
         if ReserveDT != None:
-            req['sndDT'] = ReserveDT
+            req["sndDT"] = ReserveDT
 
         if title != None:
-            req['title'] = title
+            req["title"] = title
 
         if RequestNum != None:
-            req['requestNum'] = RequestNum
+            req["requestNum"] = RequestNum
 
         if Receiver != None:
-            req['rcvs'] = []
-            if (type(Receiver) is str):
+            req["rcvs"] = []
+            if type(Receiver) is str:
                 Receiver = FaxReceiver(receiveNum=Receiver)
-            if (type(Receiver) is FaxReceiver):
+            if type(Receiver) is FaxReceiver:
                 Receiver = [Receiver]
             for r in Receiver:
-                req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName, "interOPRefKey" : r.interOPRefKey})
+                req["rcvs"].append(
+                    {
+                        "rcv": r.receiveNum,
+                        "rcvnm": r.receiveName,
+                        "interOPRefKey": r.interOPRefKey,
+                    }
+                )
 
         postData = self._stringtify(req)
 
-        return self._httppost('/FAX/' + ReceiptNum, postData, CorpNum, UserID).receiptNum
+        return self._httppost(
+            "/FAX/" + ReceiptNum, postData, CorpNum, UserID
+        ).receiptNum
 
-    def resendFaxRN(self, CorpNum, OrgRequestNum, SenderNum, SenderName, ReceiverNum, ReceiverName, ReserveDT=None,
-                    UserID=None, title=None, RequestNum=None):
-        """ 팩스 단건 전송
-            args
-                CorpNum : 팝빌회원 사업자번호
-                OrgRequestNum : 원본 팩스 전송시 할당한 전송요청번호
-                ReceiptNum : 팩스 접수번호
-                SenderNum : 발신자 번호
-                SenderName : 발신자명
-                ReceiverNum : 수신번호
-                ReceiverName : 수신자명
-                ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
-                UserID : 팝빌회원 아이디
-                title : 팩스제목
-                RequestNum : 전송요청시 할당한 전송요청번호
-            return
-                접수번호 (receiptNum)
-            raise
-                PopbillException
+    def resendFaxRN(
+        self,
+        CorpNum,
+        OrgRequestNum,
+        SenderNum,
+        SenderName,
+        ReceiverNum,
+        ReceiverName,
+        ReserveDT=None,
+        UserID=None,
+        title=None,
+        RequestNum=None,
+    ):
+        """팩스 단건 전송
+        args
+            CorpNum : 팝빌회원 사업자번호
+            OrgRequestNum : 원본 팩스 전송시 할당한 전송요청번호
+            ReceiptNum : 팩스 접수번호
+            SenderNum : 발신자 번호
+            SenderName : 발신자명
+            ReceiverNum : 수신번호
+            ReceiverName : 수신자명
+            ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
+            UserID : 팝빌회원 아이디
+            title : 팩스제목
+            RequestNum : 전송요청시 할당한 전송요청번호
+        return
+            접수번호 (receiptNum)
+        raise
+            PopbillException
         """
         receivers = None
 
         if ReceiverNum != "" or ReceiverName != "":
             receivers = []
-            receivers.append(FaxReceiver(receiveNum=ReceiverNum,
-                                         receiveName=ReceiverName)
-                             )
-        return self.resendFaxRN_multi(CorpNum, OrgRequestNum, SenderNum, SenderName, receivers, ReserveDT,
-                                      UserID, title, RequestNum)
+            receivers.append(
+                FaxReceiver(receiveNum=ReceiverNum, receiveName=ReceiverName)
+            )
+        return self.resendFaxRN_multi(
+            CorpNum,
+            OrgRequestNum,
+            SenderNum,
+            SenderName,
+            receivers,
+            ReserveDT,
+            UserID,
+            title,
+            RequestNum,
+        )
 
-    def resendFaxRN_multi(self, CorpNum, OrgRequestNum, SenderNum, SenderName, Receiver, ReserveDT=None, UserID=None,
-                          title=None, RequestNum=None):
-        """ 팩스 전송
-            args
-                CorpNum : 팝빌회원 사업자번호
-                OrgRequestNum : 원본 팩스 전송시 할당한 전송요청번호
-                SenderNum : 발신자 번호
-                SenderName : 발신자명
-                Receiver : 수신자정보 배열
-                ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
-                UserID : 팝빌회원 아이디
-                title : 팩스제목
-                RequestNum : 전송요청시 할당한 전송요청번호
-            return
-                접수번호 (receiptNum)
-            raise
-                PopbillException
+    def resendFaxRN_multi(
+        self,
+        CorpNum,
+        OrgRequestNum,
+        SenderNum,
+        SenderName,
+        Receiver,
+        ReserveDT=None,
+        UserID=None,
+        title=None,
+        RequestNum=None,
+    ):
+        """팩스 전송
+        args
+            CorpNum : 팝빌회원 사업자번호
+            OrgRequestNum : 원본 팩스 전송시 할당한 전송요청번호
+            SenderNum : 발신자 번호
+            SenderName : 발신자명
+            Receiver : 수신자정보 배열
+            ReserveDT : 예약시간(형식 yyyyMMddHHmmss)
+            UserID : 팝빌회원 아이디
+            title : 팩스제목
+            RequestNum : 전송요청시 할당한 전송요청번호
+        return
+            접수번호 (receiptNum)
+        raise
+            PopbillException
         """
 
         req = {}
@@ -555,79 +739,91 @@ class FaxService(PopbillBase):
             raise PopbillException(-99999999, "원본 팩스 요청번호가 입력되지 않았습니다")
 
         if SenderNum != "":
-            req['snd'] = SenderNum
+            req["snd"] = SenderNum
 
         if SenderName != "":
-            req['sndnm'] = SenderName
+            req["sndnm"] = SenderName
 
         if ReserveDT != None:
-            req['sndDT'] = ReserveDT
+            req["sndDT"] = ReserveDT
 
         if title != None:
-            req['title'] = title
+            req["title"] = title
 
         if RequestNum != None:
-            req['requestNum'] = RequestNum
+            req["requestNum"] = RequestNum
 
         if Receiver != None:
-            req['rcvs'] = []
-            if (type(Receiver) is str):
+            req["rcvs"] = []
+            if type(Receiver) is str:
                 Receiver = FaxReceiver(receiveNum=Receiver)
-            if (type(Receiver) is FaxReceiver):
+            if type(Receiver) is FaxReceiver:
                 Receiver = [Receiver]
             for r in Receiver:
-                req['rcvs'].append({"rcv": r.receiveNum, "rcvnm": r.receiveName, "interOPRefKey" : r.interOPRefKey})
+                req["rcvs"].append(
+                    {
+                        "rcv": r.receiveNum,
+                        "rcvnm": r.receiveName,
+                        "interOPRefKey": r.interOPRefKey,
+                    }
+                )
 
         postData = self._stringtify(req)
 
-        return self._httppost('/FAX/Resend/' + OrgRequestNum, postData, CorpNum, UserID).receiptNum
+        return self._httppost(
+            "/FAX/Resend/" + OrgRequestNum, postData, CorpNum, UserID
+        ).receiptNum
 
     def getSenderNumberList(self, CorpNum, UserID=None):
-        """ 팩스 발신번호 목록 확인
-            args
-                CorpNum : 팝빌회원 사업자번호
-                UserID : 팝빌회원 아이디
-            return
-                처리결과. list of SenderNumber
-            raise
-                PopbillException
+        """팩스 발신번호 목록 확인
+        args
+            CorpNum : 팝빌회원 사업자번호
+            UserID : 팝빌회원 아이디
+        return
+            처리결과. list of SenderNumber
+        raise
+            PopbillException
         """
-        return self._httpget('/FAX/SenderNumber', CorpNum, UserID)
+        return self._httpget("/FAX/SenderNumber", CorpNum, UserID)
 
     def checkSenderNumber(self, CorpNum, SenderNumber, UserID=None):
-        """ 발신번호 등록여부 확인
-            args
-                CorpNum : 회원 사업자번호
-                SenderNumber : 확인할 발신번호
-                UserID  : 회원 팝빌아이디
-            return
-                처리결과. consist of code and message
-            raise
-                PopbillException
+        """발신번호 등록여부 확인
+        args
+            CorpNum : 회원 사업자번호
+            SenderNumber : 확인할 발신번호
+            UserID  : 회원 팝빌아이디
+        return
+            처리결과. consist of code and message
+        raise
+            PopbillException
         """
-        if SenderNumber == None or SenderNumber == '':
+        if SenderNumber == None or SenderNumber == "":
             raise PopbillException(-99999999, "발신번호가 입력되지 않았습니다.")
 
-        return self._httpget('/FAX/CheckSenderNumber/' + SenderNumber, CorpNum, UserID)
+        return self._httpget("/FAX/CheckSenderNumber/" + SenderNumber, CorpNum, UserID)
 
     def getPreviewURL(self, CorpNum, ReceiptNum, UserID):
-        """ 팩스 발신번호 목록 확인
-            args
-                CorpNum : 팝빌회원 사업자번호
-                UserID : 팝빌회원 아이디
-            return
-                처리결과. list of SenderNumber
-            raise
-                PopbillException
+        """팩스 발신번호 목록 확인
+        args
+            CorpNum : 팝빌회원 사업자번호
+            UserID : 팝빌회원 아이디
+        return
+            처리결과. list of SenderNumber
+        raise
+            PopbillException
         """
-        return self._httpget('/FAX/Preview/' + ReceiptNum, CorpNum, UserID).url
+        return self._httpget("/FAX/Preview/" + ReceiptNum, CorpNum, UserID).url
+
 
 class FaxReceiver(object):
     def __init__(self, **kwargs):
-        self.__dict__ = dict.fromkeys(['receiveNum', 'receiveName', 'altSubject', 'interOPRefKey'])
+        self.__dict__ = dict.fromkeys(
+            ["receiveNum", "receiveName", "altSubject", "interOPRefKey"]
+        )
         self.__dict__.update(kwargs)
+
 
 class FileData(object):
     def __init__(self, **kwargs):
-            self.__dict__ = dict.fromkeys(['fileName', 'fileData'])
-            self.__dict__.update(kwargs)
+        self.__dict__ = dict.fromkeys(["fileName", "fileData"])
+        self.__dict__.update(kwargs)

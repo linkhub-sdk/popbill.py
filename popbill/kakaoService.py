@@ -8,7 +8,8 @@
 # Written : 2018-02-26
 # Updated : 2022-08-03
 # Thanks for your interest.
-from .base import PopbillBase, PopbillException, File, Response
+from .base import File, PopbillBase, PopbillException, Response
+
 try:
     from urllib import parse as parse
 except ImportError:
@@ -16,7 +17,7 @@ except ImportError:
 
 
 class KakaoService(PopbillBase):
-    """ 팝빌 카카오톡 API Service Implementation. """
+    """팝빌 카카오톡 API Service Implementation."""
 
     def __init__(self, LinkID, SecretKey):
         """
@@ -36,13 +37,13 @@ class KakaoService(PopbillBase):
         :param ToGo: [PLUSFRIEND-카카오톡채널관리, SENDER-발신번호관리, TEMPLATE-알림톡템플릿관리, BOX-카카오톡전송내용]
         :return: 팝빌 URL
         """
-        if ToGo == None or ToGo == '':
+        if ToGo == None or ToGo == "":
             raise PopbillException(-99999999, "TOGO값이 입력되지 않았습니다.")
 
-        if ToGo == 'SENDER':
-            result = self._httpget('/Message/?TG=' + ToGo, CorpNum, UserID)
+        if ToGo == "SENDER":
+            result = self._httpget("/Message/?TG=" + ToGo, CorpNum, UserID)
         else:
-            result = self._httpget('/KakaoTalk/?TG=' + ToGo, CorpNum, UserID)
+            result = self._httpget("/KakaoTalk/?TG=" + ToGo, CorpNum, UserID)
         return result.url
 
     def getPlusFriendMgtURL(self, CorpNum, UserID):
@@ -52,7 +53,7 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: 팝빌 URL
         """
-        result = self._httpget('/KakaoTalk/?TG=PLUSFRIEND', CorpNum, UserID)
+        result = self._httpget("/KakaoTalk/?TG=PLUSFRIEND", CorpNum, UserID)
         return result.url
 
     def getSenderNumberMgtURL(self, CorpNum, UserID):
@@ -62,7 +63,7 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: 팝빌 URL
         """
-        result = self._httpget('/Message/?TG=SENDER', CorpNum, UserID)
+        result = self._httpget("/Message/?TG=SENDER", CorpNum, UserID)
         return result.url
 
     def getATSTemplateMgtURL(self, CorpNum, UserID):
@@ -72,7 +73,7 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: 팝빌 URL
         """
-        result = self._httpget('/KakaoTalk/?TG=TEMPLATE', CorpNum, UserID)
+        result = self._httpget("/KakaoTalk/?TG=TEMPLATE", CorpNum, UserID)
         return result.url
 
     def getSentListURL(self, CorpNum, UserID):
@@ -82,7 +83,7 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: 팝빌 URL
         """
-        result = self._httpget('/KakaoTalk/?TG=BOX', CorpNum, UserID)
+        result = self._httpget("/KakaoTalk/?TG=BOX", CorpNum, UserID)
         return result.url
 
     def listPlusFriendID(self, CorpNum, UserID=None):
@@ -92,21 +93,23 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: 카카오톡 채널 list
         """
-        return self._httpget('/KakaoTalk/ListPlusFriendID', CorpNum, UserID)
+        return self._httpget("/KakaoTalk/ListPlusFriendID", CorpNum, UserID)
 
     def checkSenderNumber(self, CorpNum, SenderNumber, UserID=None):
-        """ 발신번호 등록여부 확인
-            args
-                CorpNum : 회원 사업자번호
-                SenderNumber : 확인할 발신번호
-                UserID  : 회원 팝빌아이디
-            return
-                처리결과. consist of code and message
-            raise
-                PopbillException
+        """발신번호 등록여부 확인
+        args
+            CorpNum : 회원 사업자번호
+            SenderNumber : 확인할 발신번호
+            UserID  : 회원 팝빌아이디
+        return
+            처리결과. consist of code and message
+        raise
+            PopbillException
         """
 
-        return self._httpget('/KakaoTalk/CheckSenderNumber/' + SenderNumber, CorpNum, UserID)
+        return self._httpget(
+            "/KakaoTalk/CheckSenderNumber/" + SenderNumber, CorpNum, UserID
+        )
 
     def getSenderNumberList(self, CorpNum, UserID=None):
         """
@@ -115,7 +118,7 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: 발신번호목록 list
         """
-        return self._httpget('/Message/SenderNumber', CorpNum, UserID)
+        return self._httpget("/Message/SenderNumber", CorpNum, UserID)
 
     def getATSTemplate(self, CorpNum, templateCode, UserID=None):
         """
@@ -126,11 +129,12 @@ class KakaoService(PopbillBase):
         :return: templateCode (템플릿 코드), templateName (템플릿 이름), template (템플릿 내용), plusFriendID (채널 이름),
                  secureYN (보안템플릿 여부),  state (템플릿 상태), stateDT (템플릿 상태 일시)
         """
-        if templateCode == None or templateCode == '':
+        if templateCode == None or templateCode == "":
             raise PopbillException(-99999999, "템플릿 코드가 입력되지 않았습니다.")
 
         result = self._httpget(
-            '/KakaoTalk/GetATSTemplate/' + templateCode, CorpNum, UserID)
+            "/KakaoTalk/GetATSTemplate/" + templateCode, CorpNum, UserID
+        )
         return result
 
     def listATSTemplate(self, CorpNum, UserID=None):
@@ -140,177 +144,525 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: 알림톡 템플릿 list
         """
-        return self._httpget('/KakaoTalk/ListATSTemplate', CorpNum, UserID)
+        return self._httpget("/KakaoTalk/ListATSTemplate", CorpNum, UserID)
 
-    def sendATS(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, Receiver,
-                ReceiverName, UserID=None, RequestNum=None):
-
-        KakaoMessages = []
-        KakaoMessages.append(KakaoReceiver(
-            rcv=Receiver,
-            rcvnm=ReceiverName,
-            msg=Content,
-            altmsg=AltContent)
-        )
-        return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
-                                 RequestNum)
-
-    # 버튼 추가
-    def sendATS(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, Receiver,
-                ReceiverName, UserID=None, RequestNum=None, ButtonList=None):
+    def sendATS(
+        self,
+        CorpNum,
+        TemplateCode,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        Receiver,
+        ReceiverName,
+        UserID=None,
+        RequestNum=None,
+    ):
 
         KakaoMessages = []
-        KakaoMessages.append(KakaoReceiver(
-            rcv=Receiver,
-            rcvnm=ReceiverName,
-            msg=Content,
-            altmsg=AltContent)
+        KakaoMessages.append(
+            KakaoReceiver(
+                rcv=Receiver, rcvnm=ReceiverName, msg=Content, altmsg=AltContent
+            )
         )
-        return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
-                                 RequestNum, ButtonList)
+        return self.sendATS_same(
+            CorpNum,
+            TemplateCode,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            UserID,
+            RequestNum,
+        )
 
-    # 대체문자 제목 추가
-    def sendATS(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, Receiver,
-                ReceiverName, UserID=None, RequestNum=None, ButtonList=None, AltSubject=None):
+    # 버튼 추가
+    def sendATS(
+        self,
+        CorpNum,
+        TemplateCode,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        Receiver,
+        ReceiverName,
+        UserID=None,
+        RequestNum=None,
+        ButtonList=None,
+    ):
 
         KakaoMessages = []
-        KakaoMessages.append(KakaoReceiver(
-            rcv=Receiver,
-            rcvnm=ReceiverName,
-            msg=Content,
-            altsjt=AltSubject,
-            altmsg=AltContent)
+        KakaoMessages.append(
+            KakaoReceiver(
+                rcv=Receiver, rcvnm=ReceiverName, msg=Content, altmsg=AltContent
+            )
         )
-        return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
-                                 RequestNum, ButtonList, "")
-
-    def sendATS_multi(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                      UserID=None,
-                      RequestNum=None):
-        return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
-                                 RequestNum)
-    # 버튼 추가
-
-    def sendATS_multi(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                      UserID=None, RequestNum=None, ButtonList=None):
-        return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
-                                 RequestNum, ButtonList)
-
-    # 대체문자 제목 추가
-    def sendATS_multi(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                      UserID=None, RequestNum=None, ButtonList=None, AltSubject=None):
-        return self.sendATS_same(CorpNum, TemplateCode, Sender, "", "", AltSendType, SndDT, KakaoMessages, UserID,
-                                 RequestNum, ButtonList, AltSubject)
-
-    def sendATS_same(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                     UserID=None, RequestNum=None):
-        return self.sendATS_same(CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                                 UserID, RequestNum, None, None)
-
-    # 버튼 추가
-    def sendATS_same(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                     UserID=None, RequestNum=None, ButtonList=None):
-        return self.sendATS_same(CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                                 UserID, RequestNum, None, None)
+        return self.sendATS_same(
+            CorpNum,
+            TemplateCode,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            UserID,
+            RequestNum,
+            ButtonList,
+        )
 
     # 대체문자 제목 추가
-    def sendATS_same(self, CorpNum, TemplateCode, Sender, Content, AltContent, AltSendType, SndDT, KakaoMessages,
-                     UserID=None, RequestNum=None, ButtonList=None, AltSubject=None):
+    def sendATS(
+        self,
+        CorpNum,
+        TemplateCode,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        Receiver,
+        ReceiverName,
+        UserID=None,
+        RequestNum=None,
+        ButtonList=None,
+        AltSubject=None,
+    ):
+
+        KakaoMessages = []
+        KakaoMessages.append(
+            KakaoReceiver(
+                rcv=Receiver,
+                rcvnm=ReceiverName,
+                msg=Content,
+                altsjt=AltSubject,
+                altmsg=AltContent,
+            )
+        )
+        return self.sendATS_same(
+            CorpNum,
+            TemplateCode,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            UserID,
+            RequestNum,
+            ButtonList,
+            "",
+        )
+
+    def sendATS_multi(
+        self,
+        CorpNum,
+        TemplateCode,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        KakaoMessages,
+        UserID=None,
+        RequestNum=None,
+    ):
+        return self.sendATS_same(
+            CorpNum,
+            TemplateCode,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            UserID,
+            RequestNum,
+        )
+
+    # 버튼 추가
+
+    def sendATS_multi(
+        self,
+        CorpNum,
+        TemplateCode,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        KakaoMessages,
+        UserID=None,
+        RequestNum=None,
+        ButtonList=None,
+    ):
+        return self.sendATS_same(
+            CorpNum,
+            TemplateCode,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            UserID,
+            RequestNum,
+            ButtonList,
+        )
+
+    # 대체문자 제목 추가
+    def sendATS_multi(
+        self,
+        CorpNum,
+        TemplateCode,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        KakaoMessages,
+        UserID=None,
+        RequestNum=None,
+        ButtonList=None,
+        AltSubject=None,
+    ):
+        return self.sendATS_same(
+            CorpNum,
+            TemplateCode,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            UserID,
+            RequestNum,
+            ButtonList,
+            AltSubject,
+        )
+
+    def sendATS_same(
+        self,
+        CorpNum,
+        TemplateCode,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        KakaoMessages,
+        UserID=None,
+        RequestNum=None,
+    ):
+        return self.sendATS_same(
+            CorpNum,
+            TemplateCode,
+            Sender,
+            Content,
+            AltContent,
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            UserID,
+            RequestNum,
+            None,
+            None,
+        )
+
+    # 버튼 추가
+    def sendATS_same(
+        self,
+        CorpNum,
+        TemplateCode,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        KakaoMessages,
+        UserID=None,
+        RequestNum=None,
+        ButtonList=None,
+    ):
+        return self.sendATS_same(
+            CorpNum,
+            TemplateCode,
+            Sender,
+            Content,
+            AltContent,
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            UserID,
+            RequestNum,
+            None,
+            None,
+        )
+
+    # 대체문자 제목 추가
+    def sendATS_same(
+        self,
+        CorpNum,
+        TemplateCode,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        KakaoMessages,
+        UserID=None,
+        RequestNum=None,
+        ButtonList=None,
+        AltSubject=None,
+    ):
         """
-       알림톡 대량 전송
-       :param CorpNum: 팝빌회원 사업자번호
-       :param TemplateCode: 템플릿코드
-       :param Sender: 발신번호
-       :param Content: [동보] 알림톡 내용
-       :param AltContent: [동보] 대체문자 내용
-       :param AltSendType: 대체문자 유형 [공백-미전송, C-알림톡내용, A-대체문자내용]
-       :param SndDT: 예약일시 [작성형식 : yyyyMMddHHmmss]
-       :param KakaoMessages: 알림톡 내용 (배열)
-       :param UserID: 팝빌회원 아이디
-       :param RequestNum : 요청번호
-       :param ButtonList : 버튼 (배열)
-       :param AltSubject : 대체문자 제목
-       :return: receiptNum (접수번호)
-       """
-        if TemplateCode is None or TemplateCode == '':
+        알림톡 대량 전송
+        :param CorpNum: 팝빌회원 사업자번호
+        :param TemplateCode: 템플릿코드
+        :param Sender: 발신번호
+        :param Content: [동보] 알림톡 내용
+        :param AltContent: [동보] 대체문자 내용
+        :param AltSendType: 대체문자 유형 [공백-미전송, C-알림톡내용, A-대체문자내용]
+        :param SndDT: 예약일시 [작성형식 : yyyyMMddHHmmss]
+        :param KakaoMessages: 알림톡 내용 (배열)
+        :param UserID: 팝빌회원 아이디
+        :param RequestNum : 요청번호
+        :param ButtonList : 버튼 (배열)
+        :param AltSubject : 대체문자 제목
+        :return: receiptNum (접수번호)
+        """
+        if TemplateCode is None or TemplateCode == "":
             raise PopbillException(-99999999, "알림톡 템플릿코드가 입력되지 않았습니다.")
 
         req = {}
 
-        if TemplateCode is not None or TemplateCode != '':
-            req['templateCode'] = TemplateCode
-        if Sender is not None or Sender != '':
-            req['snd'] = Sender
-        if Content is not None or Content != '':
-            req['content'] = Content
-        if AltSubject is not None or AltSubject != '':
-            req['altSubject'] = AltSubject
-        if AltContent is not None or AltContent != '':
-            req['altContent'] = AltContent
-        if AltSendType is not None or AltSendType != '':
-            req['altSendType'] = AltSendType
-        if SndDT is not None or SndDT != '':
-            req['sndDT'] = SndDT
-        if KakaoMessages is not None or KakaoMessages != '':
-            req['msgs'] = KakaoMessages
+        if TemplateCode is not None or TemplateCode != "":
+            req["templateCode"] = TemplateCode
+        if Sender is not None or Sender != "":
+            req["snd"] = Sender
+        if Content is not None or Content != "":
+            req["content"] = Content
+        if AltSubject is not None or AltSubject != "":
+            req["altSubject"] = AltSubject
+        if AltContent is not None or AltContent != "":
+            req["altContent"] = AltContent
+        if AltSendType is not None or AltSendType != "":
+            req["altSendType"] = AltSendType
+        if SndDT is not None or SndDT != "":
+            req["sndDT"] = SndDT
+        if KakaoMessages is not None or KakaoMessages != "":
+            req["msgs"] = KakaoMessages
         if ButtonList is not None:
-            req['btns'] = ButtonList
-        if RequestNum is not None or RequestNum != '':
-            req['requestnum'] = RequestNum
+            req["btns"] = ButtonList
+        if RequestNum is not None or RequestNum != "":
+            req["requestnum"] = RequestNum
 
         postData = self._stringtify(req)
 
-        result = self._httppost('/ATS', postData, CorpNum, UserID)
+        result = self._httppost("/ATS", postData, CorpNum, UserID)
 
         return result.receiptNum
 
-    def sendFTS(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, Receiver,
-                ReceiverName, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
+    def sendFTS(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        Receiver,
+        ReceiverName,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+    ):
         KakaoMessages = []
-        KakaoMessages.append(KakaoReceiver(
-            rcv=Receiver,
-            rcvnm=ReceiverName,
-            msg=Content,
-            altmsg=AltContent)
+        KakaoMessages.append(
+            KakaoReceiver(
+                rcv=Receiver, rcvnm=ReceiverName, msg=Content, altmsg=AltContent
+            )
         )
 
-        return self.sendFTS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, KakaoMessages, KakaoButtons,
-                                 AdsYN, UserID, RequestNum)
-
-    # 대체문자 제목 추가
-    def sendFTS(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, Receiver,
-                ReceiverName, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None, AltSubject=None):
-        KakaoMessages = []
-        KakaoMessages.append(KakaoReceiver(
-            rcv=Receiver,
-            rcvnm=ReceiverName,
-            msg=Content,
-            altsjt=AltSubject,
-            altmsg=AltContent)
+        return self.sendFTS_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
         )
 
-        return self.sendFTS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, KakaoMessages, KakaoButtons,
-                                 AdsYN, UserID, RequestNum, "")
+    # 대체문자 제목 추가
+    def sendFTS(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        Receiver,
+        ReceiverName,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+        AltSubject=None,
+    ):
+        KakaoMessages = []
+        KakaoMessages.append(
+            KakaoReceiver(
+                rcv=Receiver,
+                rcvnm=ReceiverName,
+                msg=Content,
+                altsjt=AltSubject,
+                altmsg=AltContent,
+            )
+        )
 
-    def sendFTS_multi(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT,
-                      KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
-        return self.sendFTS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, KakaoMessages, KakaoButtons,
-                                 AdsYN, UserID, RequestNum)
+        return self.sendFTS_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+            "",
+        )
+
+    def sendFTS_multi(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        KakaoMessages,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+    ):
+        return self.sendFTS_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+        )
 
     # 대체문자 제목 추가
-    def sendFTS_multi(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT,
-                      KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None, AltSubject=None):
-        return self.sendFTS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, KakaoMessages, KakaoButtons,
-                                 AdsYN, UserID, RequestNum, AltSubject)
+    def sendFTS_multi(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        KakaoMessages,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+        AltSubject=None,
+    ):
+        return self.sendFTS_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+            AltSubject,
+        )
 
-    def sendFTS_same(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT,
-                     KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
-        return self.sendFTS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, KakaoMessages, KakaoButtons,
-                                 AdsYN, UserID, RequestNum, None)
+    def sendFTS_same(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        KakaoMessages,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+    ):
+        return self.sendFTS_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+            None,
+        )
 
     # 대체문자 제목 추가
-    def sendFTS_same(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT,
-                     KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None, AltSubject=None):
+    def sendFTS_same(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        KakaoMessages,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+        AltSubject=None,
+    ):
         """
         친구톡 텍스트 대량 전송
         :param CorpNum: 팝빌회원 사업자번호
@@ -328,88 +680,257 @@ class KakaoService(PopbillBase):
         :param AltSubject : 대체문자 제목
         :return: receiptNum (접수번호)
         """
-        if PlusFriendID is None or PlusFriendID == '':
+        if PlusFriendID is None or PlusFriendID == "":
             raise PopbillException(-99999999, "검색용 아이디가 입력되지 않았습니다.")
 
         req = {}
-        if PlusFriendID is not None or PlusFriendID != '':
-            req['plusFriendID'] = PlusFriendID
-        if Sender is not None or Sender != '':
-            req['snd'] = Sender
-        if AltSendType is not None or AltSendType != '':
-            req['altSendType'] = AltSendType
-        if Content is not None or Content != '':
-            req['content'] = Content
-        if AltSubject is not None or AltSubject != '':
-            req['altSubject'] = AltSubject
-        if AltContent is not None or AltContent != '':
-            req['altContent'] = AltContent
-        if SndDT is not None or SndDT != '':
-            req['sndDT'] = SndDT
+        if PlusFriendID is not None or PlusFriendID != "":
+            req["plusFriendID"] = PlusFriendID
+        if Sender is not None or Sender != "":
+            req["snd"] = Sender
+        if AltSendType is not None or AltSendType != "":
+            req["altSendType"] = AltSendType
+        if Content is not None or Content != "":
+            req["content"] = Content
+        if AltSubject is not None or AltSubject != "":
+            req["altSubject"] = AltSubject
+        if AltContent is not None or AltContent != "":
+            req["altContent"] = AltContent
+        if SndDT is not None or SndDT != "":
+            req["sndDT"] = SndDT
         if KakaoMessages:
-            req['msgs'] = KakaoMessages
+            req["msgs"] = KakaoMessages
         if KakaoButtons:
-            req['btns'] = KakaoButtons
+            req["btns"] = KakaoButtons
         if AdsYN:
-            req['adsYN'] = True
-        if RequestNum is not None or RequestNum != '':
-            req['requestNum'] = RequestNum
+            req["adsYN"] = True
+        if RequestNum is not None or RequestNum != "":
+            req["requestNum"] = RequestNum
 
         postData = self._stringtify(req)
 
-        result = self._httppost('/FTS', postData, CorpNum, UserID)
+        result = self._httppost("/FTS", postData, CorpNum, UserID)
 
         return result.receiptNum
 
-    def sendFMS(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, FilePath, ImageURL,
-                Receiver, ReceiverName, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
+    def sendFMS(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        FilePath,
+        ImageURL,
+        Receiver,
+        ReceiverName,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+    ):
 
         KakaoMessages = []
-        KakaoMessages.append(KakaoReceiver(
-            rcv=Receiver,
-            rcvnm=ReceiverName,
-            msg=Content,
-            altmsg=AltContent)
+        KakaoMessages.append(
+            KakaoReceiver(
+                rcv=Receiver, rcvnm=ReceiverName, msg=Content, altmsg=AltContent
+            )
         )
 
-        return self.sendFMS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, FilePath, ImageURL,
-                                 KakaoMessages, KakaoButtons, AdsYN, UserID, RequestNum)
+        return self.sendFMS_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            FilePath,
+            ImageURL,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+        )
 
     # 대체문자 제목 추가
-    def sendFMS(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, FilePath, ImageURL,
-                Receiver, ReceiverName, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None, AltSubject=None):
+    def sendFMS(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        FilePath,
+        ImageURL,
+        Receiver,
+        ReceiverName,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+        AltSubject=None,
+    ):
 
         KakaoMessages = []
-        KakaoMessages.append(KakaoReceiver(
-            rcv=Receiver,
-            rcvnm=ReceiverName,
-            msg=Content,
-            altsjt=AltSubject,
-            altmsg=AltContent)
+        KakaoMessages.append(
+            KakaoReceiver(
+                rcv=Receiver,
+                rcvnm=ReceiverName,
+                msg=Content,
+                altsjt=AltSubject,
+                altmsg=AltContent,
+            )
         )
 
-        return self.sendFMS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, FilePath, ImageURL,
-                                 KakaoMessages, KakaoButtons, AdsYN, UserID, RequestNum, "")
+        return self.sendFMS_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            FilePath,
+            ImageURL,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+            "",
+        )
 
-    def sendFMS_multi(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, FilePath, ImageURL,
-                      KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
-        return self.sendFMS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, FilePath, ImageURL,
-                                 KakaoMessages, KakaoButtons, AdsYN, UserID, RequestNum)
+    def sendFMS_multi(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        FilePath,
+        ImageURL,
+        KakaoMessages,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+    ):
+        return self.sendFMS_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            FilePath,
+            ImageURL,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+        )
 
     # 대체문자 제목 추가
-    def sendFMS_multi(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, FilePath, ImageURL,
-                      KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None, AltSubject=None):
-        return self.sendFMS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, FilePath, ImageURL,
-                                 KakaoMessages, KakaoButtons, AdsYN, UserID, RequestNum, None)
+    def sendFMS_multi(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        FilePath,
+        ImageURL,
+        KakaoMessages,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+        AltSubject=None,
+    ):
+        return self.sendFMS_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            FilePath,
+            ImageURL,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+            None,
+        )
 
-    def sendFMS_same(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, FilePath, ImageURL,
-                     KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None):
-        return self.sendFMS_same(CorpNum, PlusFriendID, Sender, "", "", AltSendType, SndDT, FilePath, ImageURL,
-                                 KakaoMessages, KakaoButtons, AdsYN, UserID, RequestNum, None)
+    def sendFMS_same(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        FilePath,
+        ImageURL,
+        KakaoMessages,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+    ):
+        return self.sendFMS_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            FilePath,
+            ImageURL,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+            None,
+        )
 
     # 대체문자 제목 추가
-    def sendFMS_same(self, CorpNum, PlusFriendID, Sender, Content, AltContent, AltSendType, SndDT, FilePath, ImageURL,
-                     KakaoMessages, KakaoButtons, AdsYN=False, UserID=None, RequestNum=None, AltSubject=None):
+    def sendFMS_same(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        FilePath,
+        ImageURL,
+        KakaoMessages,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+        AltSubject=None,
+    ):
         """
         친구톡 이미지 대량 전송
         :param CorpNum: 팝빌회원 사업자번호
@@ -429,47 +950,45 @@ class KakaoService(PopbillBase):
         :param AltSubject : 대체문자 제목
         :return: receiptNum (접수번호)
         """
-        if PlusFriendID is None or PlusFriendID == '':
+        if PlusFriendID is None or PlusFriendID == "":
             raise PopbillException(-99999999, "검색용 아이디가 입력되지 않았습니다.")
 
         req = {}
-        if PlusFriendID is not None or PlusFriendID != '':
-            req['plusFriendID'] = PlusFriendID
-        if Sender is not None or Sender != '':
-            req['snd'] = Sender
-        if Content is not None or Content != '':
-            req['content'] = Content
-        if AltSubject is not None or AltSubject != '':
-            req['altSubject'] = AltSubject
-        if AltContent is not None or AltContent != '':
-            req['altContent'] = AltContent
-        if AltSendType is not None or AltSendType != '':
-            req['altSendType'] = AltSendType
-        if SndDT is not None or SndDT != '':
-            req['sndDT'] = SndDT
-        if KakaoMessages is not None or KakaoMessages != '':
-            req['msgs'] = KakaoMessages
-        if ImageURL is not None or ImageURL != '':
-            req['imageURL'] = ImageURL
+        if PlusFriendID is not None or PlusFriendID != "":
+            req["plusFriendID"] = PlusFriendID
+        if Sender is not None or Sender != "":
+            req["snd"] = Sender
+        if Content is not None or Content != "":
+            req["content"] = Content
+        if AltSubject is not None or AltSubject != "":
+            req["altSubject"] = AltSubject
+        if AltContent is not None or AltContent != "":
+            req["altContent"] = AltContent
+        if AltSendType is not None or AltSendType != "":
+            req["altSendType"] = AltSendType
+        if SndDT is not None or SndDT != "":
+            req["sndDT"] = SndDT
+        if KakaoMessages is not None or KakaoMessages != "":
+            req["msgs"] = KakaoMessages
+        if ImageURL is not None or ImageURL != "":
+            req["imageURL"] = ImageURL
         if KakaoButtons:
-            req['btns'] = KakaoButtons
+            req["btns"] = KakaoButtons
         if AdsYN:
-            req['adsYN'] = True
-        if RequestNum is not None or RequestNum != '':
-            req['requestNum'] = RequestNum
+            req["adsYN"] = True
+        if RequestNum is not None or RequestNum != "":
+            req["requestNum"] = RequestNum
 
         postData = self._stringtify(req)
 
         files = []
         try:
             with open(FilePath, "rb") as F:
-                files = [File(fieldName='file',
-                              fileName=F.name,
-                              fileData=F.read())]
+                files = [File(fieldName="file", fileName=F.name, fileData=F.read())]
         except IOError:
             raise PopbillException(-99999999, "해당경로에 파일이 없거나 읽을 수 없습니다.")
 
-        result = self._httppost_files('/FMS', postData, files, CorpNum, UserID)
+        result = self._httppost_files("/FMS", postData, files, CorpNum, UserID)
 
         return result.receiptNum
 
@@ -484,7 +1003,7 @@ class KakaoService(PopbillBase):
         if ReceiptNum == None or len(ReceiptNum) != 18:
             raise PopbillException(-99999999, "접수번호가 올바르지 않습니다.")
 
-        return self._httpget('/KakaoTalk/' + ReceiptNum + '/Cancel', CorpNum, UserID)
+        return self._httpget("/KakaoTalk/" + ReceiptNum + "/Cancel", CorpNum, UserID)
 
     def cancelReserveRN(self, CorpNum, RequestNum, UserID=None):
         """
@@ -494,10 +1013,10 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: code (요청에 대한 상태 응답코드), message (요청에 대한 응답 메시지)
         """
-        if RequestNum is None or RequestNum == '':
+        if RequestNum is None or RequestNum == "":
             raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다")
 
-        response = self._httpget('/KakaoTalk/Cancel/' + RequestNum, CorpNum, UserID)
+        response = self._httpget("/KakaoTalk/Cancel/" + RequestNum, CorpNum, UserID)
         return Response(**response.__dict__)
 
     def getMessages(self, CorpNum, ReceiptNum, UserID=None):
@@ -511,7 +1030,7 @@ class KakaoService(PopbillBase):
         if ReceiptNum == None or len(ReceiptNum) != 18:
             raise PopbillException(-99999999, "접수번호가 올바르지 않습니다.")
 
-        return self._httpget('/KakaoTalk/' + ReceiptNum, CorpNum, UserID)
+        return self._httpget("/KakaoTalk/" + ReceiptNum, CorpNum, UserID)
 
     def getMessagesRN(self, CorpNum, RequestNum, UserID=None):
         """
@@ -521,13 +1040,26 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌회원 아이디
         :return: 알림톡/친구톡 전송내역 및 전송상태
         """
-        if RequestNum is None or RequestNum == '':
+        if RequestNum is None or RequestNum == "":
             raise PopbillException(-99999999, "요청번호가 입력되지 않았습니다.")
 
-        return self._httpget('/KakaoTalk/Get/' + RequestNum, CorpNum, UserID)
+        return self._httpget("/KakaoTalk/Get/" + RequestNum, CorpNum, UserID)
 
-    def search(self, CorpNum, SDate, EDate, State, Item, ReserveYN, SenderYN, Page, PerPage, Order, UserID=None,
-               QString=None):
+    def search(
+        self,
+        CorpNum,
+        SDate,
+        EDate,
+        State,
+        Item,
+        ReserveYN,
+        SenderYN,
+        Page,
+        PerPage,
+        Order,
+        UserID=None,
+        QString=None,
+    ):
         """
         카카오톡 전송내역 목록을 조회한다.
         - 버튼정보를 확인하는 경우 GetMessages (알림톡/친구톡 전송내역 확인) API 사용
@@ -546,25 +1078,25 @@ class KakaoService(PopbillBase):
         :return: 알림톡/친구톡 전송내역 및 전송상태 및 검색결과 조회
         """
 
-        if SDate == None or SDate == '':
+        if SDate == None or SDate == "":
             raise PopbillException(-99999999, "시작일자가 입력되지 않았습니다.")
 
-        if EDate == None or EDate == '':
+        if EDate == None or EDate == "":
             raise PopbillException(-99999999, "종료일자가 입력되지 않았습니다.")
 
-        uri = '/KakaoTalk/Search'
-        uri += '?SDate=' + SDate
-        uri += '&EDate=' + EDate
-        uri += '&State=' + ','.join(State)
-        uri += '&Item=' + ','.join(Item)
-        uri += '&ReserveYN=' + ReserveYN
-        uri += '&SenderYN=' + SenderYN
-        uri += '&Page=' + str(Page)
-        uri += '&PerPage=' + str(PerPage)
-        uri += '&Order=' + Order
+        uri = "/KakaoTalk/Search"
+        uri += "?SDate=" + SDate
+        uri += "&EDate=" + EDate
+        uri += "&State=" + ",".join(State)
+        uri += "&Item=" + ",".join(Item)
+        uri += "&ReserveYN=" + ReserveYN
+        uri += "&SenderYN=" + SenderYN
+        uri += "&Page=" + str(Page)
+        uri += "&PerPage=" + str(PerPage)
+        uri += "&Order=" + Order
 
         if QString is not None:
-            uri += '&QString=' + parse.quote(QString)
+            uri += "&QString=" + parse.quote(QString)
 
         return self._httpget(uri, CorpNum, UserID)
 
@@ -590,7 +1122,7 @@ class KakaoService(PopbillBase):
         :param UserID: 팝빌 회원아이디
         :return: unitCost, chargeMethod, rateSystem
         """
-        return self._httpget('/KakaoTalk/ChargeInfo?Type=' + MsgType, CorpNum, UserID)
+        return self._httpget("/KakaoTalk/ChargeInfo?Type=" + MsgType, CorpNum, UserID)
 
     def CancelReserveRNbyRCV(self, CorpNum, requestNum, receiveNum, UserID=None):
         """예약 메시지 전송 취소. 예약시간 기준 10분전의 건만 취소 가능
@@ -611,7 +1143,9 @@ class KakaoService(PopbillBase):
 
         postData = self._stringtify(receiveNum)
 
-        response = self._httppost("/KakaoTalk/Cancel/" + requestNum, postData, CorpNum, UserID)
+        response = self._httppost(
+            "/KakaoTalk/Cancel/" + requestNum, postData, CorpNum, UserID
+        )
         return Response(response)
 
     def CancelReservebyRCV(self, CorpNum, receiptNum, receiveNum, UserID=None):
@@ -635,18 +1169,21 @@ class KakaoService(PopbillBase):
             raise PopbillException(-99999999, "수신번호가 입력되지 않았습니다.")
 
         postData = self._stringtify(receiveNum)
-        resposne = self._httppost("/KakaoTalk/" + receiptNum + "/Cancel", postData, CorpNum, UserID)
+        resposne = self._httppost(
+            "/KakaoTalk/" + receiptNum + "/Cancel", postData, CorpNum, UserID
+        )
         return Response(resposne)
 
 
 class KakaoReceiver(object):
     def __init__(self, **kwargs):
         self.__dict__ = dict.fromkeys(
-            ['rcv', 'rcvnm', 'msg', 'altsjt', 'altmsg', 'btns', 'interOPRefKey'])
+            ["rcv", "rcvnm", "msg", "altsjt", "altmsg", "btns", "interOPRefKey"]
+        )
         self.__dict__.update(kwargs)
 
 
 class KakaoButton(object):
     def __init__(self, **kwargs):
-        self.__dict__ = dict.fromkeys(['n', 't', 'u1', 'u2'])
+        self.__dict__ = dict.fromkeys(["n", "t", "u1", "u2"])
         self.__dict__.update(kwargs)

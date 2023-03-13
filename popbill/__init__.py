@@ -1,26 +1,74 @@
-__version__ = '1.59.1'
+__version__ = "1.59.2"
 Version = __version__  # for backward compatibility
-__all__ = ["PopbillException", "JoinForm", "ContactInfo", "CorpInfo",
-           "TaxinvoiceService", "Taxinvoice", "TaxinvoiceDetail", "Contact",
-           "FaxService", "FaxReceiver", "FileData",
-           "StatementService", "Statement", "StatementDetail",
-           "CashbillService", "Cashbill",
-           "MessageService", "MessageReceiver",
-           "HTTaxinvoiceService", "HTCashbillService",
-           "ClosedownService", "BizInfoCheckService",
-           "KakaoService", "KakaoReceiver", "KakaoButton",
-           "EasyFinBankService", "BankAccountInfo", "AccountCheckService", "Response","UseHistory","RefundHistoryResult","RefundHistory","RefundForm","PaymentHistoryResult","PaymentResponse", "PaymentForm", "PaymentHistory" ]
+__all__ = [
+    "PopbillException",
+    "JoinForm",
+    "ContactInfo",
+    "CorpInfo",
+    "TaxinvoiceService",
+    "Taxinvoice",
+    "TaxinvoiceDetail",
+    "Contact",
+    "FaxService",
+    "FaxReceiver",
+    "FileData",
+    "StatementService",
+    "Statement",
+    "StatementDetail",
+    "CashbillService",
+    "Cashbill",
+    "MessageService",
+    "MessageReceiver",
+    "HTTaxinvoiceService",
+    "HTCashbillService",
+    "ClosedownService",
+    "BizInfoCheckService",
+    "KakaoService",
+    "KakaoReceiver",
+    "KakaoButton",
+    "EasyFinBankService",
+    "BankAccountInfo",
+    "AccountCheckService",
+    "Response",
+    "UseHistory",
+    "RefundHistoryResult",
+    "RefundHistory",
+    "RefundForm",
+    "PaymentHistoryResult",
+    "PaymentResponse",
+    "PaymentForm",
+    "PaymentHistory",
+    "IssueResponse",
+    "BulkCashbillResult",
+    "BulkCashbillIssueResult",
+    "CashbillInfo",
+    "CBSearchResult",
+]
 
-from .base import PopbillException, JoinForm, ContactInfo, CorpInfo, Response,UseHistory,RefundHistoryResult,RefundHistory,RefundForm,PaymentHistoryResult,PaymentResponse, PaymentForm, PaymentHistory
-from .taxinvoiceService import *
-from .statementService import *
-from .faxService import *
-from .cashbillService import *
-from .messageService import *
-from .htTaxinvoiceService import *
-from .htCashbillService import *
-from .closedownService import *
-from .bizInfoCheckService import *
-from .kakaoService import *
-from .easyFinBankService import *
 from .accountCheckService import *
+from .base import (
+    ContactInfo,
+    CorpInfo,
+    JoinForm,
+    PaymentForm,
+    PaymentHistory,
+    PaymentHistoryResult,
+    PaymentResponse,
+    PopbillException,
+    RefundForm,
+    RefundHistory,
+    RefundHistoryResult,
+    Response,
+    UseHistory,
+)
+from .bizInfoCheckService import *
+from .cashbillService import *
+from .closedownService import *
+from .easyFinBankService import *
+from .faxService import *
+from .htCashbillService import *
+from .htTaxinvoiceService import *
+from .kakaoService import *
+from .messageService import *
+from .statementService import *
+from .taxinvoiceService import *

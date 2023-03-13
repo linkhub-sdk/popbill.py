@@ -1,29 +1,40 @@
 # -*- coding: utf-8 -*-
 # code for console Encoding difference. Dont' mind on it
-import sys
 import imp
 import random
+import sys
+
 imp.reload(sys)
-try: sys.setdefaultencoding('UTF8')
-except Exception as E: pass
+try:
+    sys.setdefaultencoding("UTF8")
+except Exception as E:
+    pass
 
 try:
     import unittest2 as unittest
 except ImportError:
     import unittest
+
 from popbill import *
+
 
 class BizInfoCheckServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.BizInfoCheckService =  BizInfoCheckService('TESTER','SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
+        self.BizInfoCheckService = BizInfoCheckService(
+            "TESTER", "SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I="
+        )
         self.BizInfoCheckService.IsTest = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
-        self.testMgtKey = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz1234567890',10))
+        self.testMgtKey = "".join(
+            random.sample("abcdefghijklmnopqrstuvwxyz1234567890", 10)
+        )
 
     def test_getChrgInfo(self):
-        chrgInfo = self.BizInfoCheckService.getChargeInfo(self.testCorpNum, self.testUserID)
+        chrgInfo = self.BizInfoCheckService.getChargeInfo(
+            self.testCorpNum, self.testUserID
+        )
         print(chrgInfo.rateSystem)
         print(chrgInfo.chargeMethod)
         print(chrgInfo.unitCost)
@@ -31,32 +42,36 @@ class BizInfoCheckServiceTestCase(unittest.TestCase):
     def test_getUnitCost(self):
         unitCost = self.BizInfoCheckService.getUnitCost(self.testCorpNum)
         print(unitCost)
-        self.assertGreaterEqual(unitCost,0,"단가는 0 이상.")
+        self.assertGreaterEqual(unitCost, 0, "단가는 0 이상.")
 
     def test_getBalance(self):
         balance = self.BizInfoCheckService.getBalance(self.testCorpNum)
         print(balance)
-        self.assertGreaterEqual(balance,0,'잔액 0 이상.')
+        self.assertGreaterEqual(balance, 0, "잔액 0 이상.")
 
     def test_getPartnerBalance(self):
         balance = self.BizInfoCheckService.getPartnerBalance(self.testCorpNum)
         print(balance)
-        self.assertGreaterEqual(balance,0,'잔액 0 이상.')
+        self.assertGreaterEqual(balance, 0, "잔액 0 이상.")
 
     def test_checkIsMember(self):
         result = self.BizInfoCheckService.checkIsMember(self.testCorpNum)
-        self.assertEqual(result.code,1,result.message + ", 가입시 코드는 1")
+        self.assertEqual(result.code, 1, result.message + ", 가입시 코드는 1")
 
         result = self.BizInfoCheckService.checkIsMember("1234568790")
-        self.assertEqual(result.code,0,result.message + ", 미가입시 코드는 0")
+        self.assertEqual(result.code, 0, result.message + ", 미가입시 코드는 0")
 
     def test_getPopbillURL(self):
-        url = self.BizInfoCheckService.getPopbillURL(self.testCorpNum,self.testUserID,"LOGIN")
+        url = self.BizInfoCheckService.getPopbillURL(
+            self.testCorpNum, self.testUserID, "LOGIN"
+        )
         print(url)
         self.assertEqual(url[:5], "https", "https로 시작")
 
     def test_checkBizInfo(self):
-        result = self.BizInfoCheckService.checkBizInfo(self.testCorpNum, "6798700151","")
+        result = self.BizInfoCheckService.checkBizInfo(
+            self.testCorpNum, "6798700151", ""
+        )
 
         tmp = "corpNum (사업자번호) : " + str(result.corpNum) + "\n"
         tmp += "companyRegNum (법인번호): " + str(result.companyRegNum) + "\n"
@@ -81,14 +96,21 @@ class BizInfoCheckServiceTestCase(unittest.TestCase):
         tmp += "result (결과코드) : " + str(result.result) + "\n"
         tmp += "resultMessage (결과메시지) : " + str(result.resultMessage) + "\n"
         tmp += "closeDownTaxType (사업자과세유형) : " + str(result.closeDownTaxType) + "\n"
-        tmp += "closeDownTaxTypeDate (과세유형전환일자):" + str(result.closeDownTaxTypeDate) + "\n"
+        tmp += (
+            "closeDownTaxTypeDate (과세유형전환일자):" + str(result.closeDownTaxTypeDate) + "\n"
+        )
         tmp += "closeDownState (휴폐업상태) : " + str(result.closeDownState) + "\n"
         tmp += "closeDownStateDate (휴폐업일자) : " + str(result.closeDownStateDate) + "\n"
 
         print(tmp)
 
-        self.assertEqual(result.corpNum, "6798700151","checkBizInfo 오류 :" + str(result.message))
+        self.assertEqual(
+            result.corpNum,
+            "6798700151",
+            "checkBizInfo 오류 :" + str(result.message),
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(BizInfoCheckServiceTestCase)
     unittest.TextTestRunner(verbosity=2).run(suite)

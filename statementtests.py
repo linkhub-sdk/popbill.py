@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 # code for console Encoding difference. Dont' mind on it
-from popbill import *
-import sys
 import imp
 import random
+import sys
+
+from popbill import *
 
 imp.reload(sys)
 try:
-    sys.setdefaultencoding('UTF8')
+    sys.setdefaultencoding("UTF8")
 except Exception as E:
     pass
 
@@ -21,11 +22,13 @@ class StatementServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.statementService = StatementService(
-            'TESTER', 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
+            "TESTER", "SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I="
+        )
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
-        self.testMgtKey = ''.join(random.sample(
-            'abcdefghijklmnopqrstuvwxyz1234567890', 10))
+        self.testMgtKey = "".join(
+            random.sample("abcdefghijklmnopqrstuvwxyz1234567890", 10)
+        )
         self.statementService.IsTest = True
         self.statementService.IPRestrictOnOff = True
 
@@ -509,73 +512,70 @@ class StatementServiceTestCase(unittest.TestCase):
         MgtKey = self.testMgtKey
 
         # 임시저장
-        statement = Statement(writeDate="20150323",
-                              purposeType="영수",
-                              taxType="과세",
-                              formCode="",
-                              itemCode=121,
-                              mgtKey=MgtKey,
-                              senderCorpNum="1234567890",
-                              senderCorpName="공급자 상호",
-                              senderAddr="공급자 주소",
-                              senderCEOName="공급자 대표자 성명",
-                              senderTaxRegID="",
-                              senderBizClass="업종",
-                              senderBizType="업태",
-                              senderContactName="공급자 담당자명",
-                              senderEmail="",
-                              senderTEL="",
-                              senderHP="",
+        statement = Statement(
+            writeDate="20150323",
+            purposeType="영수",
+            taxType="과세",
+            formCode="",
+            itemCode=121,
+            mgtKey=MgtKey,
+            senderCorpNum="1234567890",
+            senderCorpName="공급자 상호",
+            senderAddr="공급자 주소",
+            senderCEOName="공급자 대표자 성명",
+            senderTaxRegID="",
+            senderBizClass="업종",
+            senderBizType="업태",
+            senderContactName="공급자 담당자명",
+            senderEmail="",
+            senderTEL="",
+            senderHP="",
+            receiverCorpNum="8888888888",
+            receiverCorpName="공급받는자 상호",
+            receiverCEOName="공급받는자 대표자 성명",
+            receiverAddr="공급받는자 주소",
+            receiverTaxRegID="",
+            receiverBizClass="공급받는자 업종",
+            receiverBizType="공급받는자 업태",
+            receiverContactName="공급받는자 담당자명",
+            receiverEmail="",
+            receiverTEL="",
+            receiverHP="",
+            supplyCostTotal="20000",
+            taxTotal="2000",
+            totalAmount="22000",
+            serialNum="123",
+            remark1="비고1",
+            remark2="비고2",
+            remark3="비고3",
+            businessLIcenseYN=False,
+            bankBookYN=False,
+            propertyBag={
+                "Balance": "20000",
+                "Deposit": "5000",
+                "CBalance": "25000",
+            },
+            detailList=[
+                StatementDetail(
+                    serialNum=1,
+                    itemName="품목1",
+                    purchaseDT="20150323",
+                    qty=1,
+                    supplyCost="20000",
+                    tax="2000",
+                ),
+                StatementDetail(serialNum=2, itemName="품목2"),
+            ],
+        )
 
-                              receiverCorpNum="8888888888",
-                              receiverCorpName="공급받는자 상호",
-                              receiverCEOName="공급받는자 대표자 성명",
-                              receiverAddr="공급받는자 주소",
-                              receiverTaxRegID="",
-                              receiverBizClass="공급받는자 업종",
-                              receiverBizType="공급받는자 업태",
-                              receiverContactName="공급받는자 담당자명",
-
-                              receiverEmail="",
-                              receiverTEL="",
-                              receiverHP="",
-
-                              supplyCostTotal="20000",
-                              taxTotal="2000",
-                              totalAmount="22000",
-                              serialNum="123",
-                              remark1="비고1",
-                              remark2="비고2",
-                              remark3="비고3",
-
-                              businessLIcenseYN=False,
-                              bankBookYN=False,
-
-                              propertyBag={
-                                  'Balance': '20000',
-                                  'Deposit': '5000',
-                                  'CBalance': '25000'
-                              },
-
-                              detailList=[
-                                  StatementDetail(serialNum=1,
-                                                  itemName="품목1",
-                                                  purchaseDT="20150323",
-                                                  qty=1,
-                                                  supplyCost="20000",
-                                                  tax="2000"),
-                                  StatementDetail(serialNum=2,
-                                                  itemName="품목2")
-                              ]
-                              )
-
-        register_response = self.statementService.register(
-            self.testCorpNum, statement)
+        register_response = self.statementService.register(self.testCorpNum, statement)
         print(register_response.__dict__)
         # 발행
         issue_resposne = self.statementService.issue(
-            self.testCorpNum, ItemCode, MgtKey, EmailSubject=EmailSubject)
+            self.testCorpNum, ItemCode, MgtKey, EmailSubject=EmailSubject
+        )
         print(issue_resposne.__dict__)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
