@@ -428,9 +428,8 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             PopbillException
         """
         try:
-            url = "/PaymentHistory?CorpNum"
-            url += CorpNum if CorpNum != None else ""
-            url += "&SDate=" + SDate if SDate != None else ""
+            url = "/PaymentHistory"
+            url += "?SDate=" + SDate if SDate != None else ""
             url += "&EDate=" + EDate if EDate != None else ""
             url += "&Page=" + str(Page) if Page != None else ""
             url += "&PerPage=" + str(PerPage) if PerPage != None else ""
@@ -453,8 +452,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         """
         try:
             url = "/RefundHistory"
-            url += "?CorpNum=" + CorpNum if CorpNum != None else ""
-            url += "&Page=" + str(Page) if Page != None else ""
+            url += "?Page=" + str(Page) if Page != None else ""
             url += "&PerPage=" + str(PerPage) if PerPage != None else ""
 
             response = self._httpget(url, CorpNum, UserID)
