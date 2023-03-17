@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # code for console Encoding difference. Dont' mind on it
-import sys
 import imp
 import random
+import sys
 
 imp.reload(sys)
 try:
-    sys.setdefaultencoding('UTF8')
+    sys.setdefaultencoding("UTF8")
 except Exception as E:
     pass
 
@@ -14,13 +14,16 @@ try:
     import unittest2 as unittest
 except ImportError:
     import unittest
+
 from popbill import *
 
 
 class FaxServiceTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.faxService = FaxService('TESTER', 'SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I=')
+        self.faxService = FaxService(
+            "TESTER", "SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I="
+        )
         self.faxService.IsTest = True
         self.testCorpNum = "1234567890"
         self.testUserID = "testkorea"
@@ -38,7 +41,9 @@ class FaxServiceTestCase(unittest.TestCase):
         print(chrgInfo.rateSystem)
 
     def test_getChargeInfo_ReceiveNumType(self):
-        chrgInfo = self.faxService.getChargeInfo(self.testCorpNum, self.testUserID, "지능")
+        chrgInfo = self.faxService.getChargeInfo(
+            self.testCorpNum, self.testUserID, "지능"
+        )
         print(chrgInfo.unitCost)
         print(chrgInfo.chargeMethod)
         print(chrgInfo.rateSystem)
@@ -60,10 +65,21 @@ class FaxServiceTestCase(unittest.TestCase):
         Page = 1
         PerPage = 10
         Order = "D"
-        QString =""
+        QString = ""
 
-        response = self.faxService.search(self.testCorpNum, SDate, EDate, State, ReserveYN, SenderOnly, Page, PerPage,
-                                          Order, self.testUserID, QString)
+        response = self.faxService.search(
+            self.testCorpNum,
+            SDate,
+            EDate,
+            State,
+            ReserveYN,
+            SenderOnly,
+            Page,
+            PerPage,
+            Order,
+            self.testUserID,
+            QString,
+        )
 
         i = 1
         for info in response.list:
@@ -92,7 +108,13 @@ class FaxServiceTestCase(unittest.TestCase):
         filepath = ["test.jpeg", "test2.jpeg"]
 
         for x in range(0, 5):
-            receivers.append(FaxReceiver(receiveNum="070-111-222", receiveName="수신자명칭", interOPRefKey="20220729-"+str(x)))
+            receivers.append(
+                FaxReceiver(
+                    receiveNum="070-111-222",
+                    receiveName="수신자명칭",
+                    interOPRefKey="20220729-" + str(x),
+                )
+            )
 
         receiptNum = self.faxService.sendFax_multi(
             self.testCorpNum,
@@ -104,11 +126,13 @@ class FaxServiceTestCase(unittest.TestCase):
             None,
             False,
             "팩스전송 제목",
-            "20180809161431"
+            "20180809161431",
         )
         self.assertIsNotNone(receiptNum, "접수번호 확인완료")
 
-        result = self.faxService.getFaxResult(self.testCorpNum, receiptNum, self.testUserID)
+        result = self.faxService.getFaxResult(
+            self.testCorpNum, receiptNum, self.testUserID
+        )
 
         print(result[0].state)
         print(result[0].result)
@@ -119,25 +143,34 @@ class FaxServiceTestCase(unittest.TestCase):
         receivers = FaxReceiver(receiveNum="000111222", receiveName="수신자명")
         filepath = "test2.jpeg"
 
-        reserveDT = '20150325200000'
+        reserveDT = "20150325200000"
         receiptNum = self.faxService.sendFax_multi(
-            self.testCorpNum,
-            "",
-            receivers,
-            filepath,
-            reserveDT
+            self.testCorpNum, "", receivers, filepath, reserveDT
         )
         self.assertIsNotNone(receiptNum, "접수번호 확인완료")
         print(receiptNum)
 
         try:
-            result = self.faxService.cancelReserve(self.testCorpNum, "015032513303900002")
+            result = self.faxService.cancelReserve(
+                self.testCorpNum, "015032513303900002"
+            )
         except PopbillException as PE:
             print(PE.message)
 
     def test_05_sendFax(self):
-        receiptNum = self.faxService.sendFax(self.testCorpNum, '', '', '수신자명', 'test2.jpeg', None,
-                                             None, None, False, "팩스 타이틀", "20180809161520")
+        receiptNum = self.faxService.sendFax(
+            self.testCorpNum,
+            "",
+            "",
+            "수신자명",
+            "test2.jpeg",
+            None,
+            None,
+            None,
+            False,
+            "팩스 타이틀",
+            "20180809161520",
+        )
 
         print(receiptNum)
 
@@ -162,7 +195,7 @@ class FaxServiceTestCase(unittest.TestCase):
             "",
             "testkorea",
             "title",
-            "20180809161759"
+            "20180809161759",
         )
 
         print(receiptNum)
@@ -175,15 +208,26 @@ class FaxServiceTestCase(unittest.TestCase):
         receiveNum = ""
         receiveName = ""
 
-        receiptNum = self.faxService.resendFax(self.testCorpNum, receiptNum,
-                                               senderNum, senderName, receiveNum, receiveName, "20180810162554",
-                                               "testkorea", "타이틀", "")
+        receiptNum = self.faxService.resendFax(
+            self.testCorpNum,
+            receiptNum,
+            senderNum,
+            senderName,
+            receiveNum,
+            receiveName,
+            "20180810162554",
+            "testkorea",
+            "타이틀",
+            "",
+        )
 
         print(receiptNum)
         self.assertIsNotNone(receiptNum, " 접수번호 확인완료")
 
     def test_getSenderNumberList(self):
-        numberList = self.faxService.getSenderNumberList(self.testCorpNum, self.testUserID)
+        numberList = self.faxService.getSenderNumberList(
+            self.testCorpNum, self.testUserID
+        )
         for senderObj in numberList:
             print(senderObj.number)
             print(senderObj.representYN)
@@ -233,8 +277,18 @@ class FaxServiceTestCase(unittest.TestCase):
             title = ""
             RequestNum = "py_20180910105755"
 
-            response = self.faxService.resendFaxRN(self.testCorpNum, OrgRequestNum, SenderNum, SenderName, ReceiverNum,
-                                                   ReceiverName, ReserveDT, UserID, title, RequestNum)
+            response = self.faxService.resendFaxRN(
+                self.testCorpNum,
+                OrgRequestNum,
+                SenderNum,
+                SenderName,
+                ReceiverNum,
+                ReceiverName,
+                ReserveDT,
+                UserID,
+                title,
+                RequestNum,
+            )
             print(response)
         except PopbillException as PE:
             print(PE.message)
@@ -251,36 +305,55 @@ class FaxServiceTestCase(unittest.TestCase):
 
             receivers = []
             for x in range(0, 5):
-                receivers.append(FaxReceiver(receiveNum="", receiveName="수신자명칭", interOPRefKey="20220729-0"+str(x)))
+                receivers.append(
+                    FaxReceiver(
+                        receiveNum="",
+                        receiveName="수신자명칭",
+                        interOPRefKey="20220729-0" + str(x),
+                    )
+                )
 
-            response = self.faxService.resendFaxRN_multi(self.testCorpNum, OrgRequestNum, SenderNum, SenderName,
-                                                         receivers, ReserveDT, UserID, title, RequestNum)
+            response = self.faxService.resendFaxRN_multi(
+                self.testCorpNum,
+                OrgRequestNum,
+                SenderNum,
+                SenderName,
+                receivers,
+                ReserveDT,
+                UserID,
+                title,
+                RequestNum,
+            )
             print(response)
         except PopbillException as PE:
             print(PE.message)
 
     def test_getSenderNumberMgtURL(self):
         try:
-            response = self.faxService.getSenderNumberMgtURL(self.testCorpNum, self.testUserID)
-            print response
+            response = self.faxService.getSenderNumberMgtURL(
+                self.testCorpNum, self.testUserID
+            )
+            print(response)
         except PopbillException as PE:
             print(PE.message)
 
     def test_getSentListURL(self):
         try:
             response = self.faxService.getSentListURL(self.testCorpNum, self.testUserID)
-            print response
+            print(response)
         except PopbillException as PE:
             print(PE.message)
 
     def test_getPreviewURL(self):
         try:
-            response = self.faxService.getPreviewURL(self.testCorpNum, "018091015373100001", self.testUserID)
-            print response
+            response = self.faxService.getPreviewURL(
+                self.testCorpNum, "018091015373100001", self.testUserID
+            )
+            print(response)
         except PopbillException as PE:
             print(PE.message)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(FaxServiceTestCase)
     unittest.TextTestRunner(verbosity=2).run(suite)
