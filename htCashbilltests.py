@@ -212,7 +212,6 @@ class HTCashbillServiceTestCase(unittest.TestCase):
         self.assertIsNotNone(url)
 
     def test_getFlatRateState(self):
-
         flatRateInfo = self.htCashbillService.getFlatRateState(
             self.testCorpNum, self.testUserID
         )

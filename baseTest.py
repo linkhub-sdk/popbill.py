@@ -21,7 +21,6 @@ class BaseTest(unittest.TestCase):
         self.testUserID = "testkorea"
 
     def test_paymentRequest(self):
-
         CorpNum = "1234567890"
         paymentForm = PaymentForm(
             settlerName="담당자명",
@@ -35,7 +34,6 @@ class BaseTest(unittest.TestCase):
         print(result)
 
     def test_paymentRequest_with_UserID(self):
-
         CorpNum = "1234567890"
         UserID = "testkorea"
         paymentForm = PaymentForm(

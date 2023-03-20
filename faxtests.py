@@ -139,7 +139,6 @@ class FaxServiceTestCase(unittest.TestCase):
         print(result[0].title)
 
     def test_04_reserveCancel(self):
-
         receivers = FaxReceiver(receiveNum="000111222", receiveName="수신자명")
         filepath = "test2.jpeg"
 

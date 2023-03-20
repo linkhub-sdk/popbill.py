@@ -32,7 +32,6 @@ class EasyFinBankServiceTestCase(unittest.TestCase):
         self.jobID = ""
 
     def test_registBankAccount(self):
-
         infoObj = BankAccountInfo(
             BankCode="",
             AccountNumber="",
@@ -59,7 +58,6 @@ class EasyFinBankServiceTestCase(unittest.TestCase):
             print(ex.message)
 
     def test_updateBankAccount(self):
-
         infoObj = BankAccountInfo(
             BankCode="",
             AccountNumber="",
@@ -83,7 +81,6 @@ class EasyFinBankServiceTestCase(unittest.TestCase):
             print(ex.message)
 
     def test_getBankAccountInfo(self):
-
         BankCode = ""
 
         AccountNumber = ""
@@ -123,7 +120,6 @@ class EasyFinBankServiceTestCase(unittest.TestCase):
             print(ex.message)
 
     def test_revokeCloseBankAccount(self):
-
         BankCode = ""
 
         AccountNumber = ""
@@ -216,7 +212,6 @@ class EasyFinBankServiceTestCase(unittest.TestCase):
         print(tmp)
 
     def test_search(self):
-
         TradeType = ["I", "O"]
         SearchString = ""
         Page = 1

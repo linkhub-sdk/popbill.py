@@ -106,7 +106,6 @@ class MessageServiceTestCase(unittest.TestCase):
         self.assertEqual(result.code, 0, result.message + ", 미가입시 코드 0")
 
     def test_04_getPopbillURL(self):
-
         url = self.messageService.getPopbillURL(
             self.testCorpNum, self.testUserID, "CHRG"
         )
@@ -235,7 +234,6 @@ class MessageServiceTestCase(unittest.TestCase):
         print(receiptNum)
 
     def test_11__sendXMS_one(self):
-
         reserveDT = ""
 
         try:
@@ -289,7 +287,6 @@ class MessageServiceTestCase(unittest.TestCase):
         print(result[0].content)
 
     def test_13_reserveSendnCancel(self):
-
         Subject = "동보전송 제목"
         reserveDT = "20150325200000"
 
@@ -322,7 +319,6 @@ class MessageServiceTestCase(unittest.TestCase):
             print(PE.message)
 
     def test_14_getURL(self):
-
         url = self.messageService.getURL(self.testCorpNum, self.testUserID, "SENDER")
         self.assertEqual(url[:5], "https", "https로 시작")
         print("BOX URL : " + url)
@@ -353,7 +349,6 @@ class MessageServiceTestCase(unittest.TestCase):
             print(PE.message)
 
     def test_16_sendMMS(self):
-
         filepath = "test2.jpeg"
 
         messages = []
