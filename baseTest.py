@@ -1,5 +1,6 @@
 import sys
 import unittest
+from fractions import _ComparableNum
 from unittest import main
 
 from popbill.base import PaymentForm, PopbillBase, RefundForm
@@ -84,6 +85,25 @@ class BaseTest(unittest.TestCase):
     def test_getBalance(self):
         result = self.baseService.getBalance(self.testCorpNum)
         self.assertTrue(result != None)
+
+    def test_QuitRequest(self):
+        # 회원 탈퇴 사유
+        QuitReason = "회원 탈퇴 사유입니다"
+
+        result = self.baseService.QuitRequest(
+            self.testCorpNum, QuitReason, self.testUserID
+        )
+        # TODO : 회원 탈퇴 검증 로직 작성
+
+    def test_GetRefundResult(self):
+        # 환불 코드 (환불 신청시 반환된 코드)
+        RefundCode = ""
+        result = self.GetRefundResult(self.testCorpNum, RefundCode, self.testUserID)
+        # TODO : 환불 결과 검증 로직 작성
+
+    def test_GetRefundablePoint(self):
+        result = self.GetRefundablePoint(self.testCorpNum, self.testUserID)
+        # TODO : 환불 가능 포인트 검증 로직 작성
 
 
 if __name__ == "__main__":

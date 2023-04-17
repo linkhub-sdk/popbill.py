@@ -13,10 +13,13 @@ import base64
 import json
 import zlib
 from collections import namedtuple
+from functools import total_ordering
 from hashlib import sha1
 from io import BytesIO
 from json import JSONEncoder
 from time import time as stime
+
+from popbill import PopbillException
 
 try:
     import http.client as httpclient
@@ -470,6 +473,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
+
         try:
             postData = self._stringtify(RefundForm)
             response = self._httppost(
@@ -489,6 +493,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
+
         try:
             postData = self._stringtify(PaymentForm)
             response = self._httppost(
@@ -508,11 +513,63 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
+        if settleCode == None and len(settleCode) <= 0:
+            raise PopbillException(-99999999, "정산 코드가 입력되지 않았습니다.")
+
         try:
             response = self._httpget(
                 "/Payment/" + settleCode, CorpNum=CorpNum, UserID=UserID
             )
             return PaymentHistory(**response.__dict__)
+        except LinkhubException as LE:
+            raise PopbillException(LE.code, LE.message)
+
+    def QuitRequest(self, CorpNum, QuitReason, UserID=None):
+        """회원 탈퇴
+
+        Args:
+            CorpNum : 회원 사업자 번호
+            QuitReason : 회원 탈퇴 사유
+            UserID : 팝빌 회원 아이디
+
+        Raises:
+            PopbillException: _description_
+
+        Returns:
+            _type_: _description_
+        """
+        try:
+            reason = {"quitReason": QuitReason}
+            postData = self._stringtify(reason)
+            response = self._httppost(
+                "/QuitRequest", postData, CorpNum=CorpNum, UserID=UserID
+            )
+            return QuitResponse(**response.__dict__)
+        except LinkhubException as LE:
+            raise PopbillException(LE.code, LE.message)
+
+    def GetRefundResult(self, CorpNum, RefundCode, UserID=None):
+        """환불 상태 확인
+
+        Args:
+            CorpNum : 회원 사업자 번호
+            RefundCode : 환불 신청 코드
+            UserID : 팝빌 회원 아이디
+
+        Returns:
+            _type_: RefundHistroy
+        """
+        try:
+            response = self._httpget(
+                "/Refund" + RefundCode, CorpNum=CorpNum, UserID=UserID
+            )
+            return RefundHistory(**response.__dict__)
+        except LinkhubException as LE:
+            raise PopbillException(LE.code, LE.message)
+
+    def GetRefundablePoint(self, CorpNum, UserID=None):
+        try:
+            return self._httpget("/RefundPoint", CorpNum=CorpNum, UserID=UserID)
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -812,6 +869,11 @@ class Response(object):
 class PopbillEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
+
+
+class QuitResponse(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
 
 
 class Utils:

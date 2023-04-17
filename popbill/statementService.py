@@ -140,13 +140,15 @@ class StatementService(PopbillBase):
 
         return self._httppost("/Statement", postData, CorpNum, UserID, "FAX").receiptNum
 
-    def registIssue(self, CorpNum, statement, Memo=None, UserID=None, EmailSubect=None):
+    def registIssue(
+        self, CorpNum, statement, Memo=None, UserID=None, EmailSubject=None
+    ):
         """즉시발행
         args
             CorpNum : 팝빌회원 사업자번호
             statement : 등록할 전자명세서 object. made with Statement(...)
             Memo : 즉시발행메모
-
+            EmailSubject: 전자명세서 발행 안내메일 제목
             UserID : 팝빌회원 아이디
         return
             처리결과. consist of code and message
@@ -159,8 +161,8 @@ class StatementService(PopbillBase):
         if Memo != None or Memo != "":
             statement.memo = Memo
 
-        if EmailSubect != None or EmailSubect != "":
-            statement.emailSubject = EmailSubect
+        if EmailSubject != None or EmailSubject != "":
+            statement.emailSubject = EmailSubject
 
         postData = self._stringtify(statement)
 
@@ -223,8 +225,8 @@ class StatementService(PopbillBase):
         ItemCode,
         MgtKey,
         Memo=None,
-        EmailSubject=None,
         UserID=None,
+        EmailSubject=None,
     ):
         """발행
         args
