@@ -17,8 +17,8 @@ class BaseTest(unittest.TestCase):
             "TESTER", "SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I="
         )
         self.baseService.IsTest = True
-        self.testCorpNum = "0000007011"
-        self.testUserID = "test_7011"
+        self.testCorpNum = "1234567890"
+        self.testUserID = "testkorea"
 
     def test_paymentRequest(self):
         CorpNum = "1234567890"
@@ -49,7 +49,8 @@ class BaseTest(unittest.TestCase):
 
     def test_GetSettleResult(self):
         test_settle_code = "202303070000000052"
-        result = self.baseService.getSettleResult(self.testCorpNum, test_settle_code)
+        result = self.baseService.getSettleResult(
+            self.testCorpNum, test_settle_code)
         print(result.__dict__)
 
     def test_GetUseHistory(self):
@@ -61,7 +62,8 @@ class BaseTest(unittest.TestCase):
     def test_GetPaymentHistory(self):
         SDate = "20220101"
         EDate = "20220601"
-        result = self.baseService.getPaymentHistory(self.testCorpNum, SDate, EDate)
+        result = self.baseService.getPaymentHistory(
+            self.testCorpNum, SDate, EDate)
         print(result)
 
     def test_Refund(self):
@@ -74,7 +76,8 @@ class BaseTest(unittest.TestCase):
             accountname="예금주",
             reason="",
         )
-        result = self.baseService.refund(self.testCorpNum, refundForm, self.testUserID)
+        result = self.baseService.refund(
+            self.testCorpNum, refundForm, self.testUserID)
         self.assertTrue(result != None)
 
     def test_RefundHistory(self):
@@ -96,7 +99,8 @@ class BaseTest(unittest.TestCase):
         self.assertTrue(hasattr(result, "code"))
         self.assertTrue(hasattr(result, "message"))
 
-        print("회원 탈퇴 결과\n결과코드 : " + str(result.code) + "\n결과 메시지 : " + result.message)
+        print("회원 탈퇴 결과\n결과코드 : " + str(result.code) +
+              "\n결과 메시지 : " + result.message)
 
     def test_GetRefundInfo(self):
         # 환불 코드 (환불 신청시 반환된 코드)
@@ -119,11 +123,10 @@ class BaseTest(unittest.TestCase):
         print("환불 신청 사유 :: " + str(result.reason))
 
     def test_GetRefundableBalance(self):
-        result = self.baseService.GetRefundableBalance(
+        refundableBalance = self.baseService.GetRefundableBalance(
             self.testCorpNum, self.testUserID
         )
-        self.assertTrue(hasattr(result, "refundableBalance"))
-        print("환불 가능 포인트 :: " + result.refundableBalance)
+        print("환불 가능 포인트 :: " + refundableBalance)
 
 
 if __name__ == "__main__":
