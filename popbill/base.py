@@ -19,8 +19,6 @@ from io import BytesIO
 from json import JSONEncoder
 from time import time as stime
 
-from popbill import PopbillException
-
 try:
     import http.client as httpclient
 except ImportError:
@@ -524,7 +522,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
-    def QuitRequest(self, CorpNum, QuitReason, UserID=None):
+    def QuitMember(self, CorpNum, QuitReason, UserID=None):
         """회원 탈퇴
 
         Args:
@@ -548,12 +546,12 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
-    def GetRefundResult(self, CorpNum, RefundCode, UserID=None):
+    def GetRefundInfo(self, CorpNum, RefundCode, UserID=None):
         """환불 상태 확인
 
         Args:
             CorpNum : 회원 사업자 번호
-            RefundCode : 환불 신청 코드
+            RefundCode : 무통장입금 API로 ㅂ
             UserID : 팝빌 회원 아이디
 
         Returns:
@@ -561,15 +559,15 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         """
         try:
             response = self._httpget(
-                "/Refund" + RefundCode, CorpNum=CorpNum, UserID=UserID
+                "/Refund/" + RefundCode, CorpNum=CorpNum, UserID=UserID
             )
-            return RefundHistory(**response.__dict__)
+            return RefundInfo(**response.__dict__)
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
-    def GetRefundablePoint(self, CorpNum, UserID=None):
+    def GetRefundableBalance(self, CorpNum, UserID=None):
         try:
-            return self._httpget("/RefundPoint", CorpNum=CorpNum, UserID=UserID)
+            return self._httpget("/RefundPoint", CorpNum=CorpNum, UserID=UserID).refundableBalance
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -839,6 +837,11 @@ class RefundForm(object):
 
 
 class RefundHistory(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+
+
+class RefundInfo(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
 

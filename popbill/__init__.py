@@ -1,4 +1,34 @@
-__version__ = "1.59.3"
+from .accountCheckService import *
+from .base import (
+    ContactInfo,
+    CorpInfo,
+    JoinForm,
+    PaymentForm,
+    PaymentHistory,
+    PaymentHistoryResult,
+    PaymentResponse,
+    PopbillException,
+    QuitResponse,
+    RefundForm,
+    RefundHistory,
+    RefundHistoryResult,
+    RefundInfo,
+    Response,
+    UseHistory,
+)
+from .bizInfoCheckService import *
+from .cashbillService import *
+from .closedownService import *
+from .easyFinBankService import *
+from .faxService import *
+from .htCashbillService import *
+from .htTaxinvoiceService import *
+from .kakaoService import *
+from .messageService import *
+from .statementService import *
+from .taxinvoiceService import *
+
+__version__ = "1.60.0"
 Version = __version__  # for backward compatibility
 __all__ = [
     "PopbillException",
@@ -44,31 +74,3 @@ __all__ = [
     "CashbillInfo",
     "CBSearchResult",
 ]
-
-from .accountCheckService import *
-from .base import (
-    ContactInfo,
-    CorpInfo,
-    JoinForm,
-    PaymentForm,
-    PaymentHistory,
-    PaymentHistoryResult,
-    PaymentResponse,
-    PopbillException,
-    RefundForm,
-    RefundHistory,
-    RefundHistoryResult,
-    Response,
-    UseHistory,
-)
-from .bizInfoCheckService import *
-from .cashbillService import *
-from .closedownService import *
-from .easyFinBankService import *
-from .faxService import *
-from .htCashbillService import *
-from .htTaxinvoiceService import *
-from .kakaoService import *
-from .messageService import *
-from .statementService import *
-from .taxinvoiceService import *
