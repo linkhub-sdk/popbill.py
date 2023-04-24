@@ -551,7 +551,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         Args:
             CorpNum : 회원 사업자 번호
-            RefundCode : 무통장입금 API로 ㅂ
+            RefundCode : 환불 신청시 전달받은 환불 신청 코드
             UserID : 팝빌 회원 아이디
 
         Returns:
