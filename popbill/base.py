@@ -13,7 +13,7 @@ import base64
 import json
 import zlib
 from collections import namedtuple
-from functools import total_ordering
+# from functools import total_ordering
 from hashlib import sha1
 from io import BytesIO
 from json import JSONEncoder
@@ -381,14 +381,14 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         return token
 
     def getUseHistory(
-        self,
-        CorpNum,
-        SDate,
-        EDate,
-        Page=None,
-        PerPage=None,
-        Order=None,
-        UserID=None,
+            self,
+            CorpNum,
+            SDate,
+            EDate,
+            Page=None,
+            PerPage=None,
+            Order=None,
+            UserID=None,
     ):
         """포인트 사용내역 확인
         args
@@ -414,7 +414,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             raise PopbillException(LE.code, LE.message)
 
     def getPaymentHistory(
-        self, CorpNum, SDate, EDate, Page=None, PerPage=None, UserID=None
+            self, CorpNum, SDate, EDate, Page=None, PerPage=None, UserID=None
     ):
         """포인트 결제내역 확인.
         args
@@ -557,6 +557,10 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         Returns:
             _type_: RefundHistroy
         """
+
+        if RefundCode is None or RefundCode is "":
+            raise PopbillException( -99999999, "조회할 환불코드가 입력되지 않았습니다.")
+
         try:
             response = self._httpget(
                 "/Refund/" + RefundCode, CorpNum=CorpNum, UserID=UserID
@@ -601,13 +605,13 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             return Utils.json2obj(responseString)
 
     def _httppost(
-        self,
-        url,
-        postData,
-        CorpNum=None,
-        UserID=None,
-        ActionOverride=None,
-        contentsType=None,
+            self,
+            url,
+            postData,
+            CorpNum=None,
+            UserID=None,
+            ActionOverride=None,
+            contentsType=None,
     ):
         conn = self._getConn()
 
@@ -645,13 +649,13 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             return Utils.json2obj(responseString)
 
     def _httpBulkPost(
-        self,
-        url,
-        postData,
-        SubmitID,
-        CorpNum=None,
-        UserID=None,
-        ActionOverride=None,
+            self,
+            url,
+            postData,
+            SubmitID,
+            CorpNum=None,
+            UserID=None,
+            ActionOverride=None,
     ):
         conn = self._getConn()
 
@@ -727,9 +731,9 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             buff.write((CRLF + "--" + boundary + CRLF).encode("utf-8"))
             buff.write(
                 (
-                    'Content-Disposition: form-data; name="%s"; filename="%s"'
-                    % (f.fieldName, f.fileName)
-                    + CRLF
+                        'Content-Disposition: form-data; name="%s"; filename="%s"'
+                        % (f.fieldName, f.fileName)
+                        + CRLF
                 ).encode("utf-8")
             )
             buff.write(
@@ -893,7 +897,7 @@ class Utils:
     @staticmethod
     def isGzip(response, data):
         if response.getheader(
-            "Content-Encoding"
+                "Content-Encoding"
         ) != None and "gzip" in response.getheader("Content-Encoding"):
             return True
         else:
