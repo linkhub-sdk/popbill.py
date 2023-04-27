@@ -477,7 +477,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             response = self._httppost(
                 "/Refund", postData, CorpNum=CorpNum, UserID=UserID
             )
-            return Response(**response.__dict__)
+            return RefundResponse(**response.__dict__)
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -879,6 +879,9 @@ class PopbillEncoder(JSONEncoder):
 
 
 class QuitResponse(object):
+    def __init__(self, **kwargs):
+        self.__dict__ = kwargs
+class RefundResponse(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
 
