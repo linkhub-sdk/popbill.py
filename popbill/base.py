@@ -522,7 +522,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
-    def QuitMember(self, CorpNum, QuitReason, UserID=None):
+    def quitMember(self, CorpNum, QuitReason, UserID=None):
         """회원 탈퇴
 
         Args:
@@ -546,7 +546,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
-    def GetRefundInfo(self, CorpNum, RefundCode, UserID=None):
+    def getRefundInfo(self, CorpNum, RefundCode, UserID=None):
         """환불 상태 확인
 
         Args:
@@ -558,7 +558,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             _type_: RefundHistroy
         """
 
-        if RefundCode is None or RefundCode is "":
+        if RefundCode == None or RefundCode == "":
             raise PopbillException( -99999999, "조회할 환불코드가 입력되지 않았습니다.")
 
         try:
@@ -569,7 +569,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
-    def GetRefundableBalance(self, CorpNum, UserID=None):
+    def getRefundableBalance(self, CorpNum, UserID=None):
         try:
             return self._httpget("/RefundPoint", CorpNum=CorpNum, UserID=UserID).refundableBalance
         except LinkhubException as LE:
