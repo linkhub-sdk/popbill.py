@@ -588,7 +588,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
-        headers["User-Agent"] = "PYTHON LINKHUB SDK"
         headers["User-Agent"] = "PYTHON POPBILL SDK"
 
         conn.request("GET", url, "", headers)
@@ -633,7 +632,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
-        headers["User-Agent"] = "PYTHON LINKHUB SDK"
         headers["User-Agent"] = "PYTHON POPBILL SDK"
 
         conn.request("POST", url, postData, headers)
@@ -680,7 +678,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
-        headers["User-Agent"] = "PYTHON LINKHUB SDK"
         headers["User-Agent"] = "PYTHON POPBILL SDK"
 
         conn.request("POST", url, postData, headers)
@@ -715,7 +712,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
         headers["Accept-Encoding"] = "gzip,deflate"
 
-        headers["User-Agent"] = "PYTHON LINKHUB SDK"
         headers["User-Agent"] = "PYTHON POPBILL SDK"
 
         # oraganize postData
