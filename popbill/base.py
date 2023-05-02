@@ -409,7 +409,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             url += "&PerPage=" + str(PerPage) if PerPage != None else ""
             url += "&Order=" + Order if Order != None else ""
             response = self._httpget(url, CorpNum, UserID)
-            return UseHistoryResult(**response.__dict__)
+            return response
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -436,7 +436,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             url += "&PerPage=" + str(PerPage) if PerPage != None else ""
 
             response = self._httpget(url, CorpNum, UserID)
-            return PaymentHistoryResult(**response.__dict__)
+            return response
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -457,7 +457,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             url += "&PerPage=" + str(PerPage) if PerPage != None else ""
 
             response = self._httpget(url, CorpNum, UserID)
-            return RefundHistoryResult(**response.__dict__)
+            return response
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -477,7 +477,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             response = self._httppost(
                 "/Refund", postData, CorpNum=CorpNum, UserID=UserID
             )
-            return RefundResponse(**response.__dict__)
+            return response
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -497,7 +497,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             response = self._httppost(
                 "/Payment", postData, CorpNum=CorpNum, UserID=UserID
             )
-            return PaymentResponse(**response.__dict__)
+            return response
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -518,7 +518,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             response = self._httpget(
                 "/Payment/" + settleCode, CorpNum=CorpNum, UserID=UserID
             )
-            return PaymentHistory(**response.__dict__)
+            return response
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -542,7 +542,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             response = self._httppost(
                 "/QuitRequest", postData, CorpNum=CorpNum, UserID=UserID
             )
-            return QuitResponse(**response.__dict__)
+            return response
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -565,7 +565,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             response = self._httpget(
                 "/Refund/" + RefundCode, CorpNum=CorpNum, UserID=UserID
             )
-            return RefundInfo(**response.__dict__)
+            return response
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
@@ -834,9 +834,7 @@ class PaymentHistoryResult(object):
         ]
 
 
-class PaymentResponse(object):
-    def __init__(self, **kwargs):
-        self.__dict__ = kwargs
+
 
 
 class RefundForm(object):
@@ -844,33 +842,11 @@ class RefundForm(object):
         self.__dict__ = kwargs
 
 
-class RefundHistory(object):
-    def __init__(self, **kwargs):
-        self.__dict__ = kwargs
-
-
-class RefundInfo(object):
-    def __init__(self, **kwargs):
-        self.__dict__ = kwargs
-
-
-class RefundHistoryResult(object):
-    def __init__(self, **kwargs):
-        self.__dict__ = kwargs
-        self.__dict__["list"] = [
-            RefundHistory(**refundHistory.__dict__) for refundHistory in kwargs["list"]
-        ]
 
 
 class UseHistory(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
-
-
-class UseHistoryResult(object):
-    def __init__(self, **kwargs):
-        self.__dict__ = kwargs
-
 
 class Response(object):
     def __init__(self, **kwargs):
@@ -880,15 +856,6 @@ class Response(object):
 class PopbillEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
-
-
-class QuitResponse(object):
-    def __init__(self, **kwargs):
-        self.__dict__ = kwargs
-class RefundResponse(object):
-    def __init__(self, **kwargs):
-        self.__dict__ = kwargs
-
 
 class Utils:
     @staticmethod
