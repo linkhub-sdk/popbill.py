@@ -1,1 +1,1 @@
-linkhub>=1.4.0
+linkhub>=1.5.0
