@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (code@linkhubcorp.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2022-09-29
+# Updated : 2023-05-08
 # Thanks for your interest.
 import base64
 import json
@@ -815,30 +815,9 @@ class PaymentForm(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
 
-
-class PaymentHistory(object):
-    def __init__(self, **kwargs):
-        self.__dict__ = kwargs
-
-
-class PaymentHistoryResult(object):
-    def __init__(self, **kwargs):
-        self.__dict__ = kwargs
-        self.__dict__["list"] = [
-            PaymentHistory(**paymentHistory.__dict__)
-            for paymentHistory in kwargs["list"]
-        ]
-
-
-
-
-
 class RefundForm(object):
     def __init__(self, **kwargs):
         self.__dict__ = kwargs
-
-
-
 
 class UseHistory(object):
     def __init__(self, **kwargs):
