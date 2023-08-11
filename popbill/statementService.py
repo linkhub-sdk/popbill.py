@@ -585,6 +585,7 @@ class StatementService(PopbillBase):
             MgtKey : 파트너 문서번호
             FilePath : 첨부파일의 경로
             UserID : 팝빌 회원아이디
+            DisplayName: 첨부파일명
         return
             처리결과. consist of code and message
         raise
