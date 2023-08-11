@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhubcorp.com)
 # Written : 2015-03-20
-# Updated : 2023-05-08
+# Updated : 2023-08-11
 # Thanks for your interest.
 from .base import File, PopbillBase, PopbillException
 
@@ -575,7 +575,7 @@ class StatementService(PopbillBase):
         result = self._httpget("/?TG=SEAL", CorpNum, UserID)
         return result.url
 
-    def attachFile(self, CorpNum, ItemCode, MgtKey, FilePath, UserID=None):
+    def attachFile(self, CorpNum, ItemCode, MgtKey, FilePath, UserID=None, DisplayName=None):
         """파일 첨부
         args
             CorpNum : 팝빌회원 사업자번호
@@ -600,7 +600,10 @@ class StatementService(PopbillBase):
 
         try:
             with open(FilePath, "rb") as F:
-                files = [File(fieldName="Filedata", fileName=F.name, fileData=F.read())]
+                if DisplayName != None:
+                    files = [File(fieldName="Filedata", fileName=DisplayName, fileData=F.read())]
+                else:
+                    files = [File(fieldName="Filedata", fileName=F.name, fileData=F.read())]
         except IOError:
             raise PopbillException(-99999999, "해당경로에 파일이 없거나 읽을 수 없습니다.")
 
