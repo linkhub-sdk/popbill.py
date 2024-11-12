@@ -260,7 +260,7 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
         expireDate = self.htTaxinvoiceService.getCertificateExpireDate(
             self.testCorpNum, self.testUserID
         )
-        self.assertIsNotNone(expireDate, "홈택스 공인인증서 만료일시 확인")
+        self.assertIsNotNone(expireDate, "홈택스수집 공인인증서 만료일시 확인")
 
     def test_getPopUpURL(self):
         NTSConfirmNum = "201809194100020300000cd5"

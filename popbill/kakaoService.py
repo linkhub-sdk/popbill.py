@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Kim Hyunjin (code@linkhubcorp.com)
 # Written : 2018-02-26
-# Updated : 2023-05-08
+# Updated : 2024-11-12
 # Thanks for your interest.
 from .base import File, PopbillBase, PopbillException, Response
 

@@ -6,14 +6,14 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhubcorp.com)
 # Written : 2015-07-16
-# Updated : 2023-05-08
+# Updated : 2024-11-12
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
 
 
 class ClosedownService(PopbillBase):
-    """팝빌 휴폐업조회 API Service Implementation."""
+    """팝빌 사업자등록상태조회 (휴폐업조회) API Service Implementation."""
 
     def __init__(self, LinkID, SecretKey):
         """생성자
@@ -38,7 +38,7 @@ class ClosedownService(PopbillBase):
         return self._httpget("/CloseDown/ChargeInfo", CorpNum, UserID)
 
     def getUnitCost(self, CorpNum):
-        """휴폐업조회 단가 확인.
+        """사업자등록상태조회 (휴폐업조회) 단가 확인.
         args
             CorpNum : 팝빌회원 사업자번호
         return
@@ -52,13 +52,13 @@ class ClosedownService(PopbillBase):
         return float(result.unitCost)
 
     def checkCorpNum(self, MemberCorpNum, CheckCorpNum):
-        """휴폐업조회 - 단건
+        """사업자등록상태조회 (휴폐업조회) - 단건
         args
             MemberCorpNum : 팝빌회원 사업자번호
             CorpNum : 조회할 사업자번호
             MgtKey : 문서관리번호
         return
-            휴폐업정보 object
+            사업자등록상태 (휴폐업조회) 정보 object
         raise
             PopbillException
         """
@@ -72,12 +72,12 @@ class ClosedownService(PopbillBase):
         return self._httpget("/CloseDown?CN=" + CheckCorpNum, MemberCorpNum)
 
     def checkCorpNums(self, MemberCorpNum, CorpNumList):
-        """휴폐업조회 대량 확인, 최대 1000건
+        """사업자등록상태조회 (휴폐업조회) - 대량, 최대 1000건
         args
             MemberCorpNum : 팝빌회원 사업자번호
             CorpNumList : 조회할 사업자번호 배열
         return
-            휴폐업정보 Object as List
+            사업자등록상태 (휴폐업조회) 정보 object as List
         raise
             PopbillException
         """

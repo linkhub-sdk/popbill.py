@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhubcorp.com)
 # Written : 2015-03-24
-# Updated : 2023-05-08
+# Updated : 2024-11-12
 # Thanks for your interest.
 
 from datetime import datetime

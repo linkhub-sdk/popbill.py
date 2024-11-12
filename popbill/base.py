@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (code@linkhubcorp.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2023-05-08
+# Updated : 2024-11-12
 # Thanks for your interest.
 import base64
 import json
