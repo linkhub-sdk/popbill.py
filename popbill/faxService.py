@@ -22,13 +22,13 @@ except ImportError:
 class FaxService(PopbillBase):
     """팝빌 팩스 API Service Implementation."""
 
-    def __init__(self, LinkID, SecretKey):
+    def __init__(self, LinkID, SecretKey, timeOut=15):
         """생성자
         args
             LinkID : 링크허브에서 발급받은 링크아이디(LinkID)
             SecretKey : 링크허브에서 발급받은 비밀키(SecretKey)
         """
-        super(self.__class__, self).__init__(LinkID, SecretKey)
+        super(self.__class__, self).__init__(LinkID, SecretKey, timeOut)
         self._addScope("160")
         self._addScope("161")
 
