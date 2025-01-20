@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhubcorp.com)
 # Written : 2015-07-16
-# Updated : 2024-11-12
+# Updated : 2025-01-20
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -117,6 +117,7 @@ class HTCashbillService(PopbillBase):
             PerPage : 페이지당 목록 개수, 최대 1000개
             Order : 정렬 방향, D-내림차순, A-오름차순
             UserID : 팝빌회원 아이디
+
         return
             수집 결과 정보
         raise
@@ -125,12 +126,18 @@ class HTCashbillService(PopbillBase):
         if JobID == None or len(JobID) != 18:
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
-        uri = "/HomeTax/Cashbill/" + JobID
-        uri += "?TradeType=" + ",".join(TradeType)
-        uri += "&TradeUsage=" + ",".join(TradeUsage)
-        uri += "&Page=" + str(Page)
-        uri += "&PerPage=" + str(PerPage)
-        uri += "&Order=" + Order
+        uri = "/HomeTax/Cashbill/" + JobID + "?TradeType="
+        
+        if TradeType is not None and len(TradeType) > 0:
+            uri += ",".join(TradeType)
+        if TradeUsage is not None and len(TradeUsage) > 0:    
+            uri += "&TradeUsage=" + ",".join(TradeUsage)
+        if Page is not None and Page > 0:
+            uri += "&Page=" + str(Page)
+        if PerPage is not None and (PerPage > 0 and PerPage <= 1000):    
+            uri += "&PerPage=" + str(PerPage)
+        if Order is not None and Order != "":
+            uri += "&Order=" + Order
 
         return self._httpget(uri, CorpNum, UserID)
 
@@ -150,9 +157,12 @@ class HTCashbillService(PopbillBase):
         if JobID == None or len(JobID) != 18:
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
-        uri = "/HomeTax/Cashbill/" + JobID + "/Summary"
-        uri += "?TradeType=" + ",".join(TradeType)
-        uri += "&TradeUsage=" + ",".join(TradeUsage)
+        uri = "/HomeTax/Cashbill/" + JobID + "/Summary" + "?TradeType="
+        
+        if TradeType is not None and len(TradeType) > 0:
+            uri += ",".join(TradeType)
+        if TradeUsage is not None and len(TradeUsage) > 0:    
+            uri += "&TradeUsage=" + ",".join(TradeUsage)
 
         return self._httpget(uri, CorpNum, UserID)
 

@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhubcorp.com)
 # Written : 2015-07-16
-# Updated : 2024-11-12
+# Updated : 2025-01-20
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -132,6 +132,7 @@ class HTTaxinvoiceService(PopbillBase):
             PerPage : 페이지당 목록 개수, 최대 1000개
             Order : 정렬 방향, D-내림차순, A-오름차순
             UserID : 팝빌회원 아이디
+            SearchString : 조회 검색어, 거래처 상호 또는 사업자등록번호 기재, 미기재시 전체조회
         return
             수집 결과 정보
         raise
@@ -140,20 +141,27 @@ class HTTaxinvoiceService(PopbillBase):
         if JobID == None or len(JobID) != 18:
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
-        uri = "/HomeTax/Taxinvoice/" + JobID
-        uri += "?Type=" + ",".join(Type)
-        uri += "&TaxType=" + ",".join(TaxType)
-        uri += "&PurposeType=" + ",".join(PurposeType)
-        uri += "&TaxRegIDType=" + TaxRegIDType
-        uri += "&TaxRegID=" + TaxRegID
-        uri += "&Page=" + str(Page)
-        uri += "&PerPage=" + str(PerPage)
-        uri += "&Order=" + Order
-
-        if TaxRegIDYN != "":
+        uri = "/HomeTax/Taxinvoice/" + JobID + "?Type="
+        
+        if Type is not None and len(Type) > 0:
+            uri += ",".join(Type)
+        if TaxType is not None and len(TaxType) > 0:
+            uri += "&TaxType=" + ",".join(TaxType)
+        if PurposeType is not None and len(PurposeType) > 0:
+            uri += "&PurposeType=" + ",".join(PurposeType)
+        if TaxRegIDType is not None and TaxRegIDType != "":    
+            uri += "&TaxRegIDType=" + TaxRegIDType
+        if TaxRegIDYN is not None and TaxRegIDYN != "": 
             uri += "&TaxRegIDYN=" + TaxRegIDYN
-
-        if SearchString is not None:
+        if TaxRegID is not None and TaxRegID != "":     
+            uri += "&TaxRegID=" + TaxRegID
+        if Page is not None and Page > 0:
+            uri += "&Page=" + str(Page)
+        if PerPage is not None and (PerPage > 0 and PerPage <= 1000):
+            uri += "&PerPage=" + str(PerPage)
+        if Order is not None and Order != "":
+            uri += "&Order=" + Order
+        if SearchString is not None and SearchString != "":
             uri += "&SearchString=" + parse.quote(SearchString)
 
         return self._httpget(uri, CorpNum, UserID)
@@ -182,6 +190,7 @@ class HTTaxinvoiceService(PopbillBase):
             TaxRegIDYN : 종사업장번호 유무, 공백-전체조회, 0-종사업장번호 없음, 1-종사업장번호 있음
             TaxRegID : 종사업장번호, 콤마(",")로 구분 하여 구성 ex) '0001,0002'
             UserID : 팝빌회원 아이디
+            SearchString : 조회 검색어, 거래처 상호 또는 사업자등록번호 기재, 미기재시 전체조회
         return
             수집 결과 요약정보
         raise
@@ -190,17 +199,21 @@ class HTTaxinvoiceService(PopbillBase):
         if JobID == None or len(JobID) != 18:
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
-        uri = "/HomeTax/Taxinvoice/" + JobID + "/Summary"
-        uri += "?Type=" + ",".join(Type)
-        uri += "&TaxType=" + ",".join(TaxType)
-        uri += "&PurposeType=" + ",".join(PurposeType)
-        uri += "&TaxRegIDType=" + TaxRegIDType
-        uri += "&TaxRegID=" + TaxRegID
-
-        if TaxRegIDYN != "":
+        uri = "/HomeTax/Taxinvoice/" + JobID + "/Summary" + "?Type="
+        
+        if Type is not None and len(Type) > 0:
+            uri += ",".join(Type)
+        if TaxType is not None and len(TaxType) > 0:
+            uri += "&TaxType=" + ",".join(TaxType)
+        if PurposeType is not None and len(PurposeType) > 0:
+            uri += "&PurposeType=" + ",".join(PurposeType)
+        if TaxRegIDType is not None and TaxRegIDType != "":
+            uri += "&TaxRegIDType=" + TaxRegIDType
+        if TaxRegIDYN is not None and TaxRegIDYN != "":
             uri += "&TaxRegIDYN=" + TaxRegIDYN
-
-        if SearchString is not None:
+        if TaxRegID is not None and TaxRegID != "":
+            uri += "&TaxRegID=" + TaxRegID
+        if SearchString is not None and SearchString != "":
             uri += "&SearchString=" + parse.quote(SearchString)
 
         return self._httpget(uri, CorpNum, UserID)

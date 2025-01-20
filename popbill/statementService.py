@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhubcorp.com)
 # Written : 2015-03-20
-# Updated : 2024-11-12
+# Updated : 2025-01-20
 # Thanks for your interest.
 from .base import File, PopbillBase, PopbillException
 
@@ -369,13 +369,18 @@ class StatementService(PopbillBase):
         uri += "?DType=" + DType
         uri += "&SDate=" + SDate
         uri += "&EDate=" + EDate
-        uri += "&State=" + ",".join(State)
-        uri += "&ItemCode=" + ",".join(ItemCode)
-        uri += "&Page=" + str(Page)
-        uri += "&PerPage=" + str(PerPage)
-        uri += "&Order=" + Order
 
-        if QString is not None:
+        if State is not None and len(State) > 0:
+            uri += "&State=" + ",".join(State)
+        if ItemCode is not None and len(ItemCode) > 0:    
+            uri += "&ItemCode=" + ",".join(ItemCode)
+        if Page is not None and Page > 0:
+            uri += "&Page=" + str(Page)
+        if PerPage is not None and (PerPage > 0 and PerPage <= 1000):
+            uri += "&PerPage=" + str(PerPage)
+        if Order is not None and Order != "":
+            uri += "&Order=" + Order
+        if QString is not None and QString != "":
             uri += "&QString=" + parse.quote(QString)
 
         return self._httpget(uri, CorpNum, UserID)

@@ -6,7 +6,7 @@
 # http://www.popbill.com
 # Author : Jeong Yohan (code@linkhubcorp.com)
 # Written : 2015-03-24
-# Updated : 2024-11-12
+# Updated : 2025-01-20
 # Thanks for your interest.
 
 from datetime import datetime
@@ -447,20 +447,26 @@ class CashbillService(PopbillBase):
         uri += "?DType=" + DType
         uri += "&SDate=" + SDate
         uri += "&EDate=" + EDate
-        uri += "&State=" + ",".join(State)
-        uri += "&TradeUsage=" + ",".join(TradeUsage)
-        uri += "&TradeType=" + ",".join(TradeType)
-        uri += "&TaxationType=" + ",".join(TaxationType)
-        uri += "&Page=" + str(Page)
-        uri += "&PerPage=" + str(PerPage)
-        uri += "&Order=" + Order
 
-        if QString is not None:
+        if State is not None and len(State) > 0:
+            uri += "&State=" + ",".join(State)
+        if TradeType is not None and len(TradeType) > 0:
+            uri += "&TradeType=" + ",".join(TradeType)
+        if TradeUsage is not None and len(TradeUsage) > 0:    
+            uri += "&TradeUsage=" + ",".join(TradeUsage)
+        if TaxationType is not None and len(TaxationType) > 0:
+            uri += "&TaxationType=" + ",".join(TaxationType)
+        if Page is not None and Page > 0:     
+            uri += "&Page=" + str(Page)
+        if PerPage is not None and (PerPage > 0 and PerPage <= 1000) :
+            uri += "&PerPage=" + str(PerPage)
+        if Order is not None and Order != "":
+            uri += "&Order=" + Order
+        if QString is not None and QString != "":
             uri += "&QString=" + QString
-
-        if TradeOpt is not None:
+        if TradeOpt is not None and len(TradeOpt) > 0: 
             uri += "&TradeOpt=" + ",".join(TradeOpt)
-        if FranchiseTaxRegID is not None:
+        if FranchiseTaxRegID is not None and FranchiseTaxRegID != "":
             uri += "&FranchiseTaxRegID=" + FranchiseTaxRegID
 
         response = self._httpget(uri, CorpNum, UserID)

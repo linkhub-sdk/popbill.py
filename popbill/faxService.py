@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (code@linkhubcorp.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2024-11-12
+# Updated : 2025-01-20
 # Thanks for your interest.
 from datetime import datetime
 
@@ -145,18 +145,20 @@ class FaxService(PopbillBase):
         uri = "/FAX/Search"
         uri += "?SDate=" + SDate
         uri += "&EDate=" + EDate
-        uri += "&State=" + ",".join(State)
-
-        if ReserveYN:
-            uri += "&ReserveYN=1"
-        if SenderOnly:
-            uri += "&SenderOnly=1"
-
-        uri += "&Page=" + str(Page)
-        uri += "&PerPage=" + str(PerPage)
-        uri += "&Order=" + Order
-
-        if QString is not None:
+        
+        if State is not None and len(State) > 0:
+            uri += "&State=" + ",".join(State)
+        if ReserveYN is not None:
+            uri += "&ReserveYN=" + str(ReserveYN)
+        if SenderOnly is not None:
+            uri += "&SenderOnly=" + str(SenderOnly)
+        if Page is not None and Page > 0:
+            uri += "&Page=" + str(Page)
+        if PerPage is not None and (PerPage > 0 and PerPage <= 1000): 
+            uri += "&PerPage=" + str(PerPage)
+        if Order is not None and Order != "": 
+            uri += "&Order=" + Order
+        if QString is not None and QString != "":
             uri += "&QString=" + parse.quote(QString)
 
         return self._httpget(uri, CorpNum, UserID)

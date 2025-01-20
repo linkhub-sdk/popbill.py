@@ -258,15 +258,18 @@ class EasyFinBankService(PopbillBase):
         if JobID == None or len(JobID) != 18:
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
-        uri = "/EasyFin/Bank/" + JobID
-        uri += "?TradeType=" + ",".join(TradeType)
-
-        if SearchString is not None:
+        uri = "/EasyFin/Bank/" + JobID + "?TradeType="
+        
+        if TradeType is not None and len(TradeType) > 0:
+            uri += ",".join(TradeType)
+        if SearchString is not None and SearchString != "":
             uri += "&SearchString=" + parse.quote(SearchString)
-
-        uri += "&Page=" + str(Page)
-        uri += "&PerPage=" + str(PerPage)
-        uri += "&Order=" + Order
+        if Page is not None and Page > 0:
+            uri += "&Page=" + str(Page)
+        if PerPage is not None and (PerPage > 0 and PerPage <= 1000):    
+            uri += "&PerPage=" + str(PerPage)
+        if Order is not None and Order != "":    
+            uri += "&Order=" + Order
 
         return self._httpget(uri, CorpNum, UserID)
 
@@ -286,10 +289,11 @@ class EasyFinBankService(PopbillBase):
         if JobID == None or len(JobID) != 18:
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
-        uri = "/EasyFin/Bank/" + JobID + "/Summary"
-        uri += "?TradeType=" + ",".join(TradeType)
-
-        if SearchString is not None:
+        uri = "/EasyFin/Bank/" + JobID + "/Summary" + "?TradeType="
+        
+        if TradeType is not None and len(TradeType) > 0:
+            uri += ",".join(TradeType)
+        if SearchString is not None and SearchString != "":
             uri += "&SearchString=" + parse.quote(SearchString)
 
         return self._httpget(uri, CorpNum, UserID)

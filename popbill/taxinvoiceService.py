@@ -7,7 +7,7 @@
 # Author : Kim Seongjun (code@linkhubcorp.com)
 # Written : 2015-01-21
 # Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2024-11-12
+# Updated : 2025-01-20
 # Thanks for your interest.
 from datetime import datetime
 
@@ -1141,6 +1141,9 @@ class TaxinvoiceService(PopbillBase):
             QString : 거래처 정보, 거래처 상호 또는 사업자등록번호 기재, 미기재시 전체조회
             InterOPYN : 연동문서 여부, 공백-전체조회, 0-일반문서 조회, 1-연동문서 조회
             IssueType : 발행형태 배열, N-정발행, R-역발행, T-위수탁
+            RegType : 등록유형, P-팝빌에서 발행, H-홈택스 또는 ASP에서 발행
+            CloseDownState : 휴폐업상태, N-미확인, 0-미등록, 1-사업중, 2-폐업, 3-휴업, 4-확인실패
+            MgtKey : 문서번호
         return
             조회목록 Object
         raise
@@ -1163,36 +1166,40 @@ class TaxinvoiceService(PopbillBase):
         uri += "?DType=" + DType
         uri += "&SDate=" + SDate
         uri += "&EDate=" + EDate
-        uri += "&State=" + ",".join(State)
-        uri += "&Type=" + ",".join(Type)
-        uri += "&TaxType=" + ",".join(TaxType)
-        uri += "&TaxRegIDType=" + TaxRegIDType
-        uri += "&TaxRegID=" + TaxRegID
-        uri += "&Page=" + str(Page)
-        uri += "&PerPage=" + str(PerPage)
-        uri += "&Order=" + Order
-        uri += "&InterOPYN=" + InterOPYN
-
-        if LateOnly != "":
-            uri += "&LateOnly=" + LateOnly
-        if TaxRegIDYN != "":
+        
+        if State is not None and len(State) > 0:
+            uri += "&State=" + ",".join(State)
+        if Type is not None and len(Type) > 0:    
+            uri += "&Type=" + ",".join(Type)
+        if TaxType is not None and len(TaxType) > 0:  
+            uri += "&TaxType=" + ",".join(TaxType)
+        if LateOnly is not None:
+            uri += "&LateOnly=" + str(LateOnly)
+        if Order is not None and Order != "":
+            uri += "&Order=" + Order
+        if Page is not None and Page > 0:      
+            uri += "&Page=" + str(Page)
+        if PerPage is not None and (PerPage > 0 and PerPage <= 1000) :
+            uri += "&PerPage=" + str(PerPage)
+        if TaxRegIDType is not None and TaxRegIDType != "":    
             uri += "&TaxRegIDType=" + TaxRegIDType
-
-        if QString is not None:
+        if TaxRegIDYN is not None and TaxRegIDYN != "":
+            uri += "&TaxRegIDYN=" + TaxRegIDYN
+        if TaxRegID is not None and TaxRegID != "":  
+            uri += "&TaxRegID=" + TaxRegID
+        if QString is not None and QString != "":
             uri += "&QString=" + parse.quote(QString)
-
-        if MgtKey is not None:
+        if InterOPYN is not None and InterOPYN != "":
+            uri += "&InterOPYN=" + InterOPYN
+        if IssueType is not None and len(IssueType) > 0:
+            uri += "&IssueType=" + ",".join(IssueType)
+        if RegType is not None and len(RegType) > 0:
+            uri += "&RegType=" + ",".join(RegType)
+        if CloseDownState is not None and len(CloseDownState) > 0:
+            uri += "&CloseDownState=" + ",".join(CloseDownState)
+        if MgtKey is not None and MgtKey != "":
             uri += "&MgtKey=" + MgtKey
 
-        if IssueType is not None:
-            uri += "&IssueType=" + ",".join(IssueType)
-
-        if RegType is not None:
-            uri += "&RegType=" + ",".join(RegType)
-
-        if CloseDownState is not None:
-            uri += "&CloseDownState=" + ",".join(CloseDownState)
-        print(uri)
         return self._httpget(uri, CorpNum, UserID)
 
     def attachStatement(
