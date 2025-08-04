@@ -25,7 +25,7 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
             "TESTER", "SwWxqU+0TErBXy/9TVjIPEnI0VTUMMSQZtJf3Ed8q3I="
         )
         self.htTaxinvoiceService.IsTest = True
-        self.testCorpNum = "6798700433"
+        self.testCorpNum = "1234567890"
         self.testUserID = ""
 
     def test_getPartnerURL(self):
