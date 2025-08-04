@@ -65,11 +65,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
     UseLocalTimeYN = True
 
     def __init__(self, LinkID, SecretKey, timeOut=180):
-        """생성자.
-        args
-            LinkID : 링크허브에서 발급받은 LinkID
-            SecretKey : 링크허브에서 발급받은 SecretKey
-        """
+
         self.__linkID = LinkID
         self.__secretKey = SecretKey
         self.__scopes = ["member"]
@@ -103,15 +99,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
 
     # 파트너 포인트 충전 팝업 URL 추가 - 2017/08/29
     def getPartnerURL(self, CorpNum, TOGO):
-        """팝빌 회원 잔여포인트 확인
-        args
-            CorpNum : 팝빌회원 사업자번호
-            TOGO : "CHRG"
-        return
-            URL
-        raise
-            PopbillException
-        """
+
         try:
             return linkhub.getPartnerURL(
                 self._getToken(CorpNum), TOGO, self.UseStaticIP, self.UseGAIP
@@ -120,14 +108,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             raise PopbillException(LE.code, LE.message)
 
     def getBalance(self, CorpNum):
-        """팝빌 회원 잔여포인트 확인
-        args
-            CorpNum : 확인하고자 하는 회원 사업자번호
-        return
-            잔여포인트 by float
-        raise
-            PopbillException
-        """
+
         try:
             return linkhub.getBalance(
                 self._getToken(CorpNum), self.UseStaticIP, self.UseGAIP
@@ -136,14 +117,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             raise PopbillException(LE.code, LE.message)
 
     def getPartnerBalance(self, CorpNum):
-        """팝빌 파트너 잔여포인트 확인
-        args
-            CorpNum : 확인하고자 하는 회원 사업자번호
-        return
-            잔여포인트 by float
-        raise
-            PopbillException
-        """
+
         try:
             return linkhub.getPartnerBalance(
                 self._getToken(CorpNum), self.UseStaticIP, self.UseGAIP
@@ -152,196 +126,87 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             raise PopbillException(LE.code, LE.message)
 
     def getPopbillURL(self, CorpNum, UserID, ToGo):
-        """팝빌 관련 URL을 확인.
-        args
-            CorpNum : 회원 사업자번호
-            UserID  : 회원 팝빌아이디
-            ToGo    : 관련 기능 지정 문자. ('CHRG' : 포인트 충전,'CERT' : 공인인증서등록 ,'LOGIN' : 팝빌메인)
-        return
-            30초 보안 토큰을 포함한 url
-        raise
-            PopbillException
-        """
-
 
         result = self._httpget("/Member?TG=" + ToGo, CorpNum, UserID)
+
         return result.url
 
     def getPaymentURL(self, CorpNum, UserID=None):
-        """포인트 결재내역 URL
-        args
-            CorpNum : 회원 사업자번호
-            UserID  : 회원 팝빌아이디
-        return
-            30초 보안 토큰을 포함한 url
-        raise
-            PopbillException
-        """
+
         result = self._httpget("/Member?TG=PAYMENT", CorpNum, UserID)
+
         return result.url
 
     def getUseHistoryURL(self, CorpNum, UserID=None):
-        """포인트 사용내역 URL
-        args
-            CorpNum : 회원 사업자번호
-            UserID  : 회원 팝빌아이디
-        return
-            30초 보안 토큰을 포함한 url
-        raise
-            PopbillException
-        """
+
         result = self._httpget("/Member?TG=USEHISTORY", CorpNum, UserID)
+
         return result.url
 
     def getAccessURL(self, CorpNum, UserID):
-        """팝빌 로그인 URL
-        args
-            CorpNum : 회원 사업자번호
-            UserID  : 회원 팝빌아이디
-        return
-            30초 보안 토큰을 포함한 url
-        raise
-            PopbillException
-        """
+
         result = self._httpget("/Member?TG=LOGIN", CorpNum, UserID)
+
         return result.url
 
     def getChargeURL(self, CorpNum, UserID):
-        """팝빌 연동회원 포인트 충전 URL
-        args
-            CorpNum : 회원 사업자번호
-            UserID  : 회원 팝빌아이디
-        return
-            30초 보안 토큰을 포함한 url
-        raise
-            PopbillException
-        """
+
         result = self._httpget("/Member?TG=CHRG", CorpNum, UserID)
+
         return result.url
 
     def checkIsMember(self, CorpNum):
-        """회원가입여부 확인
-        args
-            CorpNum : 회원 사업자번호
-        return
-            회원가입여부 True/False
-        raise
-            PopbillException
-        """
-
 
         return self._httpget(
             "/Join?CorpNum=" + CorpNum + "&LID=" + self.__linkID, None, None
         )
 
     def joinMember(self, JoinInfo):
-        """팝빌 회원가입
-        args
-            JoinInfo : 회원가입정보. Reference JoinForm class
-        return
-            처리결과. consist of code and message
-        raise
-            PopbillException
-        """
+
         JoinInfo.LinkID = self.__linkID
+
         postData = self._stringtify(JoinInfo)
+
         return self._httppost("/Join", postData)
 
     def checkID(self, checkID):
-        """아이디 중복확인
-        args
-            checkID : 중복확인할 아이디
-        return
-            중복여부, consist of code and message
-        raise
-            PopbillException
-        """
 
         return self._httpget("/IDCheck?ID=" + checkID)
 
     def getContactInfo(self, CorpNum, ContactID, UserID=None):
-        """담당자 정보 확인
-        args
-            CorpNum : 회원 사업자번호
-            ContactID : 확인할 담당자 아이디
-            UserID : 회원 아이디
-        """
 
         postData = "{'id':" + "'" + ContactID + "'}"
 
         return self._httppost("/Contact", postData, CorpNum, UserID)
 
     def listContact(self, CorpNum, UserID=None):
-        """담당자 목록 확인
-        args
-            CorpNum : 회원 사업자번호
-            UserID : 회원 아이디
-        return
-            담당자 목록 as list
-        raise
-            PopbillException
-        """
+
         return self._httpget("/IDs", CorpNum, UserID)
 
     def updateContact(self, CorpNum, ContactInfo, UserID=None):
-        """담당자 정보 수정
-        args
-            CorpNum : 회원 사업자번호
-            ContactInfo : 담당자 정보, Reference ContactInfo class
-            UserID :  회원 아이디
-        return
-            처리결과. consist of code and message
-        raise
-            PopbillException
-        """
+
         postData = self._stringtify(ContactInfo)
+
         return self._httppost("/IDs", postData, CorpNum, UserID)
 
     def getCorpInfo(self, CorpNum, UserID=None):
-        """회사정보 확인
-        args
-            CorpNum : 회원 사업자번호
-            UserID : 회원 아이디
-        return
-            회사정보
-        """
+
         return self._httpget("/CorpInfo", CorpNum, UserID)
 
     def updateCorpInfo(self, CorpNum, CorpInfo, UserID=None):
-        """담당자 정보 수정
-        args
-            CorpNum : 회원 사업자번호
-            CorpInfo : 회사 정보, Reference CorpInfo class
-            UserID :  회원 아이디
-        return
-            처리결과. consist of code and message
-        raise
-            PopbillException
-        """
+
         postData = self._stringtify(CorpInfo)
+
         return self._httppost("/CorpInfo", postData, CorpNum, UserID)
 
     def registContact(self, CorpNum, ContactInfo, UserID=None):
-        """담당자 추가
-        args
-            CorpNum : 회원 사업자번호
-            ContactInfo : 담당자 정보, Reference ContactInfo class
-            UserID :  회원 아이디
-        return
-            처리결과. consist of code and message
-        """
+
         postData = self._stringtify(ContactInfo)
+
         return self._httppost("/IDs/New", postData, CorpNum, UserID)
 
     def deleteContact(self, CorpNum, TargetUserID, UserID):
-        """담당자 삭제
-        args
-            CorpNum : 회원 사업자번호
-            TargetUserID :  삭제할 회원 아이디
-            UserID :  회원 아이디
-        return
-            처리결과. consist of code and message
-        """
+
         return self._httppost('/Contact/Delete?ContactID=' + TargetUserID, None, CorpNum, UserID)
 
     def _getToken(self, CorpNum):
@@ -397,17 +262,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             Order=None,
             UserID=None,
     ):
-        """포인트 사용내역 확인
-        args
-            CorpNum : 회원 사업자번호 사업자번호
-            SDate : 조회 기간의 시작일자
-            EDate : 조회 기간의 종료일자
-            Page : 목록 페이지번호 (기본값 1)
-            PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
-            Order : 거래일자를 기준으로 하는 목록 정렬 방향
-            UserID : 팝빌 회원 아이디
-        return 검색 기간의 포인트 사용 기록 반환
-        """
+
         try:
             url = "/UseHistory"
             url += "?SDate=" + SDate if SDate != None else ""
@@ -423,18 +278,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
     def getPaymentHistory(
             self, CorpNum, SDate, EDate, Page=None, PerPage=None, UserID=None
     ):
-        """포인트 결제내역 확인.
-        args
-            CorpNum : 회원 사업자번호 사업자번호
-            SDate : 조회 기간의 시작일자
-            EDate : 조회 기간의 종료일자
-            Page : 목록 페이지번호 (기본값 1)
-            PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
-            UserID : 팝빌 회원 아이디
-        return 검색 기간의 포인트 결제 내역 반환
-        raise
-            PopbillException
-        """
+
         try:
             url = "/PaymentHistory"
             url += "?SDate=" + SDate if SDate != None else ""
@@ -448,16 +292,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             raise PopbillException(LE.code, LE.message)
 
     def getRefundHistory(self, CorpNum, Page=None, PerPage=None, UserID=None):
-        """환불신청 내역 확인.
-        args
-            CorpNum : 회원 사업자번호
-            Page : 목록 페이지번호 (기본값 1)
-            PerPage : 페이지당 표시할 목록 개수 (기본값 500, 최대 1000)
-            UserID : 팝빌 회원 아이디
-        return 검색 기간의 환불 신청 내역 반환
-        raise
-            PopbillException
-        """
+
         try:
             url = "/RefundHistory"
             url += "?Page=" + str(Page) if Page != None else ""
@@ -469,15 +304,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             raise PopbillException(LE.code, LE.message)
 
     def refund(self, CorpNum, RefundForm, UserID=None):
-        """환불 신청.
-        args
-            CorpNum : 회원 사업자번호
-            RefundForm : 환불 정보, Reference RefundForm class
-            UserID : 팝빌 회원 아이디
-        return Response
-        raise
-            PopbillException
-        """
 
         try:
             postData = self._stringtify(RefundForm)
@@ -489,15 +315,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             raise PopbillException(LE.code, LE.message)
 
     def paymentRequest(self, CorpNum, PaymentForm, UserID=None):
-        """무통장 입금신청.
-        args
-            CorpNum : 회원 사업자번호
-            PaymentForm: 환불 정보, Reference PaymentForm class
-            UserID : 팝빌 회원 아이디
-        return PaymentResponse
-        raise
-            PopbillException
-        """
 
         try:
             postData = self._stringtify(PaymentForm)
@@ -509,15 +326,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             raise PopbillException(LE.code, LE.message)
 
     def getSettleResult(self, CorpNum, settleCode, UserID=None):
-        """무통장 입금신청 정보확인.
-        args
-            CorpNum : 회원 사업자번호
-            settleCode : 정산코드
-            UserID : 팝빌 회원 아이디
-        return PaymentHistory
-        raise
-            PopbillException
-        """
 
         if settleCode == None or settleCode == "":
             raise PopbillException(-99999999, "정산코드가 입력되지 않았습니다.")
@@ -531,40 +339,21 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             raise PopbillException(LE.code, LE.message)
 
     def quitMember(self, CorpNum, QuitReason, UserID=None):
-        """회원 탈퇴
 
-        Args:
-            CorpNum : 회원 사업자 번호
-            QuitReason : 회원 탈퇴 사유
-            UserID : 팝빌 회원 아이디
-
-        Raises:
-            PopbillException: _description_
-
-        Returns:
-            _type_: _description_
-        """
         try:
             reason = {"quitReason": QuitReason}
+
             postData = self._stringtify(reason)
+
             response = self._httppost(
                 "/QuitRequest", postData, CorpNum=CorpNum, UserID=UserID
             )
+
             return response
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 
     def getRefundInfo(self, CorpNum, RefundCode, UserID=None):
-        """환불 상태 확인
-
-        Args:
-            CorpNum : 회원 사업자 번호
-            RefundCode : 환불 신청시 전달받은 환불 신청 코드
-            UserID : 팝빌 회원 아이디
-
-        Returns:
-            _type_: RefundHistroy
-        """
 
         if RefundCode == None or RefundCode == "":
             raise PopbillException( -99999999, "환불코드가 입력되지 않았습니다.")
@@ -573,7 +362,9 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             response = self._httpget(
                 "/Refund/" + RefundCode, CorpNum=CorpNum, UserID=UserID
             )
+
             return response
+            
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 

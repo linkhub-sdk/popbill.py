@@ -19,30 +19,17 @@ import re
 
 
 class AccountCheckService(PopbillBase):
-    """팝빌 예금주조회 API Service Implementation."""
 
     def __init__(self, LinkID, SecretKey):
-        """생성자
-        args
-            LinkID : 링크허브에서 발급받은 링크아이디(LinkID)
-            SecretKey : 링크허브에서 발급받은 비밀키(SecretKey)
-        """
 
         super(self.__class__, self).__init__(LinkID, SecretKey)
         self._addScope("182")
         self._addScope("183")
 
     def getChargeInfo(self, CorpNum, UserID=None, ServiceType=None):
-        """과금정보 확인
-        args
-            CorpNum : 회원 사업자번호
-            UserID : 팝빌 회원아이디
-        return
-            과금정보 객체
-        raise
-            PopbillException
-        """
+
         url = "/EasyFin/AccountCheck/ChargeInfo"
+
         if ServiceType != None and ServiceType != "":
             url = "/EasyFin/AccountCheck/ChargeInfo?serviceType=" + parse.quote(
                 ServiceType
@@ -51,15 +38,9 @@ class AccountCheckService(PopbillBase):
         return self._httpget(url, CorpNum, UserID)
 
     def getUnitCost(self, CorpNum, UserID=None, ServiceType=None):
-        """예금주조회 단가 확인.
-        args
-            CorpNum : 팝빌회원 사업자번호
-        return
-            발행단가 by float
-        raise
-            PopbillException
-        """
+
         url = "/EasyFin/AccountCheck/UnitCost"
+
         if ServiceType != None and ServiceType != "":
             url = "/EasyFin/AccountCheck/UnitCost?serviceType=" + parse.quote(
                 ServiceType

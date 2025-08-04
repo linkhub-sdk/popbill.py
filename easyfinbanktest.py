@@ -286,8 +286,8 @@ class EasyFinBankServiceTestCase(unittest.TestCase):
         print(url)
 
     def test_getFlatRateState(self):
-        BankCode = ""
-        AccountNumber = ""
+        BankCode = "0004"
+        AccountNumber = "1234"
         flatRateInfo = self.easyFinBankService.getFlatRateState(
             self.testCorpNum, BankCode, AccountNumber, self.testUserID
         )
