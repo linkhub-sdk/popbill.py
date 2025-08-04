@@ -162,8 +162,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
-        if ToGo == None or ToGo == "":
-            raise PopbillException(-99999999, "TOGO값이 입력되지 않았습니다.")
+
 
         result = self._httpget("/Member?TG=" + ToGo, CorpNum, UserID)
         return result.url
@@ -229,8 +228,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
-        if CorpNum == None or CorpNum == "":
-            raise PopbillException(-99999999, "사업자번호가 입력되지 않았습니다.")
+
 
         return self._httpget(
             "/Join?CorpNum=" + CorpNum + "&LID=" + self.__linkID, None, None
@@ -258,8 +256,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
-        if checkID == None or checkID == "":
-            raise PopbillException(-99999999, "아이디가 입력되지 않았습니다.")
 
         return self._httpget("/IDCheck?ID=" + checkID)
 
@@ -270,8 +266,6 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             ContactID : 확인할 담당자 아이디
             UserID : 회원 아이디
         """
-        if ContactID == None or ContactID == "":
-            raise PopbillException(-99999999, "담당자 아이디가 입력되지 않았습니다.")
 
         postData = "{'id':" + "'" + ContactID + "'}"
 
@@ -351,6 +345,10 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         return self._httppost('/Contact/Delete?ContactID=' + TargetUserID, None, CorpNum, UserID)
 
     def _getToken(self, CorpNum):
+
+        if CorpNum == None or CorpNum == "":
+            raise PopbillException(-99999999, "팝빌회원 사업자번호가 입력되지 않았습니다.")
+
         try:
             token = self.__tokenCache[CorpNum]
         except KeyError:
@@ -520,8 +518,9 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
-        if settleCode == None and len(settleCode) <= 0:
-            raise PopbillException(-99999999, "정산 코드가 입력되지 않았습니다.")
+
+        if settleCode == None or settleCode == "":
+            raise PopbillException(-99999999, "정산코드가 입력되지 않았습니다.")
 
         try:
             response = self._httpget(
@@ -568,7 +567,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         """
 
         if RefundCode == None or RefundCode == "":
-            raise PopbillException( -99999999, "조회할 환불코드가 입력되지 않았습니다.")
+            raise PopbillException( -99999999, "환불코드가 입력되지 않았습니다.")
 
         try:
             response = self._httpget(

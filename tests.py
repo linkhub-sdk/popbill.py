@@ -709,6 +709,7 @@ class TaxinvoiceServiceTestCase(unittest.TestCase):
     #         print(ex.code)
     #         print(ex.message)
     #     print(response)
+    
 
 
 if __name__ == "__main__":

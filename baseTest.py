@@ -9,8 +9,14 @@ try:
 except ImportError:
     import unittest
 
+# if MgtKey == None or MgtKey == "":
+#     raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
+#
+# if MgtKeyList == None or len(MgtKeyList) < 1:
+#     raise PopbillException(-99999999, "문서번호가 입력되지 않았습니다.")
 
 class BaseTest(unittest.TestCase):
+
     @classmethod
     def setUpClass(self):
         self.baseService = PopbillBase(
@@ -131,9 +137,11 @@ class BaseTest(unittest.TestCase):
         # refundableBalance = self.baseService.GetRefundableBalance(
         #     self.testCorpNum, self.testUserID
         # )
-        refundableBalance = self.baseService.GetRefundableBalance(
-            self.testCorpNum
-        )
+        try:
+            refundableBalance = self.baseService.getRefundableBalance("")
+        except PopbillException as e:
+            print(e.Code)
+
         print("환불 가능 포인트 :: " + refundableBalance)
 
 
