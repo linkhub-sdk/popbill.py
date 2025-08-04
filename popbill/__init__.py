@@ -20,7 +20,7 @@ from .messageService import *
 from .statementService import *
 from .taxinvoiceService import *
 
-__version__ = "1.60.3"
+__version__ = "1.61.0"
 Version = __version__  # for backward compatibility
 __all__ = [
     "PopbillException",
