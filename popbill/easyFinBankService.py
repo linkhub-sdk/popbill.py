@@ -198,7 +198,7 @@ class EasyFinBankService(PopbillBase):
         return self._httpget(uri, CorpNum, UserID)
 
     def getChargeInfo(self, CorpNum, UserID=None):
-        
+
         return self._httpget("/EasyFin/Bank/ChargeInfo", CorpNum, UserID)
 
 
