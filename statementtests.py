@@ -491,90 +491,89 @@ class StatementServiceTestCase(unittest.TestCase):
     #         self.testCorpNum, 121, "20150325-01")
     #     self.assertEqual(result.code, 1, "삭제 오류 : " + result.message)
 
-    # def test_listEmailConfig(self):
-    #     result = self.statementService.listEmailConfig(self.testCorpNum)
-    #     print(len(result))
+    def test_listEmailConfig(self):
+        result = self.statementService.listEmailConfig(self.testCorpNum)
+        print(len(result))
 
     # def test_updateEmailConfig(self):
     #     EmailType = "SMT_ISSUE"
     #     SendYN = True
-
     #     try:
     #         result = self.statementService.updateEmailConfig(
     #             self.testCorpNum, EmailType, SendYN)
     #         print(result)
     #     except PopbillException as PE:
     #         print(PE.message)
-
-    def test_issue_with_emailSubject(self):
-        EmailSubject = "테스트메일"
-        ItemCode = 121
-        MgtKey = self.testMgtKey
-
-        # 임시저장
-        statement = Statement(
-            writeDate="20150323",
-            purposeType="영수",
-            taxType="과세",
-            formCode="",
-            itemCode=121,
-            mgtKey=MgtKey,
-            senderCorpNum="1234567890",
-            senderCorpName="공급자 상호",
-            senderAddr="공급자 주소",
-            senderCEOName="공급자 대표자 성명",
-            senderTaxRegID="",
-            senderBizClass="업종",
-            senderBizType="업태",
-            senderContactName="공급자 담당자명",
-            senderEmail="",
-            senderTEL="",
-            senderHP="",
-            receiverCorpNum="8888888888",
-            receiverCorpName="공급받는자 상호",
-            receiverCEOName="공급받는자 대표자 성명",
-            receiverAddr="공급받는자 주소",
-            receiverTaxRegID="",
-            receiverBizClass="공급받는자 업종",
-            receiverBizType="공급받는자 업태",
-            receiverContactName="공급받는자 담당자명",
-            receiverEmail="",
-            receiverTEL="",
-            receiverHP="",
-            supplyCostTotal="20000",
-            taxTotal="2000",
-            totalAmount="22000",
-            serialNum="123",
-            remark1="비고1",
-            remark2="비고2",
-            remark3="비고3",
-            businessLIcenseYN=False,
-            bankBookYN=False,
-            propertyBag={
-                "Balance": "20000",
-                "Deposit": "5000",
-                "CBalance": "25000",
-            },
-            detailList=[
-                StatementDetail(
-                    serialNum=1,
-                    itemName="품목1",
-                    purchaseDT="20150323",
-                    qty=1,
-                    supplyCost="20000",
-                    tax="2000",
-                ),
-                StatementDetail(serialNum=2, itemName="품목2"),
-            ],
-        )
-
-        register_response = self.statementService.register(self.testCorpNum, statement)
-        print(register_response.__dict__)
-        # 발행
-        issue_resposne = self.statementService.issue(
-            self.testCorpNum, ItemCode, MgtKey, EmailSubject=EmailSubject
-        )
-        print(issue_resposne.__dict__)
+    #
+    # def test_issue_with_emailSubject(self):
+    #     EmailSubject = "테스트메일"
+    #     ItemCode = 121
+    #     MgtKey = self.testMgtKey
+    #
+    #     # 임시저장
+    #     statement = Statement(
+    #         writeDate="20150323",
+    #         purposeType="영수",
+    #         taxType="과세",
+    #         formCode="",
+    #         itemCode=121,
+    #         mgtKey=MgtKey,
+    #         senderCorpNum="1234567890",
+    #         senderCorpName="공급자 상호",
+    #         senderAddr="공급자 주소",
+    #         senderCEOName="공급자 대표자 성명",
+    #         senderTaxRegID="",
+    #         senderBizClass="업종",
+    #         senderBizType="업태",
+    #         senderContactName="공급자 담당자명",
+    #         senderEmail="",
+    #         senderTEL="",
+    #         senderHP="",
+    #         receiverCorpNum="8888888888",
+    #         receiverCorpName="공급받는자 상호",
+    #         receiverCEOName="공급받는자 대표자 성명",
+    #         receiverAddr="공급받는자 주소",
+    #         receiverTaxRegID="",
+    #         receiverBizClass="공급받는자 업종",
+    #         receiverBizType="공급받는자 업태",
+    #         receiverContactName="공급받는자 담당자명",
+    #         receiverEmail="",
+    #         receiverTEL="",
+    #         receiverHP="",
+    #         supplyCostTotal="20000",
+    #         taxTotal="2000",
+    #         totalAmount="22000",
+    #         serialNum="123",
+    #         remark1="비고1",
+    #         remark2="비고2",
+    #         remark3="비고3",
+    #         businessLIcenseYN=False,
+    #         bankBookYN=False,
+    #         propertyBag={
+    #             "Balance": "20000",
+    #             "Deposit": "5000",
+    #             "CBalance": "25000",
+    #         },
+    #         detailList=[
+    #             StatementDetail(
+    #                 serialNum=1,
+    #                 itemName="품목1",
+    #                 purchaseDT="20150323",
+    #                 qty=1,
+    #                 supplyCost="20000",
+    #                 tax="2000",
+    #             ),
+    #             StatementDetail(serialNum=2, itemName="품목2"),
+    #         ],
+    #     )
+    #
+    #     register_response = self.statementService.register(self.testCorpNum, statement)
+    #     print(register_response.__dict__)
+    #     # 발행
+    #     issue_resposne = self.statementService.issue(
+    #         self.testCorpNum, ItemCode, MgtKey, EmailSubject=EmailSubject
+    #     )
+    #     print(issue_resposne.__dict__)
 
 
 if __name__ == "__main__":
