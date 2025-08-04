@@ -6,8 +6,8 @@
 # http://www.popbill.com
 # Author : Kim Seongjun (code@linkhubcorp.com)
 # Written : 2015-01-21
-# Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2025-01-20
+# Contributor : Linkhub Dev (code@linkhubcorp.com)
+# Updated : 2025-08-02
 # Thanks for your interest.
 from datetime import datetime
 
@@ -145,7 +145,7 @@ class FaxService(PopbillBase):
         uri = "/FAX/Search"
         uri += "?SDate=" + SDate
         uri += "&EDate=" + EDate
-        
+
         if State is not None and len(State) > 0:
             uri += "&State=" + ",".join(State)
         if ReserveYN is not None:
@@ -154,9 +154,9 @@ class FaxService(PopbillBase):
             uri += "&SenderOnly=" + str(SenderOnly)
         if Page is not None and Page > 0:
             uri += "&Page=" + str(Page)
-        if PerPage is not None and (PerPage > 0 and PerPage <= 1000): 
+        if PerPage is not None and (PerPage > 0 and PerPage <= 1000):
             uri += "&PerPage=" + str(PerPage)
-        if Order is not None and Order != "": 
+        if Order is not None and Order != "":
             uri += "&Order=" + Order
         if QString is not None and QString != "":
             uri += "&QString=" + parse.quote(QString)

@@ -4,9 +4,8 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Jeong Yohan (code@linkhubcorp.com)
-# Written : 2015-07-16
-# Updated : 2025-01-20
+# Contributor : Linkhub Dev (code@linkhubcorp.com)
+# Updated : 2025-08-02
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -142,18 +141,18 @@ class HTTaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
         uri = "/HomeTax/Taxinvoice/" + JobID + "?Type="
-        
+
         if Type is not None and len(Type) > 0:
             uri += ",".join(Type)
         if TaxType is not None and len(TaxType) > 0:
             uri += "&TaxType=" + ",".join(TaxType)
         if PurposeType is not None and len(PurposeType) > 0:
             uri += "&PurposeType=" + ",".join(PurposeType)
-        if TaxRegIDType is not None and TaxRegIDType != "":    
+        if TaxRegIDType is not None and TaxRegIDType != "":
             uri += "&TaxRegIDType=" + TaxRegIDType
-        if TaxRegIDYN is not None and TaxRegIDYN != "": 
+        if TaxRegIDYN is not None and TaxRegIDYN != "":
             uri += "&TaxRegIDYN=" + TaxRegIDYN
-        if TaxRegID is not None and TaxRegID != "":     
+        if TaxRegID is not None and TaxRegID != "":
             uri += "&TaxRegID=" + TaxRegID
         if Page is not None and Page > 0:
             uri += "&Page=" + str(Page)
@@ -200,7 +199,7 @@ class HTTaxinvoiceService(PopbillBase):
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
         uri = "/HomeTax/Taxinvoice/" + JobID + "/Summary" + "?Type="
-        
+
         if Type is not None and len(Type) > 0:
             uri += ",".join(Type)
         if TaxType is not None and len(TaxType) > 0:

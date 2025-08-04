@@ -4,9 +4,8 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Jeong Yohan (code@linkhubcorp.com)
-# Written : 2015-03-20
-# Updated : 2025-01-20
+# Contributor : Linkhub Dev (code@linkhubcorp.com)
+# Updated : 2025-08-02
 # Thanks for your interest.
 from .base import File, PopbillBase, PopbillException
 
@@ -372,7 +371,7 @@ class StatementService(PopbillBase):
 
         if State is not None and len(State) > 0:
             uri += "&State=" + ",".join(State)
-        if ItemCode is not None and len(ItemCode) > 0:    
+        if ItemCode is not None and len(ItemCode) > 0:
             uri += "&ItemCode=" + ",".join(ItemCode)
         if Page is not None and Page > 0:
             uri += "&Page=" + str(Page)
@@ -577,7 +576,7 @@ class StatementService(PopbillBase):
         raise
             PopbillException
         """
-        result = self._httpget("/?TG=SEAL", CorpNum, UserID)
+        result = self._httpget("/Member?TG=SEAL", CorpNum, UserID)
         return result.url
 
     def attachFile(self, CorpNum, ItemCode, MgtKey, FilePath, UserID=None, DisplayName=None):

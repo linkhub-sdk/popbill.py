@@ -4,9 +4,8 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Jeong Yohan (code@linkhubcorp.com)
-# Written : 2015-07-16
-# Updated : 2025-01-20
+# Contributor : Linkhub Dev (code@linkhubcorp.com)
+# Updated : 2025-08-02
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -127,14 +126,14 @@ class HTCashbillService(PopbillBase):
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
         uri = "/HomeTax/Cashbill/" + JobID + "?TradeType="
-        
+
         if TradeType is not None and len(TradeType) > 0:
             uri += ",".join(TradeType)
-        if TradeUsage is not None and len(TradeUsage) > 0:    
+        if TradeUsage is not None and len(TradeUsage) > 0:
             uri += "&TradeUsage=" + ",".join(TradeUsage)
         if Page is not None and Page > 0:
             uri += "&Page=" + str(Page)
-        if PerPage is not None and (PerPage > 0 and PerPage <= 1000):    
+        if PerPage is not None and (PerPage > 0 and PerPage <= 1000):
             uri += "&PerPage=" + str(PerPage)
         if Order is not None and Order != "":
             uri += "&Order=" + Order
@@ -158,10 +157,10 @@ class HTCashbillService(PopbillBase):
             raise PopbillException(-99999999, "작업아이디(jobID)가 올바르지 않습니다.")
 
         uri = "/HomeTax/Cashbill/" + JobID + "/Summary" + "?TradeType="
-        
+
         if TradeType is not None and len(TradeType) > 0:
             uri += ",".join(TradeType)
-        if TradeUsage is not None and len(TradeUsage) > 0:    
+        if TradeUsage is not None and len(TradeUsage) > 0:
             uri += "&TradeUsage=" + ",".join(TradeUsage)
 
         return self._httpget(uri, CorpNum, UserID)

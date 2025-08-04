@@ -7,7 +7,7 @@ except ImportError:
 
 import sys
 
-version = "1.60.3"
+version = "1.61.0"
 
 if sys.version_info <= (2, 5):
     error = "ERROR: popbill requires Python Version 2.6 or above...exiting."

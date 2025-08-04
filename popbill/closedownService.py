@@ -4,9 +4,8 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Jeong Yohan (code@linkhubcorp.com)
-# Written : 2015-07-16
-# Updated : 2025-01-20
+# Contributor : Linkhub Dev (code@linkhubcorp.com)
+# Updated : 2025-08-02
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException

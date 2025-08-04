@@ -4,10 +4,8 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Kim Seongjun (code@linkhubcorp.com)
-# Written : 2015-01-21
-# Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2025-01-20
+# Contributor : Linkhub Dev (code@linkhubcorp.com)
+# Updated : 2025-08-02
 # Thanks for your interest.
 from datetime import datetime
 
@@ -1166,26 +1164,26 @@ class TaxinvoiceService(PopbillBase):
         uri += "?DType=" + DType
         uri += "&SDate=" + SDate
         uri += "&EDate=" + EDate
-        
+
         if State is not None and len(State) > 0:
             uri += "&State=" + ",".join(State)
-        if Type is not None and len(Type) > 0:    
+        if Type is not None and len(Type) > 0:
             uri += "&Type=" + ",".join(Type)
-        if TaxType is not None and len(TaxType) > 0:  
+        if TaxType is not None and len(TaxType) > 0:
             uri += "&TaxType=" + ",".join(TaxType)
         if LateOnly is not None:
             uri += "&LateOnly=" + str(LateOnly)
         if Order is not None and Order != "":
             uri += "&Order=" + Order
-        if Page is not None and Page > 0:      
+        if Page is not None and Page > 0:
             uri += "&Page=" + str(Page)
         if PerPage is not None and (PerPage > 0 and PerPage <= 1000) :
             uri += "&PerPage=" + str(PerPage)
-        if TaxRegIDType is not None and TaxRegIDType != "":    
+        if TaxRegIDType is not None and TaxRegIDType != "":
             uri += "&TaxRegIDType=" + TaxRegIDType
         if TaxRegIDYN is not None and TaxRegIDYN != "":
             uri += "&TaxRegIDYN=" + TaxRegIDYN
-        if TaxRegID is not None and TaxRegID != "":  
+        if TaxRegID is not None and TaxRegID != "":
             uri += "&TaxRegID=" + TaxRegID
         if QString is not None and QString != "":
             uri += "&QString=" + parse.quote(QString)
@@ -1356,7 +1354,7 @@ class TaxinvoiceService(PopbillBase):
         raise
             PopbillException
         """
-        result = self._httpget("/?TG=SEAL", CorpNum, UserID)
+        result = self._httpget("/Member?TG=SEAL", CorpNum, UserID)
         return result.url
 
     def getTaxCertURL(self, CorpNum, UserID):
@@ -1369,7 +1367,7 @@ class TaxinvoiceService(PopbillBase):
         raise
             PopbillException
         """
-        result = self._httpget("/?TG=CERT", CorpNum, UserID)
+        result = self._httpget("/Member?TG=CERT", CorpNum, UserID)
         return result.url
 
     def getTaxCertInfo(self, CorpNum, UserID=None):

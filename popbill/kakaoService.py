@@ -4,9 +4,8 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Kim Hyunjin (code@linkhubcorp.com)
-# Written : 2018-02-26
-# Updated : 2025-01-20
+# Contributor : Linkhub Dev (code@linkhubcorp.com)
+# Updated : 2025-08-02
 # Thanks for your interest.
 from .base import File, PopbillBase, PopbillException, Response
 
@@ -1085,13 +1084,13 @@ class KakaoService(PopbillBase):
             raise PopbillException(-99999999, "종료일자가 입력되지 않았습니다.")
 
         if State == None or len(State) < 1:
-            raise PopbillException(-99999999, "전송상태가 입력되지 않았습니다.") 
+            raise PopbillException(-99999999, "전송상태가 입력되지 않았습니다.")
 
         uri = "/KakaoTalk/Search"
         uri += "?SDate=" + SDate
         uri += "&EDate=" + EDate
         uri += "&State=" + ",".join(State)
-        
+
         if Item is not None and len(Item) > 0:
             uri += "&Item=" + ",".join(Item)
         if ReserveYN is not None and ReserveYN != "":
@@ -1100,9 +1099,9 @@ class KakaoService(PopbillBase):
             uri += "&SenderOnly=" + str(SenderYN)
         if Page is not None and Page > 0:
             uri += "&Page=" + str(Page)
-        if PerPage is not None and (PerPage > 0 and PerPage <= 1000):    
+        if PerPage is not None and (PerPage > 0 and PerPage <= 1000):
             uri += "&PerPage=" + str(PerPage)
-        if Order is not None and Order != "":    
+        if Order is not None and Order != "":
             uri += "&Order=" + Order
         if QString is not None and QString != "":
             uri += "&QString=" + parse.quote(QString)

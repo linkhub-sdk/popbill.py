@@ -4,9 +4,8 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Jeong Yohan (code@linkhubcorp.com)
-# Written : 2015-03-24
-# Updated : 2025-01-20
+# Contributor : Linkhub Dev (code@linkhubcorp.com)
+# Updated : 2025-08-02
 # Thanks for your interest.
 
 from datetime import datetime
@@ -452,11 +451,11 @@ class CashbillService(PopbillBase):
             uri += "&State=" + ",".join(State)
         if TradeType is not None and len(TradeType) > 0:
             uri += "&TradeType=" + ",".join(TradeType)
-        if TradeUsage is not None and len(TradeUsage) > 0:    
+        if TradeUsage is not None and len(TradeUsage) > 0:
             uri += "&TradeUsage=" + ",".join(TradeUsage)
         if TaxationType is not None and len(TaxationType) > 0:
             uri += "&TaxationType=" + ",".join(TaxationType)
-        if Page is not None and Page > 0:     
+        if Page is not None and Page > 0:
             uri += "&Page=" + str(Page)
         if PerPage is not None and (PerPage > 0 and PerPage <= 1000) :
             uri += "&PerPage=" + str(PerPage)
@@ -464,7 +463,7 @@ class CashbillService(PopbillBase):
             uri += "&Order=" + Order
         if QString is not None and QString != "":
             uri += "&QString=" + QString
-        if TradeOpt is not None and len(TradeOpt) > 0: 
+        if TradeOpt is not None and len(TradeOpt) > 0:
             uri += "&TradeOpt=" + ",".join(TradeOpt)
         if FranchiseTaxRegID is not None and FranchiseTaxRegID != "":
             uri += "&FranchiseTaxRegID=" + FranchiseTaxRegID

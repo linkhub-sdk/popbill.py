@@ -4,10 +4,8 @@
 # to accomplish authentication APIs.
 #
 # http://www.popbill.com
-# Author : Kim Seongjun (code@linkhubcorp.com)
-# Written : 2015-01-21
-# Contributor : Jeong Yohan (code@linkhubcorp.com)
-# Updated : 2025-01-20
+# Contributor : Linkhub Dev (code@linkhubcorp.com)
+# Updated : 2025-08-02
 # Thanks for your interest.
 import base64
 import json
@@ -66,7 +64,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
     UseGAIP = False
     UseLocalTimeYN = True
 
-    def __init__(self, LinkID, SecretKey, timeOut=15):
+    def __init__(self, LinkID, SecretKey, timeOut=180):
         """생성자.
         args
             LinkID : 링크허브에서 발급받은 LinkID
@@ -167,7 +165,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         if ToGo == None or ToGo == "":
             raise PopbillException(-99999999, "TOGO값이 입력되지 않았습니다.")
 
-        result = self._httpget("/?TG=" + ToGo, CorpNum, UserID)
+        result = self._httpget("/Member?TG=" + ToGo, CorpNum, UserID)
         return result.url
 
     def getPaymentURL(self, CorpNum, UserID=None):
@@ -180,7 +178,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
-        result = self._httpget("/?TG=PAYMENT", CorpNum, UserID)
+        result = self._httpget("/Member?TG=PAYMENT", CorpNum, UserID)
         return result.url
 
     def getUseHistoryURL(self, CorpNum, UserID=None):
@@ -193,7 +191,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
-        result = self._httpget("/?TG=USEHISTORY", CorpNum, UserID)
+        result = self._httpget("/Member?TG=USEHISTORY", CorpNum, UserID)
         return result.url
 
     def getAccessURL(self, CorpNum, UserID):
@@ -206,7 +204,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
-        result = self._httpget("/?TG=LOGIN", CorpNum, UserID)
+        result = self._httpget("/Member?TG=LOGIN", CorpNum, UserID)
         return result.url
 
     def getChargeURL(self, CorpNum, UserID):
@@ -219,7 +217,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         raise
             PopbillException
         """
-        result = self._httpget("/?TG=CHRG", CorpNum, UserID)
+        result = self._httpget("/Member?TG=CHRG", CorpNum, UserID)
         return result.url
 
     def checkIsMember(self, CorpNum):
@@ -340,6 +338,17 @@ class PopbillBase(__with_metaclass(Singleton, object)):
         """
         postData = self._stringtify(ContactInfo)
         return self._httppost("/IDs/New", postData, CorpNum, UserID)
+
+    def deleteContact(self, CorpNum, TargetUserID, UserID):
+        """담당자 삭제
+        args
+            CorpNum : 회원 사업자번호
+            TargetUserID :  삭제할 회원 아이디
+            UserID :  회원 아이디
+        return
+            처리결과. consist of code and message
+        """
+        return self._httppost('/Contact/Delete?ContactID=' + TargetUserID, None, CorpNum, UserID)
 
     def _getToken(self, CorpNum):
         try:
