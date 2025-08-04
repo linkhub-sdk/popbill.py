@@ -62,10 +62,4 @@ class BizInfoCheckService(PopbillBase):
             PopbillException
         """
 
-        if MemberCorpNum == None or MemberCorpNum == "":
-            raise PopbillException(-99999999, "팝빌회원 사업자번호가 입력되지 않았습니다.")
-
-        if CheckCorpNum == None or CheckCorpNum == "":
-            raise PopbillException(-99999999, "조회할 사업자번호가 입력되지 않았습니다.")
-
         return self._httpget("/BizInfo/Check?CN=" + CheckCorpNum, MemberCorpNum, UserID)

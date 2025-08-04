@@ -71,15 +71,6 @@ class AccountCheckService(PopbillBase):
 
     def checkAccountInfo(self, CorpNum, BankCode, AccountNumber, UserID=None):
 
-        if BankCode == None or BankCode == "":
-            raise PopbillException(-99999999, "기관코드가 입력되지 않았습니다.")
-
-        if len(BankCode) != 4:
-            raise PopbillException(-99999999, "기관코드가 유효하지 않습니다.")
-
-        if AccountNumber == None or AccountNumber == "":
-            raise PopbillException(-99999999, "계좌번호가 입력되지 않았습니다.")
-
         uri = "/EasyFin/AccountCheck"
         uri += "?c=" + BankCode
         uri += "&n=" + AccountNumber
@@ -95,27 +86,6 @@ class AccountCheckService(PopbillBase):
         IdentityNum,
         UserID=None,
     ):
-
-        if BankCode == None or BankCode == "":
-            raise PopbillException(-99999999, "기관코드가 입력되지 않았습니다.")
-
-        if len(BankCode) != 4:
-            raise PopbillException(-99999999, "기관코드가 유효하지 않습니다.")
-
-        if AccountNumber == None or AccountNumber == "":
-            raise PopbillException(-99999999, "계좌번호가 입력되지 않았습니다.")
-
-        if IdentityNumType == None or IdentityNumType == "":
-            raise PopbillException(-99999999, "등록번호 유형이 입력되지 않았습니다.")
-
-        if not re.compile("^[PB]$").match(IdentityNumType):
-            raise PopbillException(-99999999, "등록번호 유형이 유효하지 않습니다.")
-
-        if IdentityNum == None or IdentityNum == "":
-            raise PopbillException(-99999999, "등록번호가 입력되지 않았습니다.")
-
-        if not re.compile("^\d+$").match(IdentityNum):
-            raise PopbillException(-99999999, "등록번호는 숫자만 입력 가능합니다.")
 
         uri = "/EasyFin/DepositorCheck"
         uri += "?c=" + BankCode
