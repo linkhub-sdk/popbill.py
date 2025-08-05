@@ -364,7 +364,7 @@ class PopbillBase(__with_metaclass(Singleton, object)):
             )
 
             return response
-            
+
         except LinkhubException as LE:
             raise PopbillException(LE.code, LE.message)
 

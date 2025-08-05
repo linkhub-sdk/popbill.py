@@ -251,6 +251,100 @@ class MessageService(PopbillBase):
 
         return result.receiptNum
 
+    def sendMMSBinary(
+        self,
+        CorpNum,
+        Sender,
+        Receiver,
+        ReceiverName,
+        Subject,
+        Contents,
+        FileDatas,
+        reserveDT,
+        adsYN=False,
+        UserID=None,
+        SenderName=None,
+        RequestNum=None,
+    ):
+
+        Messages = []
+        Messages.append(
+            MessageReceiver(
+                snd=Sender,
+                sndnm=SenderName,
+                rcv=Receiver,
+                rcvnm=ReceiverName,
+                msg=Contents,
+                sjt=Subject,
+            )
+        )
+
+        return self.sendMMSBinary_Multi(
+            CorpNum,
+            Sender,
+            Subject,
+            Contents,
+            Messages,
+            FileDatas,
+            reserveDT,
+            adsYN,
+            UserID,
+            RequestNum,
+        )
+
+    def sendMMSBinary_Multi(
+        self,
+        CorpNum,
+        Sender,
+        Subject,
+        Contents,
+        Messages,
+        FileDatas,
+        reserveDT,
+        adsYN=False,
+        UserID=None,
+        RequestNum=None,
+    ):
+
+        if Messages == None or len(Messages) < 1:
+            raise PopbillException(-99999999, "문자 정보가 입력되지 않았습니다.")
+
+        if FileDatas == None:
+            raise PopbillException(-99999999, "파일 정보가 입력되지 않았습니다.")
+
+        req = {}
+
+        if Sender != None or Sender != "":
+            req["snd"] = Sender
+        if Contents != None or Contents != "":
+            req["content"] = Contents
+        if Subject != None or Subject != "":
+            req["subject"] = Subject
+        if reserveDT != None or reserveDT != "":
+            req["sndDT"] = reserveDT
+        if Messages != None or Messages != "":
+            req["msgs"] = Messages
+        if RequestNum != None or RequestNum != "":
+            req["requestNum"] = RequestNum
+        if adsYN:
+            req["adsYN"] = True
+
+        postData = self._stringtify(req)
+
+        files = []
+        for file in FileDatas:
+            files.append(
+                File(
+                    fieldName="file",
+                    fileName=file.fileName,
+                    fileData=file.fileData,
+                )
+            )
+
+        result = self._httppost_files("/MMS", postData, files, CorpNum, UserID)
+
+        return result.receiptNum
+
     def sendXMS(
         self,
         CorpNum,

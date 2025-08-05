@@ -885,6 +885,163 @@ class KakaoService(PopbillBase):
 
         return result.receiptNum
 
+    def sendFMSBinary(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        FileDatas,
+        ImageURL,
+        Receiver,
+        ReceiverName,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+        AltSubject=None,
+    ):
+
+
+
+        KakaoMessages = []
+        KakaoMessages.append(
+            KakaoReceiver(
+                rcv=Receiver,
+                rcvnm=ReceiverName,
+                msg=Content,
+                altsjt=AltSubject,
+                altmsg=AltContent,
+            )
+        )
+
+        return self.sendFMSBinary_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            FilePath,
+            ImageURL,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+            "",
+        )
+    def sendFMSBinary_multi(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        FileDatas,
+        ImageURL,
+        KakaoMessages,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+        AltSubject=None,
+    ):
+        return self.sendFMSBinary_same(
+            CorpNum,
+            PlusFriendID,
+            Sender,
+            "",
+            "",
+            AltSendType,
+            SndDT,
+            FileDatas,
+            ImageURL,
+            KakaoMessages,
+            KakaoButtons,
+            AdsYN,
+            UserID,
+            RequestNum,
+            None,
+        )
+
+
+
+    def sendFMSBinary_same(
+        self,
+        CorpNum,
+        PlusFriendID,
+        Sender,
+        Content,
+        AltContent,
+        AltSendType,
+        SndDT,
+        FileDatas,
+        ImageURL,
+        KakaoMessages,
+        KakaoButtons,
+        AdsYN=False,
+        UserID=None,
+        RequestNum=None,
+        AltSubject=None,
+    ):
+
+
+        if PlusFriendID == None or PlusFriendID == "":
+            raise PopbillException(-99999999, "검색용 아이디가 입력되지 않았습니다.")
+
+        if FileDatas == None:
+            raise PopbillException(-99999999, "파일 정보가 입력되지 않았습니다.")
+
+
+        req = {}
+        if PlusFriendID is not None or PlusFriendID != "":
+            req["plusFriendID"] = PlusFriendID
+        if Sender is not None or Sender != "":
+            req["snd"] = Sender
+        if Content is not None or Content != "":
+            req["content"] = Content
+        if AltSubject is not None or AltSubject != "":
+            req["altSubject"] = AltSubject
+        if AltContent is not None or AltContent != "":
+            req["altContent"] = AltContent
+        if AltSendType is not None or AltSendType != "":
+            req["altSendType"] = AltSendType
+        if SndDT is not None or SndDT != "":
+            req["sndDT"] = SndDT
+        if KakaoMessages is not None or KakaoMessages != "":
+            req["msgs"] = KakaoMessages
+        if ImageURL is not None or ImageURL != "":
+            req["imageURL"] = ImageURL
+        if KakaoButtons:
+            req["btns"] = KakaoButtons
+        if AdsYN:
+            req["adsYN"] = True
+        if RequestNum is not None or RequestNum != "":
+            req["requestNum"] = RequestNum
+
+        postData = self._stringtify(req)
+
+        files = []
+        for file in FileDatas:
+            files.append(
+                File(
+                    fieldName="file",
+                    fileName=file.fileName,
+                    fileData=file.fileData,
+                )
+            )
+
+        result = self._httppost_files("/FMS", postData, files, CorpNum, UserID)
+
+        return result.receiptNum
+
     def cancelReserve(self, CorpNum, ReceiptNum, UserID=None):
 
         if ReceiptNum == None or ReceiptNum == "":
