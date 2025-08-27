@@ -248,7 +248,7 @@ class HTCashbillServiceTestCase(unittest.TestCase):
     def test_registDeptUser(self):
         try:
             response = self.htCashbillService.registDeptUser(
-                self.testCorpNum, "cash_testpy", "123123"
+                self.testCorpNum, "cash_testpy", "123123", "", "testkorea"
             )
             print(response.code)
             print(response.message)

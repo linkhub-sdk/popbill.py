@@ -5,7 +5,7 @@
 #
 # http://www.popbill.com
 # Contributor : Linkhub Dev (code@linkhubcorp.com)
-# Updated : 2025-08-02
+# Updated : 2025-08-27
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
@@ -175,11 +175,12 @@ class HTTaxinvoiceService(PopbillBase):
 
         return self._httpget("/HomeTax/Taxinvoice/CertCheck", CorpNum, UserID)
 
-    def registDeptUser(self, CorpNum, DeptUserID, DeptUserPWD, UserID=None):
+    def registDeptUser(self, CorpNum, DeptUserID, DeptUserPWD, IdentityNum=None, UserID=None):
 
         req = {}
         req["id"] = DeptUserID
         req["pwd"] = DeptUserPWD
+        req["secAuth"] = IdentityNum
 
         postData = self._stringtify(req)
 

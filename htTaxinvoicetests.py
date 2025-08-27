@@ -278,7 +278,7 @@ class HTTaxinvoiceServiceTestCase(unittest.TestCase):
     def test_registDeptUser(self):
         try:
             response = self.htTaxinvoiceService.registDeptUser(
-                self.testCorpNum, "testpy", "123123"
+                self.testCorpNum, "testpy", "123123", "", "testkorea"
             )
             print(response.code)
             print(response.message)

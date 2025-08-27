@@ -5,7 +5,7 @@
 #
 # http://www.popbill.com
 # Contributor : Linkhub Dev (code@linkhubcorp.com)
-# Written : 2022-09-28
+# Updated : 2025-08-27
 # Thanks for your interest.
 
 from .base import PopbillBase, PopbillException
